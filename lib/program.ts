@@ -392,6 +392,58 @@ export const SESSIONS: Record<string, TrainingSession> = {
     ],
   },
 
+  // ── COMPÉTITION ───────────────────────────────────────────────────────────
+
+  taper_light: {
+    id: 'taper_light', label: 'Taper — Volume réduit', short: 'Taper',
+    type: 'rest', color: '#7A7870', duration: '20-30 min max',
+    desc: 'Semaine de taper : volume coupé de 40-50%, intensité conservée sur de courtes durées. Le corps se recharge.',
+    exercises: [
+      { name: 'Principe taper', detail: 'Choisir UNE activité (nage OU vélo OU course). Durée max 25-30 min. Allure normale, juste très court.', required: true },
+      { name: 'Quelques accélérations', detail: '2-3 × 30 secondes à allure de course, pour garder les fibres musculaires réactives. Puis repos.', sets: '' },
+      { name: 'Garder les jambes', detail: 'Sensation de lourdeur = normal en début de taper. C\'est le stock de glycogène qui se refait. Résister à l\'envie de faire plus.', required: true },
+      { name: 'Mobilité', detail: '10 min d\'étirements doux. Pas de foam roller agressif la semaine de course.', required: true },
+    ],
+  },
+
+  pre_race: {
+    id: 'pre_race', label: 'Veille de course', short: 'J-1',
+    type: 'rest', color: '#CF8E42', duration: '15-20 min',
+    desc: 'Repos actif + préparation matériel. Économiser chaque gramme d\'énergie pour demain.',
+    exercises: [
+      { name: 'Activité légère', detail: '15 min de nage très légère OU 20 min de marche. Juste débloquer les jambes — surtout pas transpirer.', required: true },
+      { name: 'Préparation matériel', detail: 'Préparer le sac T1/T2 la veille au soir. Vérifier le vélo (freins, pneus, chambre à air, cale-pieds). Préparer la nutrition race.', required: true },
+      { name: 'Alimentation J-1', detail: 'Dîner glucidique (pâtes/riz sauce légère). Pas d\'alcool, pas de fibre, pas d\'aliment nouveau. Hydratation régulière.', warning: false },
+      { name: 'Sommeil', detail: 'Coucher tôt. La nuit avant une course est souvent mauvaise — c\'est normal et sans impact sur la performance. La nuit J-2 comptait plus.', required: true },
+    ],
+  },
+
+  race_day: {
+    id: 'race_day', label: 'Jour de course', short: 'COURSE',
+    type: 'brick', color: '#CF8E42', duration: 'Toute la journée',
+    desc: 'Ce n\'est pas une séance — c\'est la récolte de tout ce travail. Profite.',
+    exercises: [
+      { name: 'Réveil', detail: '3h avant le départ. Petit déjeuner identique à l\'entraînement (jamais de nouveau). 500 mL eau sur le trajet.', required: true },
+      { name: 'Arrivée sur site', detail: '90 min avant le départ. Préparer T1 calmement, vérifier vélo une dernière fois, repérer la sortie nage.', required: true },
+      { name: 'Échauffement', detail: '15 min de nage légère si autorisé. 5 min de vélo ou jogging tranquille.', required: true },
+      { name: 'Stratégie universelle', detail: 'Nage : départ patient, trouver son rythme. Vélo : Zone 2 exclusive, jamais de sprint. Course : les 500 premiers mètres très conservateurs — c\'est là que beaucoup explosent.', required: true },
+      { name: 'Nutrition course', detail: 'Gel ou pâte de fruits 20 min avant T2. Eau aux ravitaillements (ne rien refuser). Rien de nouveau par rapport à l\'entraînement.', warning: true },
+      { name: 'Franchir la ligne', detail: 'Peu importe le temps. La 1ère fois on finit — c\'est tout. Ce chrono sera ta référence pour améliorer la prochaine fois.', required: true },
+    ],
+  },
+
+  post_race: {
+    id: 'post_race', label: 'Récupération post-course', short: 'Récup',
+    type: 'rest', color: '#6EC6D8', duration: '20-30 min',
+    desc: 'Semaine après compétition. Corps épuisé = laisser récupérer sans culpabilité.',
+    exercises: [
+      { name: 'Activité autorisée', detail: 'Nage douce 20-25 min OU marche 30 min. Pas de vélo intense ni de course si les jambes font mal.', required: true },
+      { name: 'Hydratation+++', detail: 'Boire beaucoup les 48h post-course (eau + électrolytes). Manger : protéines + glucides + légumes. Le corps répare.', required: true },
+      { name: 'Débrief positif', detail: 'Qu\'est-ce qui a bien marché ? Transition rapide ? Rythme vélo bien géré ? Chaque course enseigne quelque chose.', sets: '' },
+      { name: 'Retour entraînement', detail: 'Attendre que la fatigue disparaisse complètement avant de reprendre. Mieux vaut 1 semaine de plus que 2 mois de blessure.', required: true },
+    ],
+  },
+
   // ── REPOS ────────────────────────────────────────────────────────────────
 
   rest: {
@@ -557,6 +609,128 @@ export const PHASES: ProgramPhase[] = [
     ],
   },
 ];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// COMPÉTITIONS
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type RaceType = 'super_sprint' | 'sprint' | 'olympic' | 'half' | 'ironman';
+
+export interface Race {
+  date: string;       // YYYY-MM-DD (samedi ou dimanche)
+  label: string;
+  type: RaceType;
+  distances: string;
+  location: string;   // indicatif — à confirmer selon les événements de ta région
+  note: string;
+  optional: boolean;  // peut être décalée si pas encore prêt
+}
+
+export const RACE_COLORS: Record<RaceType, string> = {
+  super_sprint: '#6EC6D8',
+  sprint:       '#88C49A',
+  olympic:      '#CF8E42',
+  half:         '#C26060',
+  ironman:      '#CF8E42',
+};
+
+export const RACE_LABELS: Record<RaceType, string> = {
+  super_sprint: 'Super Sprint',
+  sprint:       'Sprint',
+  olympic:      'Olympique',
+  half:         'Half Ironman 70.3',
+  ironman:      'IRONMAN',
+};
+
+// Jours de taper avant la course et récupération après (en jours)
+const TAPER_CONFIG: Record<RaceType, { taper: number; recovery: number }> = {
+  super_sprint: { taper: 0,  recovery: 2  },
+  sprint:       { taper: 1,  recovery: 3  },
+  olympic:      { taper: 3,  recovery: 5  },
+  half:         { taper: 5,  recovery: 7  },
+  ironman:      { taper: 10, recovery: 14 },
+};
+
+// Dates PROVISOIRES — à ajuster selon les événements réels de ta région.
+// La France a des événements triathlon d'avril à octobre.
+// Ces dates sont des CIBLES, pas des obligations — on décale si le corps dit non.
+export const RACES: Race[] = [
+  {
+    date: '2027-05-16',
+    label: '1er Super Sprint',
+    type: 'super_sprint',
+    distances: '400 m nage · 10 km vélo · 2,5 km course',
+    location: 'Événement local (club ou "Try a Tri" région)',
+    note: 'Objectif : franchir la ligne, peu importe le chrono. Ce jour tu deviens triathlète.',
+    optional: true,
+  },
+  {
+    date: '2027-09-13',
+    label: 'Sprint Triathlon',
+    type: 'sprint',
+    distances: '750 m nage · 20 km vélo · 5 km course',
+    location: 'Triathlon proche de chez toi',
+    note: 'Premier vrai format de compétition. Évaluer la gestion des transitions et du rythme vélo.',
+    optional: true,
+  },
+  {
+    date: '2028-06-15',
+    label: 'Triathlon Olympique',
+    type: 'olympic',
+    distances: '1 500 m nage · 40 km vélo · 10 km course',
+    location: 'Triathlon Olympique (nombreux en France en juin)',
+    note: 'Format complet — 1 500 m nage est le premier gros défi. Arriver à T1 sans être épuisé.',
+    optional: true,
+  },
+  {
+    date: '2028-09-21',
+    label: 'Half Ironman 70.3',
+    type: 'half',
+    distances: '1 900 m nage · 90 km vélo · 21 km course',
+    location: 'IRONMAN 70.3 ou triathlon longue distance',
+    note: 'La grande répétition. Si tu finis confortablement, l\'Ironman est en vue.',
+    optional: true,
+  },
+  {
+    date: '2029-06-22',
+    label: 'IRONMAN',
+    type: 'ironman',
+    distances: '3 800 m nage · 180 km vélo · 42,2 km course',
+    location: 'IRONMAN France Nice ou autre IRONMAN étiqueté',
+    note: 'Le but ultime. La date peut avancer ou reculer selon ta progression réelle — l\'important est d\'y arriver entier.',
+    optional: false,
+  },
+];
+
+function shiftDate(base: string, days: number): string {
+  const d = new Date(base + 'T12:00:00');
+  d.setDate(d.getDate() + days);
+  return d.toLocaleDateString('fr-CA');
+}
+
+export function computeRaceOverrides(): Record<string, string> {
+  const overrides: Record<string, string> = {};
+  for (const race of RACES) {
+    const { taper, recovery } = TAPER_CONFIG[race.type];
+    // Jours de taper léger (J-taper-2 → J-3)
+    for (let i = -(taper + 2); i >= -3; i--) {
+      overrides[shiftDate(race.date, i)] = 'taper_light';
+    }
+    // Veille (J-2) : léger spécifique
+    overrides[shiftDate(race.date, -2)] = 'pre_race';
+    // J-1 : repos total
+    overrides[shiftDate(race.date, -1)] = 'rest';
+    // Jour J
+    overrides[race.date] = 'race_day';
+    // J+1 : repos
+    overrides[shiftDate(race.date, 1)] = 'rest';
+    // Récupération J+2 → J+recovery
+    for (let i = 2; i <= recovery; i++) {
+      overrides[shiftDate(race.date, i)] = 'post_race';
+    }
+  }
+  return overrides;
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SURCHARGES PONCTUELLES

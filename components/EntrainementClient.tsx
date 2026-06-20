@@ -1,7 +1,7 @@
 'use client';
 import { useState, useMemo } from 'react';
 import { useAppState } from './AppStateProvider';
-import { SESSIONS, PHASES, WEEK_DAYS, WEEK_DAY_LABELS, getCurrentWeek, getCurrentPhase, PROGRAM_START, DATE_OVERRIDES } from '@/lib/program';
+import { SESSIONS, PHASES, RACES, WEEK_DAYS, WEEK_DAY_LABELS, getCurrentWeek, getCurrentPhase, PROGRAM_START, DATE_OVERRIDES, computeRaceOverrides, RACE_COLORS, RACE_LABELS } from '@/lib/program';
 import type { WeekDay, ProgramPhase } from '@/lib/program';
 import MissionList from './MissionList';
 import QuestList from './QuestList';
@@ -26,7 +26,7 @@ function phaseForDate(date: Date): ProgramPhase {
 
 function sessionIdForDate(date: Date): string {
   const ds = dateStr(date);
-  if (DATE_OVERRIDES[ds]) return DATE_OVERRIDES[ds];
+  if (ALL_OVERRIDES[ds]) return ALL_OVERRIDES[ds];
   if (weekNum(date) < 1) return 'rest';
   const phase = phaseForDate(date);
   return phase.template[DAY_MAP[date.getDay()]] ?? 'rest';
@@ -56,6 +56,29 @@ function fmtWeekHeader(monday: Date): string {
 
 function fmtDayLong(d: Date): string {
   return `${DAY_SHORT[d.getDay()]} ${d.getDate()} ${MONTHS_FR[d.getMonth()]}`;
+}
+
+// Fusion des surcharges : les courses auto-génèrent taper/récup, les manuelles ont la priorité
+const ALL_OVERRIDES: Record<string, string> = { ...computeRaceOverrides(), ...DATE_OVERRIDES };
+
+// Dates de course pour lookup rapide
+const RACE_DATE_SET = new Set(RACES.map(r => r.date));
+
+function countdown(dateStr: string): string {
+  const now = new Date();
+  const race = new Date(dateStr + 'T12:00:00');
+  const diffDays = Math.round((race.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  if (diffDays < 0) return 'Passée';
+  if (diffDays === 0) return "Aujourd'hui !";
+  if (diffDays < 7) return `Dans ${diffDays} j`;
+  if (diffDays < 60) return `Dans ${Math.round(diffDays / 7)} sem`;
+  const months = Math.round(diffDays / 30);
+  return `Dans ${months} mois`;
+}
+
+function fmtRaceDate(ds: string): string {
+  const d = new Date(ds + 'T12:00:00');
+  return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
 const PHASE_MILESTONES: Record<string, { label: string; color: string }> = {
@@ -159,10 +182,13 @@ export default function EntrainementClient() {
             return (
               <button
                 key={ds}
-                className={`prog-day-cell${isToday ? ' today' : ''}${isSel ? ' open' : ''}${isPast && !isToday ? ' past' : ''}`}
+                className={`prog-day-cell${isToday ? ' today' : ''}${isSel ? ' open' : ''}${isPast && !isToday ? ' past' : ''}${RACE_DATE_SET.has(ds) ? ' race-day' : ''}`}
                 style={{ '--session-color': sess.color } as React.CSSProperties}
                 onClick={() => setSelectedDate(ds)}
               >
+                {RACE_DATE_SET.has(ds) && (
+                  <span className="prog-day-race-badge">🏅</span>
+                )}
                 <span className="prog-day-name">{DAY_SHORT[date.getDay()]}</span>
                 <span className="prog-day-date-num">{date.getDate()}/{date.getMonth() + 1}</span>
                 <span className="prog-day-session">{sess.short}</span>
@@ -239,6 +265,43 @@ export default function EntrainementClient() {
             sessionLabel={selSession.label}
           />
         )}
+      </section>
+
+      {/* ── COMPÉTITIONS ── */}
+      <section>
+        <div className="shead">
+          <h2>Compétitions prévues</h2>
+          <span className="hint">dates provisoires — à ajuster</span>
+        </div>
+        <div className="races-note">
+          Ces dates sont des objectifs, pas des obligations. Si le corps dit non → on décale sans hésiter.
+          Cherche les événements réels de ta région (fftri.fr, triathlons-annuaire.com).
+        </div>
+        <div className="races-list">
+          {RACES.map(race => {
+            const cd = countdown(race.date);
+            const isPast = cd === 'Passée';
+            const color = RACE_COLORS[race.type];
+            return (
+              <div key={race.date} className={`race-card${isPast ? ' past' : ''}`} style={{ '--race-color': color } as React.CSSProperties}>
+                <div className="race-card-top">
+                  <span className="race-type-badge" style={{ background: color + '22', color, borderColor: color + '55' }}>
+                    {RACE_LABELS[race.type]}
+                  </span>
+                  <span className={`race-countdown${isPast ? ' past' : cd.startsWith('Dans') && parseInt(cd.split(' ')[1]) < 30 ? ' soon' : ''}`}>
+                    {cd}
+                  </span>
+                  {race.optional && <span className="race-optional">facultatif</span>}
+                </div>
+                <div className="race-card-name">{race.label}</div>
+                <div className="race-card-date">{fmtRaceDate(race.date)}</div>
+                <div className="race-distances">{race.distances}</div>
+                <div className="race-location">📍 {race.location}</div>
+                <div className="race-note">{race.note}</div>
+              </div>
+            );
+          })}
+        </div>
       </section>
 
       {/* ── FEUILLE DE ROUTE ── */}
