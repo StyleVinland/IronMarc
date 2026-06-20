@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Journal de bord · Marc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --abyss:#0B2730;--deep:#11343F;--surface:#173E4A;--card:#1C4A57;
+  --foam:#EAF5F2;--muted:#86A6AD;--line:#2A5A67;
+  --dawn:#F4A259;--dawn-d:#E08A3C;--tide:#3DBC9F;--tide-d:#2E9C84;
+  --warn:#E97A6B;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Barlow',system-ui,sans-serif;
+  background:radial-gradient(120% 90% at 50% -10%,#16414E 0%,var(--abyss) 55%,#071c23 100%);
+  color:var(--foam);min-height:100vh;line-height:1.45;padding:18px 14px 60px;
+}
+.wrap{max-width:680px;margin:0 auto}
+h1,h2,h3,.disp{font-family:'Barlow Condensed',sans-serif;letter-spacing:.02em;text-transform:uppercase}
+.eyebrow{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.22em;font-size:12px;color:var(--dawn);font-weight:600}
+.muted{color:var(--muted)}
+section{margin-top:22px}
+
+/* HERO */
+.hero{position:relative;border-radius:20px;overflow:hidden;background:linear-gradient(180deg,#0d2e38 0%,#0a242c 100%);border:1px solid var(--line);padding:26px 22px 22px}
+.hero .label{font-size:12px}
+.hero .goal{font-size:clamp(52px,18vw,86px);font-weight:700;line-height:.92;margin-top:4px;color:var(--foam)}
+.hero .sub{font-family:'Barlow Condensed';text-transform:uppercase;letter-spacing:.06em;color:var(--dawn);font-weight:600;font-size:16px;margin-top:6px}
+.hero .why{font-size:14px;color:var(--muted);margin-top:12px;max-width:46ch}
+.water{position:relative;margin-top:20px;height:46px;border-radius:12px;background:#0a2730;border:1px solid var(--line);overflow:hidden}
+.water .fill{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(180deg,#2fa9c0,#1d7d96);transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.water .wave{position:absolute;top:-2px;right:-4px;width:60px;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18))}
+.water .cap{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-family:'Barlow Condensed';text-transform:uppercase;letter-spacing:.05em;font-size:13px}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 10px;text-align:center}
+.stat .n{font-family:'Barlow Condensed';font-weight:700;font-size:30px;line-height:1}
+.stat .k{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.stat.lvl .n{color:var(--dawn)}
+.stat.streak .n{color:var(--tide)}
+
+/* AFFIRMATION */
+.think{background:linear-gradient(135deg,#1d4a57,#16404c);border:1px solid var(--line);border-left:4px solid var(--dawn);border-radius:16px;padding:18px}
+.think .q{font-family:'Barlow Condensed';font-weight:600;font-size:clamp(20px,5.4vw,26px);line-height:1.15}
+.think .row{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.think button{background:none;border:1px solid var(--dawn);color:var(--dawn);font-family:'Barlow Condensed';text-transform:uppercase;letter-spacing:.08em;font-weight:600;font-size:13px;padding:7px 14px;border-radius:999px;cursor:pointer}
+.think button:hover{background:var(--dawn);color:#0a242c}
+
+/* SECTION HEAD */
+.shead{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.shead h2{font-size:24px;font-weight:700}
+.shead .hint{font-size:12px;color:var(--muted)}
+
+/* CHART SECTION */
+.chart-wrap{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px}
+.chart-title{font-family:'Barlow Condensed';font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;color:var(--foam)}
+.chart-legend{display:flex;gap:14px;margin-bottom:8px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex:none}
+canvas.chart{width:100%;height:150px;display:block}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:500px){.charts-grid{grid-template-columns:1fr}}
+
+/* CALENDAR */
+.cal-wrap{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px}
+.cal-header{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:5px}
+.cal-header span{text-align:center;font-size:10px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;font-family:'Barlow Condensed'}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-day{aspect-ratio:1;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-family:'Barlow Condensed';font-weight:600;position:relative}
+.cal-day.clean{background:var(--tide);color:#06231d}
+.cal-day.smoked{background:var(--warn);color:#2a0f0b}
+.cal-day.nodata{background:#0e2c34;border:1px solid var(--line);color:var(--muted)}
+.cal-day.future{background:transparent;border:1px dashed #2a3e44;color:#2a3e44}
+.cal-day.today{outline:2px solid var(--dawn);outline-offset:1px}
+.cal-legend{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
+.cal-leg-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+.cal-leg-dot{width:12px;height:12px;border-radius:3px;flex:none}
+
+/* MISSIONS */
+.list{display:flex;flex-direction:column;gap:9px}
+.item{display:flex;align-items:center;gap:13px;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:13px 14px;cursor:pointer;transition:.15s;user-select:none}
+.item:hover{border-color:#3a6e7c}
+.item:active{transform:scale(.99)}
+.box{flex:none;width:24px;height:24px;border-radius:7px;border:2px solid var(--muted);display:flex;align-items:center;justify-content:center;transition:.15s}
+.box svg{width:14px;height:14px;opacity:0;transform:scale(.5);transition:.15s}
+.item .txt{flex:1;font-size:15px;font-weight:500}
+.item .xp{font-family:'Barlow Condensed';font-weight:700;font-size:14px;color:var(--dawn);letter-spacing:.04em}
+.item.done{opacity:.62}
+.item.done .box{background:var(--tide);border-color:var(--tide)}
+.item.done .box svg{opacity:1;transform:scale(1)}
+.item.done .txt{text-decoration:line-through;text-decoration-color:var(--muted)}
+.item.done .xp{color:var(--tide)}
+.item.q.done .box{background:var(--dawn);border-color:var(--dawn)}
+.item.q.done .xp{color:var(--dawn)}
+
+/* CIG */
+.cig{background:linear-gradient(135deg,#2a3f44,#243a40);border:1px solid #3a5359;border-radius:18px;padding:18px}
+.cig .top{display:flex;justify-content:space-between;align-items:flex-end;gap:14px}
+.cig .today .n{font-family:'Barlow Condensed';font-weight:700;font-size:42px;line-height:.9}
+.cig .today .k{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.cig .free{text-align:right}
+.cig .free .n{font-family:'Barlow Condensed';font-weight:700;font-size:42px;line-height:.9;color:var(--tide)}
+.cig .free .k{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.cig .add{width:100%;margin-top:16px;background:var(--warn);color:#2a0f0b;border:none;border-radius:12px;padding:14px;font-family:'Barlow Condensed';text-transform:uppercase;letter-spacing:.06em;font-weight:700;font-size:17px;cursor:pointer}
+.cig .add:hover{background:#f08c7d}
+.cig .coach{margin-top:14px;font-size:14.5px;line-height:1.5;color:var(--foam);min-height:0;display:none;background:#0e2c34;border-radius:12px;padding:13px 14px;border:1px solid var(--line)}
+.cig .coach.show{display:block;animation:rise .4s ease}
+
+/* GALLERY */
+.gallery-wrap{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px}
+.upload-zone{padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:18px}
+.upload-zone label.section-label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:'Barlow Condensed';display:block;margin-bottom:10px}
+.upload-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+@media(max-width:420px){.upload-fields{grid-template-columns:1fr}}
+.date-inp,.note-inp{background:#0e2c34;border:1px solid var(--line);border-radius:11px;color:var(--foam);font-family:'Barlow';font-size:14px;padding:10px 12px;width:100%;color-scheme:dark}
+.file-pick-btn{display:flex;align-items:center;gap:10px;background:#0e2c34;border:2px dashed var(--line);border-radius:12px;padding:13px 16px;cursor:pointer;color:var(--muted);font-size:14px;transition:.15s;width:100%;margin-bottom:8px}
+.file-pick-btn:hover{border-color:var(--dawn);color:var(--foam)}
+.file-pick-btn input[type=file]{display:none}
+.file-info{font-size:12px;color:var(--tide);margin-bottom:8px;min-height:16px}
+.upload-btn{background:var(--tide);color:#06231d;border:none;border-radius:12px;padding:11px 20px;font-family:'Barlow Condensed';text-transform:uppercase;letter-spacing:.06em;font-weight:700;font-size:15px;cursor:pointer;width:100%}
+.upload-btn:hover{background:#54cbb5}
+.upload-btn:disabled{opacity:.4;cursor:not-allowed}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px}
+.gal-item{position:relative;border-radius:12px;overflow:hidden;background:#0e2c34;border:1px solid var(--line)}
+.gal-item img,.gal-item video{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.gal-item video{background:#000}
+.gal-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(5,18,24,.88));padding:7px 8px 8px}
+.gal-date{font-size:10px;color:var(--muted);font-family:'Barlow Condensed';letter-spacing:.04em}
+.gal-note{font-size:12px;color:var(--foam);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gal-actions{display:flex;gap:5px;margin-top:5px}
+.gal-btn{background:rgba(11,39,48,.75);border:1px solid var(--line);color:var(--foam);border-radius:999px;padding:4px 9px;font-size:11px;cursor:pointer;font-family:'Barlow';transition:.12s}
+.gal-btn:hover{border-color:var(--dawn);color:var(--dawn)}
+.gal-btn.del:hover{border-color:var(--warn);color:var(--warn)}
+.gal-empty{text-align:center;padding:28px 14px;color:var(--muted);font-size:14px;line-height:1.6}
+
+/* MENTAL HEALTH */
+.mind{background:linear-gradient(135deg,#173e4a,#143744);border:1px solid var(--line);border-radius:18px;padding:18px}
+.mind .lead{font-size:13.5px;color:var(--muted);line-height:1.5}
+.mblock{margin-top:18px}
+.mblock h3{font-family:'Barlow';font-size:15px;font-weight:600;color:var(--foam);margin-bottom:9px;text-transform:none;letter-spacing:0}
+.moods{display:flex;gap:7px}
+.mood{flex:1;text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px 2px;cursor:pointer;font-size:11px;color:var(--muted);transition:.15s;user-select:none}
+.mood .e{font-size:21px;display:block;margin-bottom:3px}
+.mood.sel{border-color:var(--dawn);background:#22424d;color:var(--foam)}
+.jhint{font-size:12.5px;color:var(--muted);margin-bottom:8px;line-height:1.45}
+.jbox,.gin{width:100%;background:#0e2c34;border:1px solid var(--line);border-radius:11px;color:var(--foam);font-family:'Barlow';font-size:14.5px;padding:11px 12px}
+.jbox{min-height:88px;line-height:1.5;resize:vertical}
+.grat{display:flex;flex-direction:column;gap:8px}
+.mood-chart-wrap{background:#0e2c34;border:1px solid var(--line);border-radius:14px;padding:14px}
+.mood-chart-title{font-family:'Barlow Condensed';font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:8px}
+canvas.chart-mood{width:100%;height:90px;display:block}
+.breathe-wrap{text-align:center}
+.bbtn{background:var(--tide);color:#06231d;border:none;border-radius:12px;padding:12px 20px;font-family:'Barlow Condensed';text-transform:uppercase;letter-spacing:.06em;font-weight:700;font-size:15px;cursor:pointer}
+.bbtn:hover{background:#54cbb5}
+.breathe-panel{display:none;flex-direction:column;align-items:center;padding:20px 0 4px}
+.breathe-panel.on{display:flex}
+.bcircle{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 50% 38%,#4fcab2,#1d7d8f);transform:scale(.8);transition:transform 4s ease}
+.blabel{margin-top:16px;font-family:'Barlow Condensed';text-transform:uppercase;letter-spacing:.12em;font-size:16px;color:var(--tide)}
+.support{margin-top:18px;background:#12333c;border:1px solid var(--line);border-left:4px solid var(--dawn);border-radius:14px;padding:15px 16px}
+.support h3{color:var(--dawn);font-size:16px;margin-bottom:7px;text-transform:none;letter-spacing:0}
+.support p{font-size:13.5px;color:var(--foam);line-height:1.5}
+.support a{display:inline-block;margin-top:9px;margin-right:8px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 14px;color:var(--foam);text-decoration:none;font-size:13px}
+.support a:hover{border-color:var(--dawn)}
+.support .src{font-size:11.5px;color:var(--muted);margin-top:11px}
+
+/* FOOTER */
+.foot{margin-top:30px;text-align:center;font-size:12px;color:var(--muted);line-height:1.6}
+.foot .reset{background:none;border:none;color:var(--muted);text-decoration:underline;cursor:pointer;font:inherit}
+
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+:focus-visible{outline:2px solid var(--dawn);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HERO -->
+<header class="hero">
+  <div class="eyebrow label">Journal de bord · objectif de vie</div>
+  <div class="goal">Ironman</div>
+  <div class="sub">Phase 1 — poser les fondations</div>
+  <p class="why">Je ne me reconstruis pas pour être repris. Je me reconstruis pour redevenir entier. Le reste suivra.</p>
+  <div class="water" aria-label="Progression vers le checkpoint Phase 1">
+    <div class="fill" id="waterFill"><div class="wave"></div></div>
+    <div class="cap"><span>Checkpoint Phase 1</span><span id="waterPct">0%</span></div>
+  </div>
+</header>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat lvl"><div class="n" id="levelN">1</div><div class="k" id="levelT">Le plongeon</div></div>
+  <div class="stat"><div class="n" id="xpN">0</div><div class="k">XP totale</div></div>
+  <div class="stat streak"><div class="n" id="freeStreakN">0</div><div class="k">Jours sans clope</div></div>
+</div>
+
+<!-- AFFIRMATION -->
+<section class="think">
+  <div class="q" id="affQ">…</div>
+  <div class="row">
+    <span class="muted" style="font-size:12px">Pensée du moment</span>
+    <button id="affBtn">Nouvelle pensée</button>
+  </div>
+</section>
+
+<!-- CHARTS -->
+<section>
+  <div class="shead"><h2>Progression</h2><span class="hint">14 derniers jours</span></div>
+  <div class="charts-grid">
+    <div class="chart-wrap">
+      <div class="chart-title">Cigarettes / jour</div>
+      <div class="chart-legend">
+        <span class="legend-item"><span class="legend-dot" style="background:var(--warn)"></span>cigarettes</span>
+        <span class="legend-item"><span class="legend-dot" style="background:var(--dawn);opacity:.7"></span>tendance</span>
+      </div>
+      <canvas class="chart" id="cigChart" role="img" aria-label="Graphique cigarettes par jour sur 14 jours"></canvas>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Séances / semaine</div>
+      <div class="chart-legend">
+        <span class="legend-item"><span class="legend-dot" style="background:var(--tide)"></span>jours actifs</span>
+      </div>
+      <canvas class="chart" id="sessionChart" role="img" aria-label="Graphique séances par semaine sur 6 semaines"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- CALENDAR -->
+<section>
+  <div class="shead"><h2>Calendrier sans clope</h2><span class="hint">5 dernières semaines</span></div>
+  <div class="cal-wrap">
+    <div class="cal-header">
+      <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="cal-legend">
+      <span class="cal-leg-item"><span class="cal-leg-dot" style="background:var(--tide)"></span>Zéro clope</span>
+      <span class="cal-leg-item"><span class="cal-leg-dot" style="background:var(--warn)"></span>J'ai fumé</span>
+      <span class="cal-leg-item"><span class="cal-leg-dot" style="background:#0e2c34;border:1px solid var(--line)"></span>Pas de données</span>
+    </div>
+  </div>
+</section>
+
+<!-- MISSIONS -->
+<section>
+  <div class="shead"><h2>Missions du jour</h2><span class="hint" id="dayLabel"></span></div>
+  <div class="list" id="missions"></div>
+  <p class="muted" style="font-size:12.5px;margin-top:9px">Le repos fait partie de l'entraînement. Un jour off, c'est une mission réussie, pas une mission ratée.</p>
+</section>
+
+<!-- QUESTS -->
+<section>
+  <div class="shead"><h2>Quêtes secondaires</h2><span class="hint">les grandes étapes</span></div>
+  <div class="list" id="quests"></div>
+</section>
+
+<!-- CIG COUNTER -->
+<section>
+  <div class="shead"><h2>Le compteur clope</h2><span class="hint">sans jugement</span></div>
+  <div class="cig">
+    <div class="top">
+      <div class="today"><div class="n" id="cigToday">0</div><div class="k">aujourd'hui</div></div>
+      <div class="free"><div class="n" id="cigFree">0</div><div class="k">jours sans</div></div>
+    </div>
+    <button class="add" id="cigBtn">J'ai fumé · +1</button>
+    <div class="coach" id="coach"></div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section>
+  <div class="shead"><h2>Galerie entraînements</h2><span class="hint">photos &amp; vidéos</span></div>
+  <div class="gallery-wrap">
+    <div class="upload-zone">
+      <label class="section-label">Ajouter un média</label>
+      <div class="upload-fields">
+        <input type="date" class="date-inp" id="mediaDate" aria-label="Date de l'entraînement">
+        <input type="text" class="note-inp" id="mediaNote" placeholder="Note (optionnel)">
+      </div>
+      <label class="file-pick-btn">
+        <input type="file" id="mediaFile" accept="image/*,video/*" multiple aria-label="Choisir fichiers">
+        <span id="fileLabel">📎 Choisir photo(s) ou vidéo(s)</span>
+      </label>
+      <div class="file-info" id="fileInfo"></div>
+      <button class="upload-btn" id="uploadBtn" disabled>Ajouter à la galerie</button>
+    </div>
+    <div class="gallery-grid" id="galleryGrid">
+      <div class="gal-empty">Tes entraînements apparaîtront ici.</div>
+    </div>
+  </div>
+</section>
+
+<!-- MENTAL HEALTH -->
+<section>
+  <div class="shead"><h2>Espace tête</h2><span class="hint">santé mentale</span></div>
+  <div class="mind">
+    <p class="lead">Ton coin à toi pour faire le point. Rien n'est jugé, rien ne part ailleurs. Bouger le corps, c'est la moitié du chemin — l'autre moitié, c'est ici.</p>
+
+    <div class="mblock">
+      <h3>Comment je me sens, là ?</h3>
+      <div class="moods" id="moods"></div>
+    </div>
+
+    <div class="mblock">
+      <div class="mood-chart-wrap">
+        <div class="mood-chart-title">Humeur sur 14 jours</div>
+        <canvas class="chart-mood" id="moodChart" role="img" aria-label="Graphique humeur sur 14 jours"></canvas>
+      </div>
+    </div>
+
+    <div class="mblock">
+      <h3>Vider mon sac</h3>
+      <div class="jhint">Qu'est-ce qui pèse aujourd'hui ? Et une chose, même minuscule, qui a tenu bon ?</div>
+      <textarea class="jbox" id="journal" placeholder="Écris ce qui vient…"></textarea>
+    </div>
+
+    <div class="mblock">
+      <h3>3 petites victoires / gratitudes du jour</h3>
+      <div class="grat">
+        <input class="gin" id="g0" placeholder="1 —">
+        <input class="gin" id="g1" placeholder="2 —">
+        <input class="gin" id="g2" placeholder="3 —">
+      </div>
+    </div>
+
+    <div class="mblock breathe-wrap">
+      <h3 style="margin-bottom:12px">Se poser une minute</h3>
+      <button class="bbtn" id="bbtn">Respiration guidée</button>
+      <div class="breathe-panel" id="bpanel">
+        <div class="bcircle" id="bcircle"></div>
+        <div class="blabel" id="blabel">Prêt ?</div>
+      </div>
+    </div>
+
+    <div class="support">
+      <h3>Une journée trop lourde ?</h3>
+      <p>Tu n'as pas à la porter seul. En parler — à un proche, à un médecin — soulage vraiment, et ce n'est pas une faiblesse. Si les pensées deviennent sombres, appelle, même juste pour être écouté :</p>
+      <a href="tel:3114">📞 3114 · prévention du suicide</a>
+      <a href="tel:112">🚑 112 · urgences</a>
+      <p class="src">Le 3114 (France) est gratuit, confidentiel et ouvert 24 h/24. Adapte ces numéros à ton pays.</p>
+    </div>
+  </div>
+</section>
+
+<div class="foot">
+  Tes données restent sur cet appareil, rien que pour toi.<br>
+  <button class="reset" id="resetBtn">Tout remettre à zéro</button>
+</div>
+
+</div>
+
+<script>
+// ================================================================
+// CONSTANTS
+// ================================================================
+const STORE_KEY = 'marc:tracker:v1';
+const todayStr = () => new Date().toLocaleDateString('fr-CA');
+
+const DAILY = [
+  {id:'move',   txt:"Bouger aujourd'hui (nage, vélo, renfo ou course)", xp:20},
+  {id:'eat',    txt:'Manger 3 vrais repas — nourrir, pas priver', xp:15},
+  {id:'water',  txt:"Boire de l'eau régulièrement", xp:10},
+  {id:'sleep',  txt:'Au lit à une heure raisonnable (viser 7 h)', xp:15},
+  {id:'mob',    txt:'10 min de mobilité / étirements', xp:10},
+  {id:'breath', txt:"3 respirations lentes quand l'envie de clope monte", xp:10},
+];
+
+const QUESTS = [
+  {id:'doc',     txt:'Prendre RDV médecin — feu vert effort', xp:40, cp:false},
+  {id:'jourj',   txt:"Fixer mon « jour J » d'arrêt du tabac", xp:40, cp:false},
+  {id:'free1',   txt:'1 journée entière sans clope', xp:50, cp:false},
+  {id:'free3',   txt:"3 jours sans clope d'affilée", xp:80, cp:false},
+  {id:'free7',   txt:'7 jours sans clope', xp:150, cp:false},
+  {id:'swim50',  txt:'Premier 50 m en continu', xp:40, cp:false},
+  {id:'swim100', txt:'Premier 100 m en continu', xp:60, cp:false},
+  {id:'swim200', txt:'200 m en continu — checkpoint nage', xp:100, cp:true},
+  {id:'bike40',  txt:'Vélo facile 40 min — checkpoint vélo', xp:80, cp:true},
+  {id:'run20',   txt:'Marche/course 20 min sans douleur tibiale — checkpoint course', xp:100, cp:true},
+  {id:'renfo',   txt:'Renfo intégré à ma semaine — checkpoint force', xp:80, cp:true},
+];
+
+const AFF = [
+  "C'est le moment de me concentrer sur moi.",
+  "Un 25 m aujourd'hui, c'est un de plus qu'hier.",
+  "Je ne cours pas après quelqu'un. Je cours vers moi.",
+  "Lentement est une allure. Continuer est une victoire.",
+  "Mon souffle reviendra. Je lui laisse le temps.",
+  "Le repos fait partie de l'entraînement.",
+  "Manger, dormir, bouger. Le reste suivra.",
+  "Chaque longueur efface une raison de douter.",
+  "Je n'ai pas besoin d'être rapide. J'ai besoin d'être là demain.",
+  "Trois semaines de douleur m'ont montré où était ma force.",
+  "La discipline, c'est l'amour-propre en version adulte.",
+  "Je choisis ma vie au lieu de la subir.",
+];
+
+const COACH = [
+  "Noté. Pas de honte — la honte fait fumer plus, pas moins. La prochaine, repousse-la de 10 minutes.",
+  "Ok. Une clope ne casse rien, c'est la tendance qui compte. Bois un grand verre d'eau, là, maintenant.",
+  "Compté, sans jugement. Faim, stress ou habitude ? Nomme l'envie — elle perd du pouvoir.",
+  "Pris en note. Ton souffle au bassin se souvient de chaque cigarette épargnée. 3 respirations lentes avant la suivante.",
+  "On ne vise pas la perfection, on vise moins qu'hier. Tu gères, Marc.",
+  "Compté. Sors marcher 5 minutes — l'envie passe en 3 à 5 min, chrono en main.",
+  "« On ne tombe pas pour rester à terre. » Une de plus, et on continue.",
+  "Celle-là, tu la subissais peut-être. La prochaine, tu peux la choisir — ou la laisser.",
+];
+
+const LEVELS = [
+  'Le plongeon','Tête hors de l\'eau','Cardio en chantier','Nageur régulier',
+  'Le corps répond','Endurance qui monte','Machine en rodage',
+  'Triathlète en devenir','Sur la rampe','Inarrêtable',
+];
+
+const MOODS = [
+  {v:1, e:'😔', l:'Très bas'},
+  {v:2, e:'😕', l:'Bas'},
+  {v:3, e:'😐', l:'Moyen'},
+  {v:4, e:'🙂', l:'Bien'},
+  {v:5, e:'😄', l:'Au top'},
+];
+
+const XP_PER = 150;
+
+// ================================================================
+// STORAGE LAYER — swap the internals here to change backend
+// ================================================================
+const AppStorage = {
+  get(key) {
+    try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : null; } catch(e) { return null; }
+  },
+  set(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) { console.warn('AppStorage write failed', e); }
+  },
+  remove(key) {
+    try { localStorage.removeItem(key); } catch(e) {}
+  },
+};
+
+// ================================================================
+// MEDIA DB — IndexedDB for blobs (photos/videos)
+// ================================================================
+const MediaDB = {
+  _db: null,
+
+  open() {
+    if (this._db) return Promise.resolve();
+    return new Promise((res, rej) => {
+      const req = indexedDB.open('marc-media-v1', 1);
+      req.onupgradeneeded = e => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains('media')) {
+          const store = db.createObjectStore('media', {keyPath:'id', autoIncrement:true});
+          store.createIndex('date', 'date', {unique:false});
+        }
+      };
+      req.onsuccess = e => { this._db = e.target.result; res(); };
+      req.onerror = () => rej(req.error);
+    });
+  },
+
+  async add(item) {
+    await this.open();
+    return new Promise((res, rej) => {
+      const tx = this._db.transaction('media', 'readwrite');
+      const r = tx.objectStore('media').add(item);
+      r.onsuccess = () => res(r.result);
+      r.onerror = () => rej(r.error);
+    });
+  },
+
+  async getAll() {
+    await this.open();
+    return new Promise((res, rej) => {
+      const tx = this._db.transaction('media', 'readonly');
+      const r = tx.objectStore('media').getAll();
+      r.onsuccess = () => res(r.result || []);
+      r.onerror = () => rej(r.error);
+    });
+  },
+
+  async delete(id) {
+    await this.open();
+    return new Promise((res, rej) => {
+      const tx = this._db.transaction('media', 'readwrite');
+      const r = tx.objectStore('media').delete(id);
+      r.onsuccess = () => res();
+      r.onerror = () => rej(r.error);
+    });
+  },
+
+  async clearAll() {
+    await this.open();
+    return new Promise((res, rej) => {
+      const tx = this._db.transaction('media', 'readwrite');
+      const r = tx.objectStore('media').clear();
+      r.onsuccess = () => res();
+      r.onerror = () => rej(r.error);
+    });
+  },
+};
+
+// ================================================================
+// STATE
+// ================================================================
+let S = null;
+
+function loadState() {
+  S = AppStorage.get(STORE_KEY);
+  if (!S) S = {days:{}, quests:{}, affIdx:0};
+  if (!S.days) S.days = {};
+  if (!S.quests) S.quests = {};
+  if (typeof S.affIdx === 'undefined') S.affIdx = 0;
+}
+
+function saveState() { AppStorage.set(STORE_KEY, S); }
+
+function day(d) {
+  d = d || todayStr();
+  if (!S.days[d]) S.days[d] = {missions:{}, cigs:0, mind:{mood:null, journal:'', grat:['','','']}};
+  const x = S.days[d];
+  if (!x.missions) x.missions = {};
+  if (typeof x.cigs !== 'number') x.cigs = 0;
+  if (!x.mind) x.mind = {mood:null, journal:'', grat:['','','']};
+  if (!x.mind.grat) x.mind.grat = ['','',''];
+  return x;
+}
+
+function totalXP() {
+  let x = 0;
+  for (const d in S.days) { const m = S.days[d].missions||{}; DAILY.forEach(t => { if (m[t.id]) x += t.xp; }); }
+  QUESTS.forEach(q => { if (S.quests[q.id]) x += q.xp; });
+  return x;
+}
+
+function freeStreak() {
+  let n = 0;
+  const dt = new Date();
+  for (let i = 0; i < 400; i++) {
+    const key = dt.toLocaleDateString('fr-CA');
+    const rec = S.days[key];
+    if (i === 0) {
+      // Today: count as clean even if no data yet (haven't logged any cigs)
+      if (rec && rec.cigs > 0) break;
+      n++;
+    } else {
+      if (!rec) break; // no record for that day = streak ends
+      if (rec.cigs > 0) break;
+      n++;
+    }
+    dt.setDate(dt.getDate() - 1);
+  }
+  return n;
+}
+
+// ================================================================
+// CHART UTILS
+// ================================================================
+const C_TEXT = '#86A6AD';
+const C_GRID = 'rgba(42,90,103,0.45)';
+
+function prepCanvas(id, H) {
+  const cv = document.getElementById(id);
+  if (!cv) return null;
+  const W = cv.offsetWidth;
+  if (W < 10) return null;
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = W * dpr;
+  cv.height = H * dpr;
+  const ctx = cv.getContext('2d');
+  ctx.scale(dpr, dpr);
+  return {ctx, W, H};
+}
+
+function linReg(vals) {
+  const n = vals.length; if (n < 2) return vals.slice();
+  let sx=0, sy=0, sxy=0, sx2=0;
+  for (let i=0;i<n;i++) { sx+=i; sy+=vals[i]; sxy+=i*vals[i]; sx2+=i*i; }
+  const den = n*sx2 - sx*sx;
+  if (!den) return vals.map(() => sy/n);
+  const m = (n*sxy - sx*sy)/den, b = (sy - m*sx)/n;
+  return vals.map((_,i) => Math.max(0, m*i+b));
+}
+
+function drawBars(id, labels, vals, barCol, trendCol, forcedMax, H) {
+  const r = prepCanvas(id, H||150); if (!r) return;
+  const {ctx,W} = r; const cH = H||150;
+  const pad = {t:12,r:8,b:26,l:30};
+  const iW = W-pad.l-pad.r, iH = cH-pad.t-pad.b;
+  const n = vals.length; if (!n) return;
+  const yMax = forcedMax||Math.max(...vals,1);
+
+  ctx.clearRect(0,0,W,cH);
+
+  // grid + y labels
+  ctx.strokeStyle = C_GRID; ctx.lineWidth = 1;
+  ctx.font = `10px Barlow,sans-serif`; ctx.fillStyle = C_TEXT; ctx.textAlign = 'right';
+  [0,0.5,1].forEach(p => {
+    const y = pad.t + iH*(1-p);
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+    ctx.fillText(Math.round(yMax*p), pad.l-4, y+4);
+  });
+
+  // bars
+  const slot = iW/n, bW = slot*0.55;
+  vals.forEach((v,i) => {
+    const bH = (v/yMax)*iH;
+    const x = pad.l + i*slot + (slot-bW)/2;
+    const y = pad.t + iH - bH;
+    if (bH > 0) {
+      const r2 = Math.min(4, bW/2, bH);
+      ctx.fillStyle = barCol;
+      ctx.beginPath();
+      ctx.moveTo(x+r2, y); ctx.lineTo(x+bW-r2,y);
+      ctx.arcTo(x+bW,y,x+bW,y+r2,r2); ctx.lineTo(x+bW,y+bH);
+      ctx.lineTo(x,y+bH); ctx.arcTo(x,y,x+r2,y,r2);
+      ctx.closePath(); ctx.fill();
+    }
+    // x label
+    if (n<=8||i%2===0||i===n-1) {
+      ctx.fillStyle = C_TEXT; ctx.font='9px Barlow,sans-serif'; ctx.textAlign='center';
+      ctx.fillText(labels[i], x+bW/2, cH-4);
+    }
+  });
+
+  // trend line
+  if (trendCol && n>=2) {
+    const tr = linReg(vals);
+    ctx.strokeStyle = trendCol; ctx.lineWidth=2; ctx.setLineDash([4,3]);
+    ctx.beginPath();
+    tr.forEach((v,i) => {
+      const x = pad.l + i*slot + slot/2;
+      const y = pad.t + iH - (v/yMax)*iH;
+      i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    });
+    ctx.stroke(); ctx.setLineDash([]);
+  }
+}
+
+function drawLine(id, labels, vals, lineCol, dotCol, yMin, yMax, H) {
+  const r = prepCanvas(id, H||150); if (!r) return;
+  const {ctx,W} = r; const cH = H||150;
+  const pad = {t:8,r:8,b:24,l:28};
+  const iW = W-pad.l-pad.r, iH = cH-pad.t-pad.b;
+  const n = labels.length; if (!n) return;
+  const range = (yMax-yMin)||1;
+
+  ctx.clearRect(0,0,W,cH);
+
+  // grid
+  ctx.strokeStyle = C_GRID; ctx.lineWidth=1;
+  ctx.font='10px Barlow,sans-serif'; ctx.fillStyle=C_TEXT;
+  [0,0.25,0.5,0.75,1].forEach(p => {
+    const y = pad.t + iH*(1-p);
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+    ctx.textAlign='right';
+    ctx.fillText(Math.round(yMin+range*p), pad.l-4, y+4);
+  });
+
+  // collect valid points
+  const pts = vals.map((v,i) => {
+    if (v===null||v===undefined) return null;
+    const x = pad.l + (n<2 ? iW/2 : i/(n-1)*iW);
+    const y = pad.t + iH - ((v-yMin)/range)*iH;
+    return {x,y};
+  }).filter(Boolean);
+
+  if (pts.length >= 2) {
+    // area fill
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pad.t+iH);
+    pts.forEach(p => ctx.lineTo(p.x,p.y));
+    ctx.lineTo(pts[pts.length-1].x, pad.t+iH);
+    ctx.closePath();
+    ctx.fillStyle = lineCol+'20'; ctx.fill();
+    // line
+    ctx.strokeStyle=lineCol; ctx.lineWidth=2; ctx.lineJoin='round';
+    ctx.beginPath();
+    pts.forEach((p,j) => j===0 ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y));
+    ctx.stroke();
+  }
+
+  // dots
+  pts.forEach(p => {
+    ctx.beginPath(); ctx.arc(p.x,p.y,3.5,0,Math.PI*2);
+    ctx.fillStyle=dotCol; ctx.fill();
+  });
+
+  // x labels
+  labels.forEach((l,i) => {
+    if (n<=8||i%2===0||i===n-1) {
+      const x = pad.l + (n<2 ? iW/2 : i/(n-1)*iW);
+      ctx.fillStyle=C_TEXT; ctx.font='9px Barlow,sans-serif'; ctx.textAlign='center';
+      ctx.fillText(l, x, cH-4);
+    }
+  });
+}
+
+// ================================================================
+// CHART DATA
+// ================================================================
+function renderCharts() {
+  requestAnimationFrame(() => {
+    // Cig chart — last 14 days
+    const cigL=[], cigV=[];
+    const dt0=new Date();
+    for (let i=13;i>=0;i--) {
+      const d=new Date(dt0); d.setDate(d.getDate()-i);
+      const k=d.toLocaleDateString('fr-CA'), rec=S.days[k];
+      cigL.push(d.getDate()+'/'+(d.getMonth()+1));
+      cigV.push(rec?rec.cigs:0);
+    }
+    drawBars('cigChart', cigL, cigV, '#E97A6B', '#F4A25988', Math.max(...cigV,5), 150);
+
+    // Session chart — last 6 weeks
+    const sesL=[], sesV=[];
+    const now=new Date();
+    const dow=(now.getDay()+6)%7;
+    const ws0=new Date(now); ws0.setDate(ws0.getDate()-dow);
+    for (let w=5;w>=0;w--) {
+      const ws=new Date(ws0); ws.setDate(ws.getDate()-w*7);
+      let s=0;
+      for (let d=0;d<7;d++) {
+        const wd=new Date(ws); wd.setDate(wd.getDate()+d);
+        if (wd>now) break;
+        const rec=S.days[wd.toLocaleDateString('fr-CA')];
+        if (rec&&rec.missions&&rec.missions.move) s++;
+      }
+      sesL.push('S'+(6-w)); sesV.push(s);
+    }
+    drawBars('sessionChart', sesL, sesV, '#3DBC9F', null, 7, 150);
+
+    // Mood chart — last 14 days
+    const mL=[], mV=[];
+    for (let i=13;i>=0;i--) {
+      const d=new Date(dt0); d.setDate(d.getDate()-i);
+      const k=d.toLocaleDateString('fr-CA'), rec=S.days[k];
+      mL.push(d.getDate()+'/'+(d.getMonth()+1));
+      mV.push(rec&&rec.mind?rec.mind.mood:null);
+    }
+    drawLine('moodChart', mL, mV, '#3DBC9F', '#F4A259', 1, 5, 90);
+  });
+}
+
+// ================================================================
+// CALENDAR
+// ================================================================
+function renderCalendar() {
+  const grid = document.getElementById('calGrid'); if (!grid) return;
+  grid.innerHTML = '';
+  const today=new Date(), todayKey=todayStr();
+  const dow=(today.getDay()+6)%7;
+  const start=new Date(today); start.setDate(start.getDate()-dow-28);
+
+  for (let i=0;i<35;i++) {
+    const d=new Date(start); d.setDate(d.getDate()+i);
+    const key=d.toLocaleDateString('fr-CA'), rec=S.days[key];
+    const isFuture=d>today, isToday=key===todayKey;
+    const el=document.createElement('div');
+    el.className='cal-day'; el.textContent=d.getDate(); el.title=key;
+    if (isFuture) el.classList.add('future');
+    else if (!rec) el.classList.add('nodata');
+    else if (rec.cigs>0) { el.classList.add('smoked'); el.title=key+' · '+rec.cigs+' clope'+(rec.cigs>1?'s':''); }
+    else el.classList.add('clean');
+    if (isToday) el.classList.add('today');
+    grid.appendChild(el);
+  }
+}
+
+// ================================================================
+// MAIN RENDER
+// ================================================================
+function render() {
+  day(); // ensure today's record exists before any reads
+
+  const xp=totalXP(), lvl=Math.floor(xp/XP_PER)+1;
+  document.getElementById('xpN').textContent=xp;
+  document.getElementById('levelN').textContent=lvl;
+  document.getElementById('levelT').textContent=LEVELS[Math.min(lvl-1,LEVELS.length-1)];
+
+  const cps=QUESTS.filter(q=>q.cp), done=cps.filter(q=>S.quests[q.id]).length;
+  const pct=Math.round(done/cps.length*100);
+  document.getElementById('waterFill').style.width=pct+'%';
+  document.getElementById('waterPct').textContent=pct+'%';
+
+  const streak=freeStreak();
+  document.getElementById('freeStreakN').textContent=streak;
+  document.getElementById('cigFree').textContent=streak;
+  document.getElementById('cigToday').textContent=day().cigs;
+
+  document.getElementById('dayLabel').textContent=
+    new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+
+  // missions
+  const m=day().missions, mc=document.getElementById('missions'); mc.innerHTML='';
+  DAILY.forEach(t => {
+    const el=document.createElement('div');
+    el.className='item'+(m[t.id]?' done':''); el.tabIndex=0; el.setAttribute('role','button');
+    el.innerHTML=`<div class="box"><svg viewBox="0 0 24 24" fill="none" stroke="#0a242c" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="txt">${t.txt}</div><div class="xp">+${t.xp}</div>`;
+    const toggle=()=>{ day().missions[t.id]=!day().missions[t.id]; saveState(); render(); };
+    el.onclick=toggle; el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}};
+    mc.appendChild(el);
+  });
+
+  // quests
+  const qc=document.getElementById('quests'); qc.innerHTML='';
+  QUESTS.forEach(q => {
+    const ok=!!S.quests[q.id];
+    const el=document.createElement('div');
+    el.className='item q'+(ok?' done':''); el.tabIndex=0; el.setAttribute('role','button');
+    el.innerHTML=`<div class="box"><svg viewBox="0 0 24 24" fill="none" stroke="#0a242c" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="txt">${q.txt}${q.cp?' ⭐':''}</div><div class="xp">+${q.xp}</div>`;
+    const toggle=()=>{ S.quests[q.id]=!S.quests[q.id]; saveState(); render(); };
+    el.onclick=toggle; el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}};
+    qc.appendChild(el);
+  });
+
+  renderMind();
+  renderCalendar();
+  renderCharts();
+}
+
+// ================================================================
+// MENTAL HEALTH
+// ================================================================
+function renderMind() {
+  const md=day().mind;
+  const mc=document.getElementById('moods'); mc.innerHTML='';
+  MOODS.forEach(o => {
+    const el=document.createElement('div');
+    el.className='mood'+(md.mood===o.v?' sel':''); el.tabIndex=0;
+    el.setAttribute('role','button'); el.setAttribute('aria-label',o.l);
+    el.innerHTML=`<span class="e">${o.e}</span>${o.l}`;
+    const pick=()=>{ day().mind.mood=(day().mind.mood===o.v?null:o.v); saveState(); renderMind(); renderCharts(); };
+    el.onclick=pick; el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();pick();}};
+    mc.appendChild(el);
+  });
+  const j=document.getElementById('journal');
+  if(document.activeElement!==j) j.value=md.journal||'';
+  [0,1,2].forEach(i=>{ const g=document.getElementById('g'+i); if(document.activeElement!==g) g.value=(md.grat&&md.grat[i])||''; });
+}
+
+document.getElementById('journal').addEventListener('change',e=>{ day().mind.journal=e.target.value; saveState(); });
+[0,1,2].forEach(i=>{ document.getElementById('g'+i).addEventListener('change',e=>{ day().mind.grat[i]=e.target.value; saveState(); }); });
+
+// ================================================================
+// AFFIRMATION
+// ================================================================
+function showAff(rand) {
+  if(rand) S.affIdx=Math.floor(Math.random()*AFF.length);
+  document.getElementById('affQ').textContent='« '+AFF[S.affIdx%AFF.length]+' »';
+}
+document.getElementById('affBtn').onclick=()=>{ showAff(true); saveState(); };
+
+// ================================================================
+// CIG COUNTER
+// ================================================================
+document.getElementById('cigBtn').onclick=()=>{
+  day().cigs++; saveState(); render();
+  const c=document.getElementById('coach');
+  c.textContent=COACH[Math.floor(Math.random()*COACH.length)];
+  c.classList.remove('show'); void c.offsetWidth; c.classList.add('show');
+};
+
+// ================================================================
+// GALLERY
+// ================================================================
+let pendingFiles = [];
+
+document.getElementById('mediaDate').value = todayStr();
+
+document.getElementById('mediaFile').addEventListener('change', e => {
+  pendingFiles = Array.from(e.target.files);
+  const info = document.getElementById('fileInfo');
+  const btn = document.getElementById('uploadBtn');
+  const lbl = document.getElementById('fileLabel');
+  if (pendingFiles.length) {
+    const mb = (pendingFiles.reduce((s,f)=>s+f.size,0)/1024/1024).toFixed(1);
+    info.textContent = pendingFiles.length+' fichier(s) · '+mb+' Mo';
+    lbl.textContent = '✓ '+pendingFiles.length+' fichier(s) sélectionné(s)';
+    btn.disabled = false;
+  } else {
+    info.textContent = '';
+    lbl.textContent = '📎 Choisir photo(s) ou vidéo(s)';
+    btn.disabled = true;
+  }
+});
+
+document.getElementById('uploadBtn').addEventListener('click', async () => {
+  if (!pendingFiles.length) return;
+  const btn = document.getElementById('uploadBtn');
+  btn.disabled = true; btn.textContent = 'Enregistrement…';
+  const date = document.getElementById('mediaDate').value || todayStr();
+  const note = document.getElementById('mediaNote').value.trim();
+  try {
+    for (const file of pendingFiles) {
+      await MediaDB.add({date, name:file.name, type:file.type, blob:file, note});
+    }
+    document.getElementById('mediaFile').value = '';
+    document.getElementById('mediaNote').value = '';
+    document.getElementById('mediaDate').value = todayStr();
+    document.getElementById('fileInfo').textContent = '';
+    document.getElementById('fileLabel').textContent = '📎 Choisir photo(s) ou vidéo(s)';
+    pendingFiles = [];
+    btn.textContent = 'Ajouter à la galerie';
+    await renderGallery();
+  } catch(err) {
+    console.error(err);
+    btn.textContent = 'Erreur — réessaie';
+    setTimeout(()=>{ btn.textContent='Ajouter à la galerie'; btn.disabled=false; }, 3000);
+  }
+});
+
+async function renderGallery() {
+  const grid = document.getElementById('galleryGrid'); if (!grid) return;
+  grid.innerHTML = '';
+  let items = [];
+  try { items = await MediaDB.getAll(); } catch(e) { console.warn(e); }
+
+  if (!items.length) {
+    grid.innerHTML = '<div class="gal-empty">Tes entraînements apparaîtront ici.<br>Ajoute une photo ou une vidéo ci-dessus.</div>';
+    return;
+  }
+
+  items.sort((a,b) => b.date.localeCompare(a.date));
+
+  items.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'gal-item';
+    const url = URL.createObjectURL(item.blob);
+    const isVideo = item.type && item.type.startsWith('video/');
+    let media;
+    if (isVideo) {
+      media = document.createElement('video');
+      media.src = url; media.controls = true; media.preload = 'metadata';
+      media.style.cssText = 'width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#000';
+    } else {
+      media = document.createElement('img');
+      media.src = url; media.alt = item.note||item.name; media.loading = 'lazy';
+    }
+    const fmtDate = item.date ? new Date(item.date+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'}) : '';
+    const ov = document.createElement('div'); ov.className = 'gal-overlay';
+    ov.innerHTML = `<div class="gal-date">${fmtDate}</div>${item.note?`<div class="gal-note">${item.note}</div>`:''}<div class="gal-actions"><button class="gal-btn dl">⬇ Télécharger</button><button class="gal-btn del">✕</button></div>`;
+    ov.querySelector('.dl').onclick = () => {
+      const a = document.createElement('a'); a.href=url; a.download=item.name||('media-'+item.date); a.click();
+    };
+    ov.querySelector('.del').onclick = async () => {
+      if (confirm('Supprimer ce fichier ?')) { URL.revokeObjectURL(url); await MediaDB.delete(item.id); renderGallery(); }
+    };
+    el.appendChild(media); el.appendChild(ov);
+    grid.appendChild(el);
+  });
+}
+
+// ================================================================
+// BREATHING
+// ================================================================
+let breathing = false, bTimers = [];
+function clearB() { bTimers.forEach(t=>clearTimeout(t)); bTimers=[]; }
+function breatheCycle() {
+  const c=document.getElementById('bcircle'), l=document.getElementById('blabel');
+  l.textContent='Inspire…'; c.style.transition='transform 4s ease'; c.style.transform='scale(1.5)';
+  bTimers.push(setTimeout(()=>{
+    l.textContent='Retiens…';
+    bTimers.push(setTimeout(()=>{
+      l.textContent='Expire…'; c.style.transition='transform 6s ease'; c.style.transform='scale(.8)';
+      bTimers.push(setTimeout(()=>{ if(breathing) breatheCycle(); },6000));
+    },1000));
+  },4000));
+}
+document.getElementById('bbtn').onclick=()=>{
+  breathing=!breathing;
+  const panel=document.getElementById('bpanel'), btn=document.getElementById('bbtn');
+  if(breathing){ panel.classList.add('on'); btn.textContent='Arrêter'; breatheCycle(); }
+  else { clearB(); panel.classList.remove('on'); btn.textContent='Respiration guidée';
+    document.getElementById('bcircle').style.transform='scale(.8)';
+    document.getElementById('blabel').textContent='Prêt ?'; }
+};
+
+// ================================================================
+// RESET
+// ================================================================
+document.getElementById('resetBtn').onclick = async () => {
+  if (confirm('Tout remettre à zéro ? Cette action efface toute ta progression et tes médias.')) {
+    S={days:{},quests:{},affIdx:0}; saveState();
+    try { await MediaDB.clearAll(); } catch(e){}
+    document.getElementById('coach').classList.remove('show');
+    render(); renderGallery(); showAff(false);
+  }
+};
+
+// ================================================================
+// INIT
+// ================================================================
+(async () => {
+  loadState();
+  showAff(false);
+  render();
+  await renderGallery();
+})();
+</script>
+</body>
+</html>
