@@ -225,7 +225,7 @@ export default function EntrainementClient() {
 
       {/* ── FEUILLE DE ROUTE ── */}
       <section>
-        <div className="shead"><h2>Feuille de route 2 ans</h2><span className="hint">6 phases</span></div>
+        <div className="shead"><h2>Feuille de route 2 ans</h2><span className="hint">9 phases</span></div>
         <div className="prog-roadmap">
           {PHASES.map(p => (
             <div key={p.id} className={`prog-roadmap-phase${p.id === currentPhase.id ? ' current' : ''}`}>

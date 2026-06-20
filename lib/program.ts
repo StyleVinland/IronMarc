@@ -1,10 +1,14 @@
-// Programme d'entraînement complet pour Marc
-// Pubalgie + périostites + 10 ans sans sport → Ironman en 2 ans
-// Protocoles : Copenhagen (pubalgie) + MTSS (tibias) + progression cardio très douce
+// Programme d'entraînement Marc — Pubalgie + périostites + 10 ans sans sport → Ironman 2 ans
+// Protocoles : Copenhagen (pubalgie) · MTSS (tibias) · règle des 10 % (course) · Zone 2 (cardio)
 
-export const PROGRAM_START = '2026-06-19'; // Jour 1 : 25 m nagés
+export const PROGRAM_START = '2026-06-19';
 
-export type SessionType = 'renfo' | 'swim' | 'bike' | 'run' | 'mobility' | 'rest';
+export type SessionType = 'renfo' | 'swim' | 'bike' | 'run' | 'brick' | 'rest';
+export type WeekDay = 'lun' | 'mar' | 'mer' | 'jeu' | 'ven' | 'sam' | 'dim';
+export const WEEK_DAYS: WeekDay[] = ['lun', 'mar', 'mer', 'jeu', 'ven', 'sam', 'dim'];
+export const WEEK_DAY_LABELS: Record<WeekDay, string> = {
+  lun: 'Lun', mar: 'Mar', mer: 'Mer', jeu: 'Jeu', ven: 'Ven', sam: 'Sam', dim: 'Dim',
+};
 
 export interface Exercise {
   name: string;
@@ -22,298 +26,558 @@ export interface TrainingSession {
   color: string;
   duration: string;
   desc: string;
-  painCheck?: boolean; // afficher le check douleur avant
+  painCheck?: boolean;
   exercises: Exercise[];
 }
-
-// ── SESSIONS ─────────────────────────────────────────────────────
-
-export const SESSIONS: Record<string, TrainingSession> = {
-  renfo_a: {
-    id: 'renfo_a',
-    label: 'Renfo A — Pubalgie',
-    short: 'Renfo A',
-    type: 'renfo',
-    color: '#CF8E42',
-    duration: '25 min',
-    desc: 'Adducteurs + gainage — protocole Copenhagen progressif',
-    painCheck: true,
-    exercises: [
-      { name: 'Échauffement', detail: 'Marche sur place, rotations hanches, 5 min', required: true },
-      { name: 'Squeeze isométrique', detail: 'Ballon ou coussin entre les genoux — serrer 30 à 45 s, relâcher', sets: '5 reps', warning: false },
-      { name: 'Adduction couché sur le côté', detail: 'Jambe du dessous qui monte lentement et redescend — amplitude modérée', sets: '2-3 × 10 / côté' },
-      { name: 'Copenhagen (genou posé)', detail: 'Planche latérale, jambe du dessus pliée sur un appui bas (banc / chaise), soulever le bassin depuis le genou intérieur', sets: '2 × 6 / côté', warning: false },
-      { name: 'Planche ventrale', detail: 'Sur les coudes, corps droit de la tête aux talons', sets: '3 × 20-40 s' },
-      { name: 'Planche latérale', detail: 'Corps aligné, bras tendu ou sur le coude', sets: '3 × 15-25 s / côté' },
-      { name: 'Dead bug', detail: 'Dos au sol, bras vers le plafond, genoux à 90°. Étendre bras droit + jambe gauche simultanément. Alterner.', sets: '3 × 8 / côté' },
-      { name: 'Mobilité', detail: 'Fente basse tenue 30 s / côté, pigeon couché 30 s / côté', required: true },
-    ],
-  },
-
-  renfo_b: {
-    id: 'renfo_b',
-    label: 'Renfo B — Tibias & Hanches',
-    short: 'Renfo B',
-    type: 'renfo',
-    color: '#CF8E42',
-    duration: '25 min',
-    desc: 'Mollets + tibias + fessiers — protocole MTSS anti-périostites',
-    painCheck: true,
-    exercises: [
-      { name: 'Échauffement', detail: 'Marche sur place, rotations chevilles × 10 dans chaque sens, 5 min', required: true },
-      { name: 'Mollet genou tendu', detail: 'Debout, montée sur la pointe des pieds (gastrocnémiens)', sets: '3 × 12-15' },
-      { name: 'Mollet genou fléchi', detail: 'Assis, talon au sol, monter sur la pointe (soléaire — le plus lié au tibia)', sets: '3 × 12-15' },
-      { name: 'Excentrique mollet', detail: 'Monter sur 2 pieds, redescendre lentement sur 1 pied en 3-4 secondes. Contrôle total.', sets: '3 × 8 / côté', warning: false },
-      { name: 'Tibialis raises', detail: 'Dos au mur, talons écartés du mur de 30 cm, lever les pointes de pied', sets: '3 × 15-20' },
-      { name: 'Inversion cheville élastique', detail: 'Élastique autour du pied, tirer vers l\'intérieur contre résistance (tibial postérieur)', sets: '3 × 15 / côté' },
-      { name: 'Clamshell', detail: 'Couché sur le côté, genoux pliés à 45°, ouvrir le genou du dessus comme une palourde', sets: '3 × 12 / côté' },
-      { name: 'Pas latéraux élastique', detail: 'Élastique aux chevilles, pas latéraux contrôlés en position légèrement fléchie', sets: '3 × 12' },
-      { name: 'Équilibre 1 pied', detail: 'Sur une jambe, regard fixe. Progresser : yeux ouverts → fermés → surface instable', sets: '3 × 30 s / côté' },
-      { name: 'Mobilité', detail: 'Étirement mollets debout + assis, 30 s × 2 / côté', required: true },
-    ],
-  },
-
-  swim: {
-    id: 'swim',
-    label: 'Natation',
-    short: 'Nage',
-    type: 'swim',
-    color: '#6EC6D8',
-    duration: '20-40 min selon semaine',
-    desc: 'Priorité : technique + respiration. Allure très douce.',
-    exercises: [
-      { name: 'Flottaison ventrale', detail: 'Bras tendus devant, souffler doucement dans l\'eau — sentir le corps flotter horizontal', sets: '5 × 15 m' },
-      { name: 'Battements pieds planche', detail: 'Planche devant, jambes qui battent — petite amplitude, chevilles relâchées', sets: '4 × 25 m' },
-      { name: 'Crawl technique', detail: 'Allure très douce. 1 bras tire → rotation du corps → expiration dans l\'eau. Pas de précipitation.', sets: 'S1-4 : 50-100 m | S5-8 : 100-200 m | S9-16 : 200-300 m' },
-      { name: 'Objectif Phase 1', detail: '200-300 m sans s\'arrêter d\'ici semaine 12. Marc a nagé 25 m le J1 — chaque longueur est une victoire.', required: true },
-    ],
-  },
-
-  bike: {
-    id: 'bike',
-    label: 'Vélo appartement',
-    short: 'Vélo',
-    type: 'bike',
-    color: '#88C49A',
-    duration: '30-45 min',
-    desc: 'Cadence souple, zéro impact articulaire. Ménage le pubis.',
-    exercises: [
-      { name: 'Échauffement', detail: 'Résistance nulle, 70 rpm, 5 min', required: true },
-      { name: 'Corps de séance', detail: 'Résistance légère, 80-90 rpm, allure conversation (tu peux parler normalement)', sets: 'S1-4 : 20 min | S5-8 : 30 min | S9-16 : 35-40 min' },
-      { name: 'Retour au calme', detail: 'Résistance nulle, 5 min', required: true },
-      { name: 'Règle conversation', detail: 'Si tu ne peux plus parler en phrases complètes → tu vas trop vite. Ralentis.', warning: true },
-    ],
-  },
-
-  walk: {
-    id: 'walk',
-    label: 'Marche',
-    short: 'Marche',
-    type: 'run',
-    color: '#8A9870',
-    duration: '20-30 min',
-    desc: 'Sol souple. Disponible dès semaine 5 si douleurs tibiales absentes.',
-    exercises: [
-      { name: 'Marche douce', detail: 'Terrain plat, sol souple si possible (herbe, piste sablée). Chaussures running.', sets: '20-30 min' },
-      { name: 'Écoute', detail: 'Gêne tibia ou aine > 4/10 → rentrer immédiatement. Ce n\'est pas un échec, c\'est de l\'intelligence.', warning: true },
-    ],
-  },
-
-  run_walk: {
-    id: 'run_walk',
-    label: 'Marche / Course',
-    short: 'MC',
-    type: 'run',
-    color: '#C26060',
-    duration: '20-25 min',
-    desc: '1 min course / 2 min marche. Seulement dès semaine 9, si marche indolore.',
-    exercises: [
-      { name: 'Échauffement', detail: '5 min de marche', required: true },
-      { name: 'Intervalles', detail: '1 min course légère (conversation possible) / 2 min marche. 5 à 6 rounds.', sets: '~18 min' },
-      { name: 'Retour calme', detail: '3-5 min marche', required: true },
-      { name: 'Check tibia à 24h', detail: 'Si douleur tibiale persistante le lendemain → rester en marche pure, pas de course.', warning: true },
-    ],
-  },
-
-  rest: {
-    id: 'rest',
-    label: 'Repos',
-    short: 'Repos',
-    type: 'rest',
-    color: '#4A4845',
-    duration: '',
-    desc: 'Le repos est une mission accomplie, pas un échec. C\'est là que le corps se reconstruit.',
-    exercises: [],
-  },
-};
-
-// ── PHASES & TEMPLATES ────────────────────────────────────────────
-
-export type WeekDay = 'lun' | 'mar' | 'mer' | 'jeu' | 'ven' | 'sam' | 'dim';
-export const WEEK_DAYS: WeekDay[] = ['lun', 'mar', 'mer', 'jeu', 'ven', 'sam', 'dim'];
-export const WEEK_DAY_LABELS: Record<WeekDay, string> = {
-  lun: 'Lun', mar: 'Mar', mer: 'Mer', jeu: 'Jeu', ven: 'Ven', sam: 'Sam', dim: 'Dim',
-};
 
 export interface ProgramPhase {
   id: string;
   label: string;
-  weeks: [number, number]; // inclusive
+  weeks: [number, number];
   tagline: string;
   focus: string[];
-  template: Record<WeekDay, string>; // session id
+  template: Record<WeekDay, string>;
   notes: string[];
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SESSIONS
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const SESSIONS: Record<string, TrainingSession> = {
+
+  // ── RENFORCEMENT ──────────────────────────────────────────────────────────
+
+  renfo_a: {
+    id: 'renfo_a', label: 'Renfo A — Pubalgie', short: 'Renfo A',
+    type: 'renfo', color: '#CF8E42', duration: '25 min',
+    desc: 'Adducteurs + gainage — protocole Copenhagen progressif',
+    painCheck: true,
+    exercises: [
+      { name: 'Échauffement', detail: 'Marche sur place, rotations hanches × 10, 5 min', required: true },
+      { name: 'Squeeze isométrique', detail: 'Ballon entre les genoux, serrer 30-45 s, relâcher', sets: '5 reps' },
+      { name: 'Adduction couché côté', detail: 'Jambe du dessous qui monte lentement — amplitude modérée', sets: '3 × 10 / côté' },
+      { name: 'Copenhagen genou (niveau 1→3)', detail: 'Planche latérale, jambe du dessus pliée sur appui bas. Soulever le bassin. Augmenter durée chaque semaine.', sets: '2 × 6-10 / côté', warning: false },
+      { name: 'Planche ventrale', detail: 'Corps droit, sur les coudes', sets: '3 × 20-45 s' },
+      { name: 'Dead bug', detail: 'Dos au sol, étendre bras droit + jambe gauche en alternance, dos collé au sol', sets: '3 × 8 / côté' },
+      { name: 'Mobilité', detail: 'Fente basse 30 s / côté, pigeon couché 30 s / côté', required: true },
+    ],
+  },
+
+  renfo_b: {
+    id: 'renfo_b', label: 'Renfo B — Tibias & Hanches', short: 'Renfo B',
+    type: 'renfo', color: '#CF8E42', duration: '25 min',
+    desc: 'Mollets + tibias + fessiers — protocole MTSS anti-périostites',
+    painCheck: true,
+    exercises: [
+      { name: 'Échauffement', detail: 'Rotations chevilles × 10 par sens, marche sur place, 5 min', required: true },
+      { name: 'Mollet genou tendu', detail: 'Montée sur pointe des pieds (gastrocnémiens)', sets: '3 × 15' },
+      { name: 'Mollet genou fléchi', detail: 'Assis, talon au sol, monter sur la pointe (soléaire — lié au tibia)', sets: '3 × 15' },
+      { name: 'Excentrique mollet', detail: 'Monter sur 2 pieds, descendre lentement sur 1 seul (3-4 sec). Contrôle total.', sets: '3 × 8 / côté' },
+      { name: 'Tibialis raises', detail: 'Dos au mur, talons à 30 cm, lever les pointes de pied', sets: '3 × 20' },
+      { name: 'Clamshell', detail: 'Couché sur le côté, genoux à 45°, ouvrir le genou du dessus', sets: '3 × 12 / côté' },
+      { name: 'Équilibre 1 pied', detail: 'Sur une jambe, regard fixe. Progresser : yeux ouverts → fermés → surface instable', sets: '3 × 30 s / côté' },
+      { name: 'Mobilité', detail: 'Étirement mollet debout + assis, 30 s × 2 / côté', required: true },
+    ],
+  },
+
+  renfo_core: {
+    id: 'renfo_core', label: 'Renfo Core — Maintien tri', short: 'Renfo C',
+    type: 'renfo', color: '#CF8E42', duration: '20 min',
+    desc: 'Gainage triathlon + protection blessures — version maintien Phase 2+',
+    exercises: [
+      { name: 'Copenhagen pied (niveau 3-4)', detail: 'Jambe tendue sur l\'appui, plus difficile que le genou. Maintenir l\'alignement.', sets: '3 × 8-12 / côté' },
+      { name: 'Pont fessier 1 jambe', detail: 'Dos au sol, 1 jambe tendue, pousser le bassin vers le haut avec l\'autre', sets: '3 × 12 / côté' },
+      { name: 'Planche avec rotation', detail: 'En planche, ouvrir un bras vers le plafond, regard vers le haut. Stabilité.', sets: '3 × 8 / côté' },
+      { name: 'Excentrique mollet 1 jambe', detail: 'Descendre lentement en 4 secondes sur 1 jambe. Protection tibia.', sets: '3 × 10 / côté' },
+      { name: 'Superman', detail: 'À plat ventre, soulever bras + jambe opposés. Renforce le dos pour le vélo.', sets: '3 × 12' },
+    ],
+  },
+
+  // ── NATATION ─────────────────────────────────────────────────────────────
+
+  swim_debutant: {
+    id: 'swim_debutant', label: 'Natation — Débutant', short: 'Nage',
+    type: 'swim', color: '#6EC6D8', duration: '25-35 min',
+    desc: 'S1-8 : technique + respiration. 25 → 200 m. Chaque longueur compte.',
+    exercises: [
+      { name: 'Flottaison ventrale', detail: 'Bras tendus, souffler lentement dans l\'eau, sentir le corps horizontaliser', sets: '4 × 15 m' },
+      { name: 'Battements planche', detail: 'Planche devant, jambes qui battent, petite amplitude, chevilles relâchées', sets: '4 × 25 m' },
+      { name: 'Crawl technique', detail: 'Allure très douce. 1 bras tire → rotation corps → expiration dans l\'eau. PAS de précipitation.', sets: 'S1 : 50 m total · S2 : 75 m · S3 : 100 m · S4-6 : 150 m · S7-8 : 200 m' },
+      { name: 'Récupération', detail: 'Dos crawl ou marche dans l\'eau entre chaque série. Si tu t\'essouffle → ralentis.', required: true },
+    ],
+  },
+
+  swim_initiation: {
+    id: 'swim_initiation', label: 'Natation — Initiation', short: 'Nage',
+    type: 'swim', color: '#6EC6D8', duration: '35-45 min',
+    desc: 'S9-16 : construire 200-400 m continus. Technique bras + respiration bilatérale.',
+    exercises: [
+      { name: 'Échauffement', detail: '100 m dos crawl ou 4 × 25 m crawl technique lent', required: true },
+      { name: 'Drills bras', detail: 'Catch-up drill : un bras tire pendant que l\'autre attend devant. Sentir la traction.', sets: '4 × 25 m' },
+      { name: 'Crawl progressif', detail: 'Allure douce → légèrement soutenue. Expiration complète dans l\'eau.', sets: 'S9-10 : 4 × 50 m (30 s repos) · S11-12 : 3 × 75 m · S13-14 : 2 × 100 m · S15-16 : 200 m continu' },
+      { name: 'Objectif S16', detail: 'Nager 200 m sans s\'arrêter à allure conversation. Tu y es.', required: true },
+    ],
+  },
+
+  swim_base: {
+    id: 'swim_base', label: 'Natation — Base', short: 'Nage',
+    type: 'swim', color: '#6EC6D8', duration: '40-55 min',
+    desc: 'S17-40 : 400-900 m. Endurance aérobie + technique régularité.',
+    exercises: [
+      { name: 'Échauffement', detail: '200 m mixte (crawl + dos)', required: true },
+      { name: 'Série principale', detail: 'S17-20 : 4 × 100 m (20 s repos) · S21-26 : 3 × 150 m · S27-32 : 2 × 250 m · S33-40 : 600-800 m continu ou 4 × 150 m (15 s repos)', sets: 'Allure conversation — tu peux parler entre les souffles' },
+      { name: 'Crawl continu', detail: 'S33+ : nager 10-12 min sans arrêt. Gérer le rythme, l\'essoufflement est normal.', sets: 'Viser 400-600 m continus à S40' },
+      { name: 'Retour au calme', detail: '100 m dos crawl lent', required: true },
+    ],
+  },
+
+  swim_endurance: {
+    id: 'swim_endurance', label: 'Natation — Endurance', short: 'Nage',
+    type: 'swim', color: '#6EC6D8', duration: '50-70 min',
+    desc: 'S41-56 : 900-1 500 m. Allure course + travail de vitesse.',
+    exercises: [
+      { name: 'Échauffement', detail: '300 m (200 crawl + 100 dos)', required: true },
+      { name: 'Série principale', detail: 'S41-44 : 6 × 100 m (15 s repos) · S45-50 : 3 × 300 m (20 s repos) · S51-56 : 1 200-1 500 m continus ou 5 × 200 m (20 s repos)', sets: '' },
+      { name: 'Sprint courts', detail: '4 × 25 m à allure rapide — sentir la puissance des bras', sets: '30 s repos entre chaque' },
+      { name: 'Retour au calme', detail: '150 m nage libre lent', required: true },
+    ],
+  },
+
+  swim_avance: {
+    id: 'swim_avance', label: 'Natation — Avancé', short: 'Nage',
+    type: 'swim', color: '#6EC6D8', duration: '60-80 min',
+    desc: 'S57-88 : 1 500-2 800 m. Séances qualité + volume.',
+    exercises: [
+      { name: 'Échauffement', detail: '400 m (300 crawl + 100 dos/brasse)', required: true },
+      { name: 'Série principale', detail: 'S57-62 : 5 × 300 m (15 s repos) · S63-72 : 4 × 400 m (20 s repos) · S73-88 : 2 000-2 500 m (fractionné ou continu)', sets: '' },
+      { name: 'Travail de nage ouverte', detail: 'S65+ : nager sans voir le bord (sighting — levée de tête toutes les 8-10 brasses pour s\'orienter, comme en lac ou mer)', sets: '2 × 200 m' },
+      { name: 'Retour au calme', detail: '200 m dos crawl lent', required: true },
+    ],
+  },
+
+  swim_ironman: {
+    id: 'swim_ironman', label: 'Natation — Ironman', short: 'Nage',
+    type: 'swim', color: '#6EC6D8', duration: '75-100 min',
+    desc: 'S89-104 : 2 800-3 800 m. Préparation distance Ironman (3,8 km).',
+    exercises: [
+      { name: 'Échauffement', detail: '500 m mixte progressif', required: true },
+      { name: 'Volume principal', detail: 'S89-94 : 2 800-3 000 m (fractionné 10 × 300 m) · S95-100 : 3 200 m · S101-104 : 3 800 m (distance race) — nager à allure cible Ironman (très patient, tu as encore 8h de course devant toi)', sets: '' },
+      { name: 'Simulation départ', detail: 'S95+ : départ "départ masse" (nager les 200 premiers mètres légèrement plus vite pour sortir du groupe, puis réduire)', sets: '1 × simulation 5 min' },
+      { name: 'Retour au calme', detail: '200 m lent', required: true },
+    ],
+  },
+
+  // ── VÉLO ─────────────────────────────────────────────────────────────────
+
+  bike_stationnaire: {
+    id: 'bike_stationnaire', label: 'Vélo appartement', short: 'Vélo',
+    type: 'bike', color: '#88C49A', duration: '25-45 min',
+    desc: 'S1-16 : cardio sans impact. Ménage le pubis et les tibias.',
+    exercises: [
+      { name: 'Échauffement', detail: 'Résistance nulle, 70 rpm, 5 min', required: true },
+      { name: 'Corps de séance', detail: 'Résistance légère, 80-90 rpm. S1-4 : 20 min · S5-8 : 30 min · S9-12 : 35 min · S13-16 : 40 min', sets: '' },
+      { name: 'Règle conversation', detail: 'Tu dois pouvoir parler en phrases entières. Si tu t\'essouffle → résistance trop haute. Baisser.', warning: true },
+      { name: 'Retour au calme', detail: 'Résistance nulle, 5 min', required: true },
+    ],
+  },
+
+  bike_court: {
+    id: 'bike_court', label: 'Vélo route — Court', short: 'Vélo',
+    type: 'bike', color: '#88C49A', duration: '45-90 min',
+    desc: 'S17-40 : premiers tours de roue en extérieur. Cadence + zones cardio.',
+    exercises: [
+      { name: 'Échauffement', detail: '10 min à cadence libre, résistance nulle / pente nulle', required: true },
+      { name: 'Zone 2', detail: 'S17-22 : 35 min à allure conversation (cardio Zone 2) · S23-30 : 50 min · S31-40 : 60-75 min. Tu dois pouvoir parler facilement.', sets: 'Viser 80-90 rpm' },
+      { name: 'Assis en montée', detail: 'S25+ : sur les petites montées, rester assis et augmenter légèrement la résistance plutôt que de se lever', sets: '' },
+      { name: 'Retour au calme', detail: '10 min facile', required: true },
+    ],
+  },
+
+  bike_moyen: {
+    id: 'bike_moyen', label: 'Vélo route — Moyen', short: 'Vélo',
+    type: 'bike', color: '#88C49A', duration: '90-120 min',
+    desc: 'S41-56 : vraies sorties d\'endurance. Gestion du cardio + ravitaillement.',
+    exercises: [
+      { name: 'Échauffement', detail: '15 min progressif Zone 1-2', required: true },
+      { name: 'Endurance Zone 2', detail: 'S41-46 : 75 min · S47-52 : 90 min · S53-56 : 100-110 min. Allure régulière, pas de sprint.', sets: '' },
+      { name: 'Boire régulièrement', detail: 'Toutes les 20 min, même sans soif. Sur 90 min+ tu peux perdre 1-2 L.', warning: true },
+      { name: 'Intervalles légers', detail: 'S48+ : 4 × 3 min légèrement soutenu (Zone 3) toutes les 25 min, puis retour Zone 2', sets: '' },
+      { name: 'Retour au calme', detail: '15 min facile', required: true },
+    ],
+  },
+
+  bike_tri: {
+    id: 'bike_tri', label: 'Vélo route — Triathlon', short: 'Vélo',
+    type: 'bike', color: '#88C49A', duration: '2h-3h',
+    desc: 'S57-88 : sorties 2-3h. Travail en position aéro + gestion de l\'énergie.',
+    exercises: [
+      { name: 'Échauffement', detail: '20 min progressif', required: true },
+      { name: 'Volume principal', detail: 'S57-62 : 1h45 · S63-72 : 2h15 · S73-88 : 2h30-3h. Terrain varié, quelques montées.', sets: 'Zone 2 dominant (80%), Zone 3 (20%)' },
+      { name: 'Position aéro', detail: 'S60+ : passer 20-30 min en position basse (coudes sur le guidon ou position tri). Améliore la résistance au vent.', sets: '' },
+      { name: 'Nutrition vélo', detail: 'Toutes les 45 min : 1 gel ou banane + eau. En course ça sera 180 km, tu dois t\'alimenter.', warning: true },
+      { name: 'Retour au calme', detail: '20 min facile + 5 min de marche après pour ne pas rester assis', required: true },
+    ],
+  },
+
+  bike_long: {
+    id: 'bike_long', label: 'Longue sortie vélo', short: 'Long Vélo',
+    type: 'bike', color: '#88C49A', duration: '2h30-4h',
+    desc: 'Sortie longue du week-end. Volume pur, Zone 2. Construction progressive.',
+    exercises: [
+      { name: 'Règle de la longue', detail: 'Aucune sortie longue ne peut dépasser la précédente de +15%. Progression lente = progression sûre.', warning: true },
+      { name: 'Volume', detail: 'S41-52 : 2h-2h30 · S53-62 : 2h30-3h · S63-72 : 3h-3h30 · S73-88 : 3h30-4h30', sets: 'Zone 2 quasi-exclusive' },
+      { name: 'Alimentation longue', detail: 'Avant : repas 2h30 avant. Pendant : 60g glucides/h (gels, bananes, barres). Après : protéines + glucides dans les 30 min.', required: true },
+    ],
+  },
+
+  bike_ironman: {
+    id: 'bike_ironman', label: 'Vélo Ironman', short: 'Vélo IM',
+    type: 'bike', color: '#88C49A', duration: '4h-6h',
+    desc: 'S89-104 : sorties Ironman. 180 km = 5-6h de vélo. Stratégie de course.',
+    exercises: [
+      { name: 'Volume', detail: 'S89-94 : 4h · S95-100 : 4h30-5h · S101-104 : 1 sortie 5h-6h (simulation parcours)', sets: 'Zone 2 impérative — ne pas dépasser Z3 en course' },
+      { name: 'Position course', detail: 'Rester en position aéro le maximum. Sur 180 km c\'est la discipline où tu perds ou gagnes le plus de temps.', sets: '' },
+      { name: 'Stratégie Ironman', detail: 'Les 90 premiers km : très patient (Zone 2 basse), les 90 derniers : maintenir. Ne jamais "attaquer" en vélo — la course à pied attend.', warning: true },
+    ],
+  },
+
+  // ── COURSE / MARCHE ───────────────────────────────────────────────────────
+
+  marche: {
+    id: 'marche', label: 'Marche active', short: 'Marche',
+    type: 'run', color: '#8A9870', duration: '25-35 min',
+    desc: 'S5-8 : reprendre contact avec l\'impact, tibias silencieux requis.',
+    painCheck: true,
+    exercises: [
+      { name: 'Marche active', detail: 'Sol souple (herbe, piste). Pas de trottoir béton au début. Chaussures running.', sets: 'S5 : 20 min · S6 : 25 min · S7-8 : 30-35 min' },
+      { name: 'Check tibia', detail: 'Moindre douleur tibia > 3/10 → s\'arrêter et rentrer. Ce n\'est pas un échec.', warning: true },
+      { name: 'Foulée douce', detail: 'Attaque talon-milieu de pied. Pas de course. Cadence de marche rapide (~6 km/h).', sets: '' },
+    ],
+  },
+
+  marche_course: {
+    id: 'marche_course', label: 'Marche / Course', short: 'M/C',
+    type: 'run', color: '#C26060', duration: '25-35 min',
+    desc: 'S9-26 : intervalles progressifs. Règle des 10% — jamais plus que la semaine d\'avant.',
+    painCheck: true,
+    exercises: [
+      { name: 'Échauffement marche', detail: '5 min de marche active', required: true },
+      { name: 'Intervalles progressifs', detail: 'S9-12 : 1 min course / 2 min marche × 5 (15 min total) · S13-16 : 1/2 × 6 · S17-20 : 2/1 × 5 · S21-24 : 3/1 × 4 · S25-26 : 5/1 × 3', sets: 'Allure très douce — conversation possible' },
+      { name: 'Foulée tibia-safe', detail: 'Pas d\'attaque talon. Milieu de pied. Petite foulée rapide (170-175 pas/min). Cadence > longueur.', warning: false },
+      { name: 'Check 24h', detail: 'Si douleur tibiale le lendemain → rester en marche pure la semaine suivante.', warning: true },
+      { name: 'Retour calme', detail: '5 min marche + étirement mollets', required: true },
+    ],
+  },
+
+  course_debutant: {
+    id: 'course_debutant', label: 'Course — Débutant', short: 'Course',
+    type: 'run', color: '#C26060', duration: '25-35 min',
+    desc: 'S27-40 : premiers 10-20 min continus. Allure très lente = progrès réels.',
+    painCheck: true,
+    exercises: [
+      { name: 'Échauffement', detail: '5 min marche rapide', required: true },
+      { name: 'Course continue', detail: 'S27-30 : 8-10 min continus · S31-34 : 12-15 min · S35-38 : 15-18 min · S39-40 : 18-22 min. Si tu t\'essouffle trop → intercaler 1 min marche.', sets: '' },
+      { name: 'Allure Zone 2', detail: 'Tu dois pouvoir parler en phrases. Si non → tu vas trop vite. C\'est la principale erreur des débutants.', warning: true },
+      { name: 'Retour calme', detail: '5 min marche + étirements mollets + fléchisseurs hanche (3 min/côté)', required: true },
+    ],
+  },
+
+  course_base: {
+    id: 'course_base', label: 'Course — Base', short: 'Course',
+    type: 'run', color: '#C26060', duration: '35-50 min',
+    desc: 'S41-56 : 25-40 min continus. Commencer à gérer l\'allure et la foulée.',
+    painCheck: true,
+    exercises: [
+      { name: 'Échauffement', detail: '5 min marche + éducatifs (montées de genoux × 30, talons-fesses × 30)', required: true },
+      { name: 'Course endurance', detail: 'S41-44 : 25 min · S45-48 : 30 min · S49-52 : 35 min · S53-56 : 38-42 min. Zone 2 exclusive.', sets: '' },
+      { name: 'Cadence', detail: 'Viser 170-180 pas/min. Compte les pas d\'une jambe sur 30 sec (cible : 43-45). Prévient les périostites.', sets: '' },
+      { name: 'Retour calme', detail: '5 min marche lente + 8 min étirements complets', required: true },
+    ],
+  },
+
+  course_intermediaire: {
+    id: 'course_intermediaire', label: 'Course — Intermédiaire', short: 'Course',
+    type: 'run', color: '#C26060', duration: '50-70 min',
+    desc: 'S57-72 : 40-55 min. Séances qualité + volume. Objectif 5 km sous 35 min.',
+    exercises: [
+      { name: 'Échauffement', detail: '10 min progressif (marche → allure douce)', required: true },
+      { name: 'Séance qualité (1×/semaine)', detail: 'S57-62 : 5 × 2 min allure tempo (Zone 3) avec 90 s récup · S63-72 : 5 × 3 min tempo avec 2 min récup', sets: '' },
+      { name: 'Séance facile (2ème séance)', detail: '40-50 min Zone 2 pure. Allure conversation. Récupération active.', sets: '' },
+      { name: 'Retour calme', detail: '8-10 min étirements (cuisses, mollets, hanche)', required: true },
+    ],
+  },
+
+  course_long: {
+    id: 'course_long', label: 'Sortie longue course', short: 'Long Run',
+    type: 'run', color: '#C26060', duration: '60-80 min',
+    desc: 'Sortie longue du week-end S53-72. Base marathon. Pas de performance.',
+    exercises: [
+      { name: 'Règle de la longue', detail: '+10% max par rapport à la semaine précédente. Jamais deux longues difficiles consécutives.', warning: true },
+      { name: 'Volume', detail: 'S53-56 : 55 min · S57-62 : 60-65 min · S63-70 : 70-75 min · S71-72 : 75-80 min. Zone 2 totale.', sets: '' },
+      { name: 'Ravitaillement', detail: 'S65+ : prendre un gel ou une banane à 40 min. Boire toutes les 20 min.', required: true },
+    ],
+  },
+
+  course_avance: {
+    id: 'course_avance', label: 'Course — Avancé', short: 'Course',
+    type: 'run', color: '#C26060', duration: '60-80 min',
+    desc: 'S73-88 : 55-75 min. Séances structurées. Objectif 10 km sous 55 min.',
+    exercises: [
+      { name: 'Échauffement', detail: '12 min progressif', required: true },
+      { name: 'Séance tempo (1×/semaine)', detail: 'S73-80 : 3 × 5 min allure 10 km (Zone 3-4) avec 3 min récup · S81-88 : 2 × 10 min tempo, 4 min récup', sets: '' },
+      { name: 'Séance longue (2ème)', detail: '55-70 min Zone 2. Objectif : aller chercher la fatigue sans se blesser.', sets: '' },
+      { name: 'Retour calme', detail: '10 min étirements + foam roller mollets + fessiers', required: true },
+    ],
+  },
+
+  course_long_avance: {
+    id: 'course_long_avance', label: 'Long Run — Ironman', short: 'Long Run',
+    type: 'run', color: '#C26060', duration: '90 min-2h',
+    desc: 'Sortie longue du dimanche S73-104. Fondation marathon Ironman.',
+    exercises: [
+      { name: 'Volume', detail: 'S73-80 : 85-100 min · S81-88 : 100-110 min · S89-96 : 110-130 min · S97-104 : 120-150 min (dont 1 sortie 2h10 simulant la course du jour J)', sets: 'Zone 2 exclusive — marathon Ironman se court très lentement' },
+      { name: 'Stratégie marathon Ironman', detail: 'Après 180 km de vélo tu seras fatigué. Viser 6-7 min/km, pas de héroïsme. Marcher les ravitaillements (30 sec). Le vrai marathon Ironman se "court" sur la 2ème moitié.', warning: true },
+      { name: 'Nutrition longue', detail: '1 gel toutes les 30-35 min. Eau + électrolytes. Tester tes gels à l\'entraînement, jamais le jour J.', required: true },
+    ],
+  },
+
+  // ── ENCHAÎNEMENTS / BRICKS ───────────────────────────────────────────────
+
+  brick_initiation: {
+    id: 'brick_initiation', label: 'Enchaînement — Initiation', short: 'Brick',
+    type: 'brick', color: '#A07058', duration: '55-70 min',
+    desc: 'S41-56 : premier enchaînement vélo + course. Apprendre les jambes de brique.',
+    painCheck: true,
+    exercises: [
+      { name: 'Vélo', detail: 'S41-44 : 35 min modéré · S45-52 : 40-50 min. Allure triathlon (Zone 2-3).', required: true },
+      { name: 'Transition T2', detail: 'Descendre du vélo, changer de chaussures, partir immédiatement en course. Chrono la transition (cible : < 3 min).', sets: '' },
+      { name: 'Course post-vélo', detail: 'S41-44 : 10 min très lent (les jambes seront lourdes — c\'est normal, 2-3 min et ça passe) · S45-56 : 12-18 min. Ne pas paniquer à la sensation bizarre.', required: true },
+      { name: 'Sensation "brique"', detail: 'Les 5 premières minutes de course après le vélo sont toujours difficiles. C\'est physiologique (sang qui se redistribue). Ralentir et attendre que ça passe.', warning: true },
+    ],
+  },
+
+  brick_sprint: {
+    id: 'brick_sprint', label: 'Enchaînement — Sprint', short: 'Brick',
+    type: 'brick', color: '#A07058', duration: '90-110 min',
+    desc: 'S57-72 : bricks format triathlon Sprint (20 km vélo + 5 km course).',
+    exercises: [
+      { name: 'Vélo', detail: 'S57-62 : 50-60 min · S63-72 : 65-75 min. Zone 2-3, rester assis, cadence 85+ rpm.', required: true },
+      { name: 'Transition', detail: 'Simuler une vraie transition : casque, chaussures, dossard. Objectif < 2 min 30.', sets: '' },
+      { name: 'Course', detail: 'S57-60 : 20 min · S61-66 : 25 min · S67-72 : 30 min. Zone 2, allure plus facile qu\'en course sèche — tu gardes de l\'énergie.', required: true },
+    ],
+  },
+
+  brick_olympique: {
+    id: 'brick_olympique', label: 'Enchaînement — Olympique', short: 'Brick',
+    type: 'brick', color: '#A07058', duration: '2h-2h30',
+    desc: 'S73-88 : bricks format triathlon Olympique (40 km vélo + 10 km course).',
+    exercises: [
+      { name: 'Vélo', detail: 'S73-78 : 80-90 min · S79-88 : 90-105 min. Zone 2-3. Position aéro le maximum.', required: true },
+      { name: 'Transition', detail: 'Transition rapide. Dossard en courant.', sets: '' },
+      { name: 'Course', detail: 'S73-78 : 35-40 min · S79-88 : 40-50 min. Zone 2. Trouver l\'allure 10 km sur des jambes fatiguées.', required: true },
+      { name: 'Nutrition brick', detail: 'Manger sur le vélo (gel à 30 et 60 min). Ne rien prendre pendant les 20 premières minutes de course — l\'estomac ne suit pas juste après T2.', warning: true },
+    ],
+  },
+
+  brick_ironman: {
+    id: 'brick_ironman', label: 'Enchaînement — Ironman', short: 'Brick IM',
+    type: 'brick', color: '#A07058', duration: '3h30-5h',
+    desc: 'S89-104 : bricks longues. Simuler les conditions de course.',
+    exercises: [
+      { name: 'Vélo', detail: 'S89-94 : 2h30-3h · S95-100 : 3h-3h30 · S101-104 : 1 sortie 4h (simulation 1/2 vélo Ironman)', required: true },
+      { name: 'Transition', detail: 'Changer de chaussures, se remasser 30 sec, puis partir. Ne jamais s\'asseoir trop longtemps.', sets: '' },
+      { name: 'Course', detail: 'S89-94 : 45-55 min · S95-104 : 55-70 min. Zone 2 impérative. Pace cible Ironman (très lent, type 6 min/km).', required: true },
+      { name: 'Objectif mental', detail: 'En brick Ironman tu t\'habitues à courir sur des jambes détruites. Si tu y arrives à l\'entraînement, tu le feras le jour J.', required: true },
+    ],
+  },
+
+  // ── REPOS ────────────────────────────────────────────────────────────────
+
+  rest: {
+    id: 'rest', label: 'Repos', short: 'Repos',
+    type: 'rest', color: '#4A4845', duration: '',
+    desc: 'Le corps se reconstruit pendant le repos, pas pendant l\'effort. C\'est une séance à part entière.',
+    exercises: [],
+  },
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PHASES (9 phases sur 2 ans = 104 semaines)
+// ─────────────────────────────────────────────────────────────────────────────
 
 export const PHASES: ProgramPhase[] = [
   {
     id: 'p1a',
     label: 'Phase 1A — Fondations',
     weeks: [1, 4],
-    tagline: 'Poser les bases sans se blesser',
-    focus: ['Renforcement A+B', 'Technique natation', 'Vélo doux', 'Pas de course'],
+    tagline: 'Bâtir les bases sans solliciter les blessures',
+    focus: ['Renfo A+B', 'Technique nage', 'Vélo 20-30 min', 'Zéro course'],
     template: {
-      lun: 'renfo_a',
-      mar: 'swim',
-      mer: 'renfo_b',
-      jeu: 'bike',
-      ven: 'renfo_a',
-      sam: 'swim',
-      dim: 'rest',
+      lun: 'renfo_a', mar: 'swim_debutant', mer: 'renfo_b',
+      jeu: 'bike_stationnaire', ven: 'renfo_a', sam: 'swim_debutant', dim: 'rest',
     },
     notes: [
-      'Aucune course à pied — le tibia et l\'aine doivent se reconditionner d\'abord.',
-      'Natation : priorité technique + respiration, pas la distance.',
-      'Vélo : cadence 80-90 rpm, résistance légère, jamais douloureux à l\'aine.',
-      'Si une journée est mauvaise (fatigue, douleur) → déplacer la séance ou la supprimer. Pas de rattrapage 7j/7.',
+      'Aucune course à pied — tibia et aine doivent se reconditionner en premier.',
+      'Natation : 1 longueur après l\'autre, peu importe la distance totale.',
+      'Vélo appartement : jamais douloureux à l\'aine. Baisser la résistance si besoin.',
     ],
   },
   {
     id: 'p1b',
     label: 'Phase 1B — Introduction marche',
     weeks: [5, 8],
-    tagline: 'Introduire la marche si tibias silencieux',
-    focus: ['Renforcement A+B', 'Marche progressive', 'Natation 100-200 m', 'Vélo 30 min'],
+    tagline: 'Marche si les tibias sont silencieux',
+    focus: ['Marche 20-30 min', 'Nage 100-200 m', 'Vélo 30 min', 'Renfo A+B'],
     template: {
-      lun: 'renfo_a',
-      mar: 'swim',
-      mer: 'renfo_b',
-      jeu: 'bike',
-      ven: 'walk',
-      sam: 'swim',
-      dim: 'rest',
+      lun: 'renfo_a', mar: 'swim_debutant', mer: 'renfo_b',
+      jeu: 'bike_stationnaire', ven: 'marche', sam: 'swim_debutant', dim: 'rest',
     },
     notes: [
-      'La marche (20-30 min) remplace une séance de renfo le vendredi si les tibias sont silencieux.',
-      'Critère : marche quotidienne sans douleur tibiale → marche séance OK.',
-      'Copenhagen : viser niveau 3-4 en fin de cette phase.',
-      'Natation : atteindre 100-150 m sans s\'arrêter.',
+      'Critère marche : marcher au quotidien sans douleur tibiale depuis 1 semaine.',
+      'Si les tibias protestent → garder le renfo B vendredi et patienter.',
+      'Copenhagen : progresser vers niveau 2 (jambe plus tendue).',
     ],
   },
   {
     id: 'p1c',
-    label: 'Phase 1C — Marche/Course',
+    label: 'Phase 1C — Premiers pas course',
     weeks: [9, 16],
-    tagline: 'Premiers pas de course — ultra-progressif',
-    focus: ['Marche/Course 1-2 min', 'Natation 200-300 m', 'Vélo 40 min', 'Renfo maintien'],
+    tagline: '1 min de course / 2 min de marche — ultra-progressif',
+    focus: ['Run/walk 1:2 → 2:1', 'Nage 200-400 m', 'Vélo 40 min', 'Renfo maintien'],
     template: {
-      lun: 'renfo_a',
-      mar: 'swim',
-      mer: 'run_walk',
-      jeu: 'bike',
-      ven: 'renfo_b',
-      sam: 'swim',
-      dim: 'rest',
+      lun: 'renfo_a', mar: 'swim_initiation', mer: 'marche_course',
+      jeu: 'bike_stationnaire', ven: 'renfo_b', sam: 'swim_initiation', dim: 'rest',
     },
     notes: [
-      'Critère marche/course : marcher 30 min sans douleur tibiale ni inguinale.',
-      'Si les tibias protestent → rester en marche pure. Aucune précipitation.',
-      'Natation : viser 200-300 m continus en fin de phase.',
-      'Vélo : augmenter à 35-40 min. Toujours allure conversation.',
+      'Critère course : marcher 30 min sans douleur. Alors seulement démarrer les intervalles.',
+      'Si douleur tibiale le lendemain d\'une séance course → semaine entière en marche pure.',
+      'Nage : viser 200 m continus en fin de phase (semaine 16).',
+      '→ Super Sprint envisageable fin Phase 2A (mois 5-6).',
     ],
   },
   {
-    id: 'p2',
-    label: 'Phase 2 — Construction',
-    weeks: [17, 36],
-    tagline: 'Augmenter le volume et acquérir le vélo de route',
-    focus: ['Course 5-10 min blocs', 'Natation 400-800 m', 'Vélo route (à prévoir)', 'Enchaînements'],
+    id: 'p2a',
+    label: 'Phase 2A — Course progressive',
+    weeks: [17, 26],
+    tagline: 'Construire jusqu\'à 10 min de course continue',
+    focus: ['Run/walk → 5 min blocs', 'Nage 400-600 m', 'Vélo route 45-60 min', '2 séances course/sem'],
     template: {
-      lun: 'renfo_a',
-      mar: 'swim',
-      mer: 'run_walk',
-      jeu: 'bike',
-      ven: 'run_walk',
-      sam: 'swim',
-      dim: 'rest',
+      lun: 'renfo_core', mar: 'swim_base', mer: 'marche_course',
+      jeu: 'bike_court', ven: 'marche_course', sam: 'swim_base', dim: 'rest',
     },
     notes: [
-      'Acquisition du vélo de route envisagée en Phase 2 (basculer vélo salle → route).',
-      'Course : progression 1 min / 2 min → 2 min / 1 min → 5 min continus.',
-      'Continuer le renforcement 2x/semaine indéfiniment — c\'est la protection des blessures.',
+      'Basculer sur vélo de route dès que disponible (prévoir l\'achat en Phase 2A).',
+      'Super Sprint (~S22-24) : 400 m nage / 10 km vélo / 2,5 km course. Objectif faisabilité, pas performance.',
+      'Renfo : passer en version "core" (Copenhagen niveau 3+).',
     ],
   },
   {
-    id: 'p3',
-    label: 'Phase 3 — Endurance',
-    weeks: [37, 72],
-    tagline: 'Vraies séances longues, premier triathlon sprint',
-    focus: ['Course 20-30 min', 'Natation 1500 m', 'Vélo 60-90 min', 'Premier triathlon Sprint'],
+    id: 'p2b',
+    label: 'Phase 2B — Endurance de base',
+    weeks: [27, 40],
+    tagline: '15-25 min de course continue, vélo 90 min',
+    focus: ['Course 15-25 min continu', 'Nage 600-900 m', 'Vélo 60-90 min', 'Long vélo dimanche'],
     template: {
-      lun: 'renfo_a',
-      mar: 'swim',
-      mer: 'run_walk',
-      jeu: 'bike',
-      ven: 'run_walk',
-      sam: 'swim',
-      dim: 'rest',
+      lun: 'renfo_core', mar: 'swim_base', mer: 'course_debutant',
+      jeu: 'bike_court', ven: 'course_debutant', sam: 'swim_base', dim: 'bike_court',
     },
     notes: [
-      'Objectif intermédiaire : triathlon Sprint (750 m nage / 20 km vélo / 5 km course).',
-      'Obtenir la licence FFTRI et le certificat médical.',
-      'Feu vert médical pour l\'effort d\'endurance à demander dès que possible.',
+      'Dimanche : sortie vélo longue et facile — 60-90 min Zone 2. Première vraie endurance.',
+      'Nage : commencer à gérer les 600 m continus.',
+      'Course : jamais deux séances difficiles consécutives. Lun et ven doivent être espacées.',
     ],
   },
   {
-    id: 'p4',
-    label: 'Phase 4 — Ironman',
-    weeks: [73, 104],
-    tagline: 'Préparation spécifique Ironman',
-    focus: ['Nage 3,8 km', 'Vélo 180 km', 'Course 42 km', 'Enchaînements'],
+    id: 'p3a',
+    label: 'Phase 3A — Prépa Sprint',
+    weeks: [41, 56],
+    tagline: '2 nages/semaine, premiers bricks → Sprint Triathlon',
+    focus: ['Course 25-40 min', 'Nage 900-1500 m × 2/sem', 'Vélo 90-120 min', 'Bricks samedi'],
     template: {
-      lun: 'renfo_a',
-      mar: 'swim',
-      mer: 'run_walk',
-      jeu: 'bike',
-      ven: 'run_walk',
-      sam: 'swim',
-      dim: 'rest',
+      lun: 'course_base', mar: 'swim_endurance', mer: 'bike_moyen',
+      jeu: 'swim_endurance', ven: 'course_base', sam: 'brick_initiation', dim: 'rest',
     },
     notes: [
-      'Programme spécifique Ironman à adapter avec un coach triathlon en Phase 4.',
-      '3,8 km nage / 180 km vélo / 42,195 km course.',
+      '→ Triathlon Sprint (~S52) : 750 m nage / 20 km vélo / 5 km course.',
+      'Introduction 2 séances nage/semaine : mardi et jeudi.',
+      'Samedi brick : vélo puis course enchaînés sans pause — habitue aux "jambes de brique".',
+      'Renfo réduit à 1×/semaine intégré dans les séances.',
+    ],
+  },
+  {
+    id: 'p3b',
+    label: 'Phase 3B — Prépa Olympique',
+    weeks: [57, 72],
+    tagline: 'Volume + qualité → Triathlon Olympique',
+    focus: ['Course 40-55 min + qualité', 'Nage 1500-2000 m', 'Vélo 2-3h + long dim', 'Bricks 60-70 min'],
+    template: {
+      lun: 'course_intermediaire', mar: 'swim_avance', mer: 'bike_tri',
+      jeu: 'swim_avance', ven: 'course_intermediaire', sam: 'brick_sprint', dim: 'bike_long',
+    },
+    notes: [
+      '→ Triathlon Olympique (~S70) : 1500 m nage / 40 km vélo / 10 km course.',
+      'Dimanche : longue sortie vélo (2h30-3h). C\'est la séance la plus importante de la semaine.',
+      'Séances course : 1 qualité (tempo) + 1 facile. Ne pas faire 2 séances tempo.',
+      'Commencer la course longue (course_long) les semaines légères.',
+    ],
+  },
+  {
+    id: 'p4a',
+    label: 'Phase 4A — Prépa Half Ironman',
+    weeks: [73, 88],
+    tagline: 'Volumes Ironman intermédiaires → Half Ironman',
+    focus: ['Course 55-75 min + longs dim', 'Nage 2000-2800 m', 'Vélo 3-4h', 'Bricks 2h+'],
+    template: {
+      lun: 'course_avance', mar: 'swim_avance', mer: 'bike_tri',
+      jeu: 'swim_avance', ven: 'course_avance', sam: 'brick_olympique', dim: 'course_long_avance',
+    },
+    notes: [
+      '→ Half Ironman (~S88) : 1900 m nage / 90 km vélo / 21 km course.',
+      'Dimanche : long run 85-110 min. C\'est la fondation du marathon Ironman.',
+      'Obtenir la licence FFTRI + certificat médical pour les compétitions.',
+      'Bricks samedi : format olympique (90 min vélo + 40-50 min course).',
+    ],
+  },
+  {
+    id: 'p4b',
+    label: 'Phase 4B — Ironman',
+    weeks: [89, 104],
+    tagline: 'Préparation finale → IRONMAN',
+    focus: ['Long run 2h+', 'Nage 3800 m', 'Vélo 5h+', 'Bricks Ironman'],
+    template: {
+      lun: 'course_avance', mar: 'swim_ironman', mer: 'bike_ironman',
+      jeu: 'swim_ironman', ven: 'course_avance', sam: 'brick_ironman', dim: 'course_long_avance',
+    },
+    notes: [
+      '→ IRONMAN : 3,8 km nage / 180 km vélo / 42,2 km course.',
+      'Semaines 99-102 : phase de "taper" (réduire le volume de 30-40%, garder l\'intensité). Tu arriveras frais le jour J.',
+      'Ne jamais essayer quelque chose de nouveau le jour de la course (nutrition, équipement).',
+      'Coach triathlon recommandé pour les 6 derniers mois — les détails font la différence sur un Ironman.',
     ],
   },
 ];
 
-// ── SURCHARGES PONCTUELLES ────────────────────────────────────────
-// Séances hors template pour des dates précises
-// Nage du 20/06 manquée → prochaine nage naturellement mardi 23/06 (template mar = swim)
+// ─────────────────────────────────────────────────────────────────────────────
+// SURCHARGES PONCTUELLES
+// ─────────────────────────────────────────────────────────────────────────────
+
 export const DATE_OVERRIDES: Record<string, string> = {
-  '2026-06-20': 'rest',     // Samedi — nage déplacée au 23/06
-  '2026-06-21': 'renfo_a',  // Dimanche de rattrapage — renfo pubalgie
-  '2026-06-23': 'swim',     // Mardi — PREMIÈRE SÉANCE PISCINE (début programme natation)
-  '2026-06-27': 'swim',     // Nage samedi — enchaînement S1
+  '2026-06-20': 'rest',           // Samedi — nage déplacée au 23/06
+  '2026-06-21': 'renfo_a',        // Dimanche de rattrapage — renfo pubalgie
+  '2026-06-23': 'swim_debutant',  // Mardi — PREMIÈRE SÉANCE PISCINE (début programme natation)
+  '2026-06-27': 'swim_debutant',  // Nage samedi — enchaînement S1
 };
 
-// ── HELPERS ───────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────────────────────────
 
 export function getCurrentWeek(): number {
   const start = new Date(PROGRAM_START);
   const now = new Date();
   const diffMs = now.getTime() - start.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  return Math.max(1, Math.floor(diffDays / 7) + 1);
+  return Math.max(1, Math.floor(diffMs / (1000 * 60 * 60 * 24 * 7)) + 1);
 }
 
 export function getCurrentPhase(week: number): ProgramPhase {
@@ -321,7 +585,7 @@ export function getCurrentPhase(week: number): ProgramPhase {
 }
 
 export function getTodaySession(phase: ProgramPhase): string {
-  const dow = new Date().getDay(); // 0 = dimanche
+  const dow = new Date().getDay();
   const dayMap: Record<number, WeekDay> = { 1: 'lun', 2: 'mar', 3: 'mer', 4: 'jeu', 5: 'ven', 6: 'sam', 0: 'dim' };
   return phase.template[dayMap[dow]] ?? 'rest';
 }
