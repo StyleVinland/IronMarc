@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import Nav from '@/components/Nav';
 import { AppStateProvider } from '@/components/AppStateProvider';
+import { AuthProvider } from '@/components/AuthProvider';
 import { getFullState } from '@/lib/db';
 import './globals.css';
 
@@ -40,16 +41,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <AppStateProvider initial={initialState}>
-          <div className="app-root">
-            <Nav />
-            <main className="page-main">
-              <div className="page-inner">
-                {children}
-              </div>
-            </main>
-          </div>
-        </AppStateProvider>
+        <AuthProvider>
+          <AppStateProvider initial={initialState}>
+            <div className="app-root">
+              <Nav />
+              <main className="page-main">
+                <div className="page-inner">
+                  {children}
+                </div>
+              </main>
+            </div>
+          </AppStateProvider>
+        </AuthProvider>
       </body>
     </html>
   );

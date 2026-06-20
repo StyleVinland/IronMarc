@@ -999,6 +999,75 @@ body { padding: 0; }
 .dash-aside section:first-child { margin-top: 0; }
 
 /* ================================================================
+   CODE PIN
+   ================================================================ */
+
+.pin-screen {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--abyss);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.pin-box {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 40px 32px; width: 100%; max-width: 340px;
+}
+
+.pin-logo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; font-size: 32px; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--dawn);
+  margin-bottom: 6px;
+}
+
+.pin-tagline {
+  font-size: 13px; color: var(--muted); letter-spacing: .06em;
+  text-transform: uppercase; font-family: 'Barlow Condensed', sans-serif;
+  margin-bottom: 36px;
+}
+
+.pin-dots {
+  display: flex; gap: 16px; margin-bottom: 36px;
+}
+.pin-dots.error { animation: pin-shake .35s ease; }
+
+@keyframes pin-shake {
+  0%,100% { transform: translateX(0); }
+  20%      { transform: translateX(-8px); }
+  40%      { transform: translateX(8px); }
+  60%      { transform: translateX(-6px); }
+  80%      { transform: translateX(6px); }
+}
+
+.pin-dot {
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 2px solid var(--muted);
+  transition: background .15s, border-color .15s;
+}
+.pin-dot.filled { background: var(--dawn); border-color: var(--dawn); }
+.pin-dot.err    { background: var(--warn); border-color: var(--warn); }
+
+.pin-pad {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 12px; width: 100%;
+}
+
+.pin-key {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+  color: var(--foam); font-family: 'Barlow Condensed', sans-serif;
+  font-size: 24px; font-weight: 600; letter-spacing: .02em;
+  padding: 18px 0; cursor: pointer; text-align: center;
+  transition: background .1s, border-color .1s, transform .08s;
+  user-select: none;
+}
+.pin-key:hover  { background: var(--card); border-color: var(--dawn); }
+.pin-key:active { transform: scale(.94); }
+.pin-key:disabled { opacity: .4; cursor: not-allowed; }
+.pin-key-enter { background: var(--dawn); color: #1a0c00; border-color: var(--dawn); }
+.pin-key-enter:hover { background: var(--dawn-d); }
+.pin-key-del   { color: var(--muted); font-size: 20px; }
+
+/* ================================================================
    MOBILITÉ — dropdown séance étirements
    ================================================================ */
 
