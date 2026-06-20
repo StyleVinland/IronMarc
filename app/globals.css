@@ -757,28 +757,83 @@ body { padding: 0; }
 /* Roadmap */
 .prog-roadmap { display: flex; flex-direction: column; gap: 6px; }
 .prog-roadmap-phase {
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
-  padding: 11px 14px;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 11px;
-  opacity: .55;
+  overflow: hidden;
+  opacity: .6;
+  transition: opacity .2s;
 }
 .prog-roadmap-phase.current {
   opacity: 1;
   border-color: var(--dawn);
-  background: rgba(207,142,66,.07);
+  background: rgba(207,142,66,.06);
 }
-.prog-roadmap-label { display: flex; align-items: baseline; gap: 10px; }
-.prog-roadmap-weeks { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; color: var(--dawn); letter-spacing: .06em; min-width: 56px; }
+.prog-roadmap-phase:has(.prog-roadmap-details) { opacity: 1; }
+
+/* Header bouton */
+.prog-roadmap-header {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 12px 14px;
+  background: none; border: none; cursor: pointer;
+  text-align: left;
+}
+.prog-roadmap-header-left {
+  display: flex; flex-direction: column; align-items: flex-start;
+  min-width: 80px;
+}
+.prog-roadmap-weeks { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; color: var(--dawn); letter-spacing: .06em; font-weight: 600; }
+.prog-roadmap-period { font-size: 10px; color: var(--muted); margin-top: 1px; }
+.prog-roadmap-header-center { flex: 1; display: flex; flex-direction: column; gap: 2px; text-align: left; }
 .prog-roadmap-name { font-size: 14px; font-weight: 600; color: var(--foam); }
-.prog-roadmap-tagline { font-size: 12px; color: var(--muted); margin-left: auto; text-align: right; }
+.prog-roadmap-tagline { font-size: 12px; color: var(--muted); }
+.prog-roadmap-chevron { font-size: 10px; color: var(--muted); margin-left: auto; padding-left: 8px; }
+
+/* Détails dépliés */
+.prog-roadmap-details {
+  padding: 0 14px 14px;
+  display: flex; flex-direction: column; gap: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+
+/* Milestone compétition */
+.prog-roadmap-milestone {
+  font-size: 13px; font-weight: 600;
+  padding: 8px 12px; border-radius: 8px;
+  border: 1px solid;
+  background: transparent;
+  letter-spacing: .02em;
+}
+
+/* Focus tags */
+.prog-roadmap-focus { display: flex; flex-wrap: wrap; gap: 5px; }
+
+/* Template semaine */
+.prog-roadmap-week-template {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.prog-template-day {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 7px; padding: 6px 4px;
+}
+.prog-template-day-name { font-size: 10px; color: var(--muted); font-family: 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .04em; }
+.prog-template-sess { font-size: 11px; font-weight: 600; text-align: center; line-height: 1.2; }
+.prog-template-dur { font-size: 9px; color: var(--muted); text-align: center; line-height: 1.2; }
+
+/* Notes phase */
+.prog-roadmap-notes { display: flex; flex-direction: column; gap: 4px; }
+.prog-roadmap-note { font-size: 12px; color: var(--muted); line-height: 1.5; }
 
 @media (max-width: 580px) {
-  .prog-roadmap-tagline { display: none; }
-  .prog-roadmap-phase { flex-wrap: wrap; }
+  .prog-roadmap-header { padding: 10px 12px; gap: 8px; }
+  .prog-roadmap-header-left { min-width: 64px; }
+  .prog-roadmap-week-template { grid-template-columns: repeat(7, 1fr); gap: 2px; }
+  .prog-template-day { padding: 5px 2px; }
+  .prog-template-sess { font-size: 10px; }
+  .prog-template-dur { display: none; }
 }
 
 /* ================================================================

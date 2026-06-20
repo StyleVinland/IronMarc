@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import type { DebriefData } from '@/lib/db';
+import type { DebriefData } from '@/types';
 
 interface Props {
   date: string;

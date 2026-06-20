@@ -26,3 +26,15 @@ export interface AppState {
   quests: Record<string, boolean>;
   affIdx: number;
 }
+
+export interface DebriefData {
+  date: string;
+  session_id: string;
+  status: string;
+  pain_aine: number;
+  pain_tibia: number;
+  energy: number;
+  difficulty: number;
+  notes: string;
+  created_at: string;
+}

@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import type { AppState, DayData, MediaItem } from '@/types';
+import type { AppState, DayData, MediaItem, DebriefData } from '@/types';
 
 // node:sqlite is built into Node.js 22+ — no native compilation needed
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -210,18 +210,6 @@ export function deleteMedia(id: number): string | undefined {
   if (!row) return undefined;
   db.prepare('DELETE FROM media WHERE id = ?').run(id);
   return row.filename as string;
-}
-
-export interface DebriefData {
-  date: string;
-  session_id: string;
-  status: string;
-  pain_aine: number;
-  pain_tibia: number;
-  energy: number;
-  difficulty: number;
-  notes: string;
-  created_at: string;
 }
 
 export function saveDebrief(date: string, data: Omit<DebriefData, 'date' | 'created_at'>) {

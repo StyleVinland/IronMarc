@@ -1,7 +1,7 @@
 'use client';
 import { useState, useMemo } from 'react';
 import { useAppState } from './AppStateProvider';
-import { SESSIONS, PHASES, getCurrentWeek, getCurrentPhase, PROGRAM_START, DATE_OVERRIDES } from '@/lib/program';
+import { SESSIONS, PHASES, WEEK_DAYS, WEEK_DAY_LABELS, getCurrentWeek, getCurrentPhase, PROGRAM_START, DATE_OVERRIDES } from '@/lib/program';
 import type { WeekDay, ProgramPhase } from '@/lib/program';
 import MissionList from './MissionList';
 import QuestList from './QuestList';
@@ -58,11 +58,20 @@ function fmtDayLong(d: Date): string {
   return `${DAY_SHORT[d.getDay()]} ${d.getDate()} ${MONTHS_FR[d.getMonth()]}`;
 }
 
+const PHASE_MILESTONES: Record<string, { label: string; color: string }> = {
+  p2a: { label: '🏊 Super Sprint triathlon (~S22) — 400 m nage · 10 km vélo · 2,5 km course', color: '#6EC6D8' },
+  p3a: { label: '🏊🚴 Sprint triathlon (~S52) — 750 m nage · 20 km vélo · 5 km course', color: '#88C49A' },
+  p3b: { label: '🏊🚴🏃 Triathlon Olympique (~S70) — 1 500 m nage · 40 km vélo · 10 km course', color: '#CF8E42' },
+  p4a: { label: '💪 Half-Ironman (~S88) — 1 900 m nage · 90 km vélo · 21 km course', color: '#C26060' },
+  p4b: { label: '🏅 IRONMAN (~S104) — 3 800 m nage · 180 km vélo · 42,2 km course', color: '#CF8E42' },
+};
+
 export default function EntrainementClient() {
   const { state, today, toggleMission, toggleQuest } = useAppState();
   const [weekOffset, setWeekOffset] = useState(0);
   const [selectedDate, setSelectedDate] = useState<string>(() => today);
   const [pain, setPain] = useState({ aine: 0, tibia: 0 });
+  const [openPhaseId, setOpenPhaseId] = useState<string | null>(null);
 
   const todayData = state.days[today] ?? {
     date: today, cigs: 0,
@@ -236,15 +245,65 @@ export default function EntrainementClient() {
       <section>
         <div className="shead"><h2>Feuille de route 2 ans</h2><span className="hint">9 phases</span></div>
         <div className="prog-roadmap">
-          {PHASES.map(p => (
-            <div key={p.id} className={`prog-roadmap-phase${p.id === currentPhase.id ? ' current' : ''}`}>
-              <div className="prog-roadmap-label">
-                <span className="prog-roadmap-weeks">S{p.weeks[0]}–{p.weeks[1]}</span>
-                <span className="prog-roadmap-name">{p.label}</span>
+          {PHASES.map(p => {
+            const isCurrent = p.id === currentPhase.id;
+            const isOpen = openPhaseId === p.id;
+            const startDate = new Date(PROGRAM_START);
+            startDate.setDate(startDate.getDate() + (p.weeks[0] - 1) * 7);
+            const endDate = new Date(PROGRAM_START);
+            endDate.setDate(endDate.getDate() + p.weeks[1] * 7 - 1);
+            const fmtMonth = (d: Date) => d.toLocaleDateString('fr-FR', { month: 'short', year: '2-digit' });
+            const milestone = PHASE_MILESTONES[p.id];
+            return (
+              <div key={p.id} className={`prog-roadmap-phase${isCurrent ? ' current' : ''}`}>
+                <button
+                  className="prog-roadmap-header"
+                  onClick={() => setOpenPhaseId(isOpen ? null : p.id)}
+                >
+                  <div className="prog-roadmap-header-left">
+                    <span className="prog-roadmap-weeks">S{p.weeks[0]}–{p.weeks[1]}</span>
+                    <span className="prog-roadmap-period">{fmtMonth(startDate)} → {fmtMonth(endDate)}</span>
+                  </div>
+                  <div className="prog-roadmap-header-center">
+                    <span className="prog-roadmap-name">{p.label}</span>
+                    <span className="prog-roadmap-tagline">{p.tagline}</span>
+                  </div>
+                  <span className="prog-roadmap-chevron">{isOpen ? '▲' : '▼'}</span>
+                </button>
+
+                {isOpen && (
+                  <div className="prog-roadmap-details">
+                    {milestone && (
+                      <div className="prog-roadmap-milestone" style={{ borderColor: milestone.color, color: milestone.color }}>
+                        {milestone.label}
+                      </div>
+                    )}
+                    <div className="prog-roadmap-focus">
+                      {p.focus.map((f, i) => <span key={i} className="prog-focus-tag">{f}</span>)}
+                    </div>
+                    <div className="prog-roadmap-week-template">
+                      {WEEK_DAYS.map(day => {
+                        const sid = p.template[day];
+                        const sess = SESSIONS[sid];
+                        return (
+                          <div key={day} className="prog-template-day">
+                            <span className="prog-template-day-name">{WEEK_DAY_LABELS[day]}</span>
+                            <span className="prog-template-sess" style={{ color: sess.color }}>{sess.short}</span>
+                            {sess.duration && <span className="prog-template-dur">{sess.duration}</span>}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    {p.notes.length > 0 && (
+                      <div className="prog-roadmap-notes">
+                        {p.notes.map((n, i) => <div key={i} className="prog-roadmap-note">— {n}</div>)}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
-              <div className="prog-roadmap-tagline">{p.tagline}</div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
