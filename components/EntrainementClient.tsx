@@ -82,11 +82,11 @@ function fmtRaceDate(ds: string): string {
 }
 
 const PHASE_MILESTONES: Record<string, { label: string; color: string }> = {
-  p2a: { label: '🏊 Super Sprint triathlon (~S22) — 400 m nage · 10 km vélo · 2,5 km course', color: '#6EC6D8' },
-  p3a: { label: '🏊🚴 Sprint triathlon (~S52) — 750 m nage · 20 km vélo · 5 km course', color: '#88C49A' },
-  p3b: { label: '🏊🚴🏃 Triathlon Olympique (~S70) — 1 500 m nage · 40 km vélo · 10 km course', color: '#CF8E42' },
-  p4a: { label: '💪 Half-Ironman (~S88) — 1 900 m nage · 90 km vélo · 21 km course', color: '#C26060' },
-  p4b: { label: '🏅 IRONMAN (~S104) — 3 800 m nage · 180 km vélo · 42,2 km course', color: '#CF8E42' },
+  p2b: { label: '🏊 Super Sprint — 16 mai 2027 · 400 m nage · 10 km vélo · 2,5 km course', color: '#6EC6D8' },
+  p3a: { label: '🚴 Sprint triathlon — 13 sept. 2027 · 750 m nage · 20 km vélo · 5 km course', color: '#88C49A' },
+  p3c: { label: '🏃 Triathlon Olympique — 15 juin 2028 · 1 500 m nage · 40 km vélo · 10 km course', color: '#CF8E42' },
+  p4a: { label: '💪 Half Ironman 70.3 — 21 sept. 2028 · 1 900 m nage · 90 km vélo · 21 km course', color: '#C26060' },
+  p4c: { label: '🏅 IRONMAN — 22 juin 2029 · 3 800 m nage · 180 km vélo · 42,2 km course', color: '#CF8E42' },
 };
 
 export default function EntrainementClient() {
@@ -306,7 +306,7 @@ export default function EntrainementClient() {
 
       {/* ── FEUILLE DE ROUTE ── */}
       <section>
-        <div className="shead"><h2>Feuille de route 2 ans</h2><span className="hint">9 phases</span></div>
+        <div className="shead"><h2>Feuille de route 3 ans</h2><span className="hint">11 phases</span></div>
         <div className="prog-roadmap">
           {PHASES.map(p => {
             const isCurrent = p.id === currentPhase.id;

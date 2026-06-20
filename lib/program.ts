@@ -458,26 +458,34 @@ export const SESSIONS: Record<string, TrainingSession> = {
 // PHASES (9 phases sur 2 ans = 104 semaines)
 // ─────────────────────────────────────────────────────────────────────────────
 
+// Semaines de début calculées sur PROGRAM_START = 19 juin 2026 (vendredi)
+// S48  → 14 mai 2027  · Super Sprint 16 mai 2027
+// S65  → 10 sep 2027  · Sprint       13 sep 2027
+// S104 →  9 jun 2028  · Olympique    15 jun 2028
+// S117 →  8 sep 2028  · Half-IM      21 sep 2028
+// S157 → 15 jun 2029  · IRONMAN      22 jun 2029
+
 export const PHASES: ProgramPhase[] = [
+  // ── PHASE 1 : RÉÉDUCATION ─────────────────────────────────────────────────
   {
     id: 'p1a',
     label: 'Phase 1A — Fondations',
     weeks: [1, 4],
     tagline: 'Bâtir les bases sans solliciter les blessures',
-    focus: ['Renfo A+B', 'Technique nage', 'Vélo 20-30 min', 'Zéro course'],
+    focus: ['Renfo A+B', 'Technique nage (25-100 m)', 'Vélo 20-30 min appart.', 'Zéro course'],
     template: {
       lun: 'renfo_a', mar: 'swim_debutant', mer: 'renfo_b',
       jeu: 'bike_stationnaire', ven: 'renfo_a', sam: 'swim_debutant', dim: 'rest',
     },
     notes: [
-      'Aucune course à pied — tibia et aine doivent se reconditionner en premier.',
-      'Natation : 1 longueur après l\'autre, peu importe la distance totale.',
-      'Vélo appartement : jamais douloureux à l\'aine. Baisser la résistance si besoin.',
+      'Zéro course à pied — le tibia et l\'aine doivent se reconditionner en premier.',
+      'Nage : 1 longueur après l\'autre, peu importe la distance totale.',
+      'Vélo appartement : jamais douloureux à l\'aine. Baisser résistance si besoin.',
     ],
   },
   {
     id: 'p1b',
-    label: 'Phase 1B — Introduction marche',
+    label: 'Phase 1B — Marche',
     weeks: [5, 8],
     tagline: 'Marche si les tibias sont silencieux',
     focus: ['Marche 20-30 min', 'Nage 100-200 m', 'Vélo 30 min', 'Renfo A+B'],
@@ -486,126 +494,170 @@ export const PHASES: ProgramPhase[] = [
       jeu: 'bike_stationnaire', ven: 'marche', sam: 'swim_debutant', dim: 'rest',
     },
     notes: [
-      'Critère marche : marcher au quotidien sans douleur tibiale depuis 1 semaine.',
-      'Si les tibias protestent → garder le renfo B vendredi et patienter.',
-      'Copenhagen : progresser vers niveau 2 (jambe plus tendue).',
+      'Critère marche : marcher 20 min au quotidien sans douleur tibiale depuis 1 semaine.',
+      'Si les tibias protestent → garder renfo B vendredi et patienter.',
+      'Copenhagen : passer au niveau 2 (jambe plus tendue sur le bord).',
     ],
   },
   {
     id: 'p1c',
-    label: 'Phase 1C — Premiers pas course',
+    label: 'Phase 1C — Run/Walk',
     weeks: [9, 16],
-    tagline: '1 min de course / 2 min de marche — ultra-progressif',
+    tagline: '1 min course / 2 min marche — ultra-progressif',
     focus: ['Run/walk 1:2 → 2:1', 'Nage 200-400 m', 'Vélo 40 min', 'Renfo maintien'],
     template: {
       lun: 'renfo_a', mar: 'swim_initiation', mer: 'marche_course',
       jeu: 'bike_stationnaire', ven: 'renfo_b', sam: 'swim_initiation', dim: 'rest',
     },
     notes: [
-      'Critère course : marcher 30 min sans douleur. Alors seulement démarrer les intervalles.',
-      'Si douleur tibiale le lendemain d\'une séance course → semaine entière en marche pure.',
-      'Nage : viser 200 m continus en fin de phase (semaine 16).',
-      '→ Super Sprint envisageable fin Phase 2A (mois 5-6).',
+      'Critère course : marcher 30 min sans douleur → alors seulement démarrer les intervalles.',
+      'Douleur tibiale le lendemain → semaine entière en marche pure. Pas de négociation.',
+      'Nage : viser 200 m continus en fin de phase (S16).',
     ],
   },
+
+  // ── PHASE 2 : CONSTRUCTION ────────────────────────────────────────────────
   {
     id: 'p2a',
     label: 'Phase 2A — Course progressive',
-    weeks: [17, 26],
-    tagline: 'Construire jusqu\'à 10 min de course continue',
-    focus: ['Run/walk → 5 min blocs', 'Nage 400-600 m', 'Vélo route 45-60 min', '2 séances course/sem'],
+    weeks: [17, 30],
+    tagline: 'Construire jusqu\'à 10 min de course continue — 3,5 mois',
+    focus: ['Run/walk → 10 min continus', 'Nage 400-600 m', 'Vélo route 45-60 min', '2 courses/sem'],
     template: {
       lun: 'renfo_core', mar: 'swim_base', mer: 'marche_course',
       jeu: 'bike_court', ven: 'marche_course', sam: 'swim_base', dim: 'rest',
     },
     notes: [
-      'Basculer sur vélo de route dès que disponible (prévoir l\'achat en Phase 2A).',
-      'Super Sprint (~S22-24) : 400 m nage / 10 km vélo / 2,5 km course. Objectif faisabilité, pas performance.',
-      'Renfo : passer en version "core" (Copenhagen niveau 3+).',
+      'Basculer sur vélo de route dès que disponible (mois 4-5).',
+      'Renfo : passer en version "core" — Copenhagen niveau 3+.',
+      'Fin de phase (S28-30) : essayer 10 min de course continue sans douleur.',
     ],
   },
   {
     id: 'p2b',
-    label: 'Phase 2B — Endurance de base',
-    weeks: [27, 40],
-    tagline: '15-25 min de course continue, vélo 90 min',
-    focus: ['Course 15-25 min continu', 'Nage 600-900 m', 'Vélo 60-90 min', 'Long vélo dimanche'],
+    label: 'Phase 2B — Prépa Super Sprint',
+    weeks: [31, 48],
+    tagline: '20 min course, 400 m nage, 45 min vélo → Super Sprint',
+    focus: ['Course 15-25 min continu', 'Nage 400-600 m', 'Vélo 45-75 min route', '🏊 Super Sprint 16 mai 2027'],
     template: {
       lun: 'renfo_core', mar: 'swim_base', mer: 'course_debutant',
       jeu: 'bike_court', ven: 'course_debutant', sam: 'swim_base', dim: 'bike_court',
     },
     notes: [
-      'Dimanche : sortie vélo longue et facile — 60-90 min Zone 2. Première vraie endurance.',
-      'Nage : commencer à gérer les 600 m continus.',
-      'Course : jamais deux séances difficiles consécutives. Lun et ven doivent être espacées.',
+      '→ Super Sprint 16 mai 2027 (S48) : 400 m nage · 10 km vélo · 2,5 km course.',
+      'Dimanche : première vraie sortie vélo longue (60-90 min Zone 2).',
+      'Nage : 400 m continus = autonomie minimale pour la course.',
+      'Objectif Super Sprint : finir. Peu importe le chrono — être à l\'arrivée.',
+      'Taper automatique les 3 jours avant. Semaine +1 : récupération uniquement.',
     ],
   },
+
+  // ── PHASE 3 : SPRINT → OLYMPIQUE ─────────────────────────────────────────
   {
     id: 'p3a',
     label: 'Phase 3A — Prépa Sprint',
-    weeks: [41, 56],
-    tagline: '2 nages/semaine, premiers bricks → Sprint Triathlon',
-    focus: ['Course 25-40 min', 'Nage 900-1500 m × 2/sem', 'Vélo 90-120 min', 'Bricks samedi'],
+    weeks: [49, 65],
+    tagline: '30 min course, 900 m nage, 75 min vélo, bricks → Sprint',
+    focus: ['Course 25-35 min', 'Nage 750-1000 m × 2/sem', 'Vélo 75-90 min', '🚴 Bricks samedi'],
     template: {
-      lun: 'course_base', mar: 'swim_endurance', mer: 'bike_moyen',
-      jeu: 'swim_endurance', ven: 'course_base', sam: 'brick_initiation', dim: 'rest',
+      lun: 'course_base', mar: 'swim_base', mer: 'bike_moyen',
+      jeu: 'swim_base', ven: 'course_base', sam: 'brick_initiation', dim: 'rest',
     },
     notes: [
-      '→ Triathlon Sprint (~S52) : 750 m nage / 20 km vélo / 5 km course.',
-      'Introduction 2 séances nage/semaine : mardi et jeudi.',
-      'Samedi brick : vélo puis course enchaînés sans pause — habitue aux "jambes de brique".',
-      'Renfo réduit à 1×/semaine intégré dans les séances.',
+      '→ Sprint 13 sept. 2027 (S65) : 750 m nage · 20 km vélo · 5 km course.',
+      '2 nages/semaine dès le début de cette phase (mar + jeu).',
+      'Bricks le samedi : enchaîner vélo + course sans pause. Première vraie simulation triathlon.',
+      'Transition T1/T2 : pratiquer les changements de chaussures et dossard.',
     ],
   },
   {
     id: 'p3b',
-    label: 'Phase 3B — Prépa Olympique',
-    weeks: [57, 72],
-    tagline: 'Volume + qualité → Triathlon Olympique',
-    focus: ['Course 40-55 min + qualité', 'Nage 1500-2000 m', 'Vélo 2-3h + long dim', 'Bricks 60-70 min'],
+    label: 'Phase 3B — Endurance intermédiaire',
+    weeks: [66, 90],
+    tagline: 'Consolider post-Sprint et construire la base olympique — 6 mois',
+    focus: ['Course 35-50 min + tempo', 'Nage 1000-1500 m', 'Vélo 90-120 min', 'Bricks croissants'],
     template: {
-      lun: 'course_intermediaire', mar: 'swim_avance', mer: 'bike_tri',
-      jeu: 'swim_avance', ven: 'course_intermediaire', sam: 'brick_sprint', dim: 'bike_long',
+      lun: 'course_intermediaire', mar: 'swim_endurance', mer: 'bike_moyen',
+      jeu: 'swim_endurance', ven: 'course_intermediaire', sam: 'brick_sprint', dim: 'bike_long',
     },
     notes: [
-      '→ Triathlon Olympique (~S70) : 1500 m nage / 40 km vélo / 10 km course.',
-      'Dimanche : longue sortie vélo (2h30-3h). C\'est la séance la plus importante de la semaine.',
-      'Séances course : 1 qualité (tempo) + 1 facile. Ne pas faire 2 séances tempo.',
-      'Commencer la course longue (course_long) les semaines légères.',
+      'Phase la plus longue : 25 semaines pour vraiment consolider la base multisport.',
+      'Introduire 1 séance qualité/semaine en course (intervalles 2-3 min).',
+      'Dimanche : longue sortie vélo 2h-3h Zone 2. Importance capitale pour le vélo.',
+      'Bricks samedi : format Sprint (50 min vélo + 20 min course) → vers format olympique.',
     ],
   },
   {
+    id: 'p3c',
+    label: 'Phase 3C — Affûtage Olympique',
+    weeks: [91, 104],
+    tagline: '45-55 min course, 1500 m nage, 2h vélo → Triathlon Olympique',
+    focus: ['Course 45-55 min + qualité', 'Nage 1500-2000 m', 'Vélo 2-2h30', '🏃 Bricks format Olympique'],
+    template: {
+      lun: 'course_intermediaire', mar: 'swim_endurance', mer: 'bike_tri',
+      jeu: 'swim_endurance', ven: 'course_intermediaire', sam: 'brick_sprint', dim: 'bike_long',
+    },
+    notes: [
+      '→ Olympique 15 juin 2028 (S104) : 1500 m nage · 40 km vélo · 10 km course.',
+      'Vélo milieu de semaine passe à 2h+ (bike_tri) — travail d\'endurance longue.',
+      'La nage 1500 m est le premier vrai défi : objectif nager sans panique dans un départ masse.',
+      'Taper 5 jours avant la course. Récupération 1 semaine complète après.',
+    ],
+  },
+
+  // ── PHASE 4 : LONGUE DISTANCE → IRONMAN ─────────────────────────────────
+  {
     id: 'p4a',
     label: 'Phase 4A — Prépa Half Ironman',
-    weeks: [73, 88],
-    tagline: 'Volumes Ironman intermédiaires → Half Ironman',
-    focus: ['Course 55-75 min + longs dim', 'Nage 2000-2800 m', 'Vélo 3-4h', 'Bricks 2h+'],
+    weeks: [105, 117],
+    tagline: '60 min course, 2000 m nage, 3h vélo → Half Ironman 70.3',
+    focus: ['Course 55-70 min', 'Nage 2000-2500 m', 'Vélo 2h30-3h', '💪 Bricks 2h+'],
     template: {
       lun: 'course_avance', mar: 'swim_avance', mer: 'bike_tri',
       jeu: 'swim_avance', ven: 'course_avance', sam: 'brick_olympique', dim: 'course_long_avance',
     },
     notes: [
-      '→ Half Ironman (~S88) : 1900 m nage / 90 km vélo / 21 km course.',
-      'Dimanche : long run 85-110 min. C\'est la fondation du marathon Ironman.',
-      'Obtenir la licence FFTRI + certificat médical pour les compétitions.',
+      '→ Half Ironman 21 sept. 2028 (S117) : 1900 m nage · 90 km vélo · 21 km course.',
+      'Dimanche : long run 85-100 min — fondation du marathon Ironman.',
+      'Licence FFTRI + certificat médical à obtenir avant cette phase.',
       'Bricks samedi : format olympique (90 min vélo + 40-50 min course).',
+      'Si le Half se passe bien → l\'Ironman est en vue. Sinon → on décale sans hésiter.',
     ],
   },
   {
     id: 'p4b',
-    label: 'Phase 4B — Ironman',
-    weeks: [89, 104],
-    tagline: 'Préparation finale → IRONMAN',
-    focus: ['Long run 2h+', 'Nage 3800 m', 'Vélo 5h+', 'Bricks Ironman'],
+    label: 'Phase 4B — Longue distance base',
+    weeks: [118, 140],
+    tagline: '70 min course, 2500 m nage, 4h vélo — construction Ironman',
+    focus: ['Course 65-80 min', 'Nage 2500-3200 m', 'Vélo 3-4h', 'Long run dim 2h'],
+    template: {
+      lun: 'course_avance', mar: 'swim_avance', mer: 'bike_tri',
+      jeu: 'swim_avance', ven: 'course_avance', sam: 'brick_olympique', dim: 'bike_long',
+    },
+    notes: [
+      'Phase de construction pure : volume progressif sur 23 semaines.',
+      'Alterner dim long run (course_long_avance) et dim long vélo (bike_long) chaque semaine.',
+      'Nage : commencer à nager en eau libre si possible (lac, mer) — simuler les conditions Ironman.',
+      'Sortie vélo longue : viser 4h-5h en fin de phase (90-110 km).',
+      'Coach triathlon vivement recommandé dès cette phase.',
+    ],
+  },
+  {
+    id: 'p4c',
+    label: 'Phase 4C — Pic Ironman',
+    weeks: [141, 157],
+    tagline: '3800 m nage · 180 km vélo · 42 km course → IRONMAN',
+    focus: ['Long run 2h30+', 'Nage 3000-3800 m', 'Vélo 5-6h', '🏅 Bricks Ironman'],
     template: {
       lun: 'course_avance', mar: 'swim_ironman', mer: 'bike_ironman',
       jeu: 'swim_ironman', ven: 'course_avance', sam: 'brick_ironman', dim: 'course_long_avance',
     },
     notes: [
-      '→ IRONMAN : 3,8 km nage / 180 km vélo / 42,2 km course.',
-      'Semaines 99-102 : phase de "taper" (réduire le volume de 30-40%, garder l\'intensité). Tu arriveras frais le jour J.',
-      'Ne jamais essayer quelque chose de nouveau le jour de la course (nutrition, équipement).',
-      'Coach triathlon recommandé pour les 6 derniers mois — les détails font la différence sur un Ironman.',
+      '→ IRONMAN 22 juin 2029 (S157) : 3800 m nage · 180 km vélo · 42,2 km course.',
+      'S155-156 : taper (−40% volume, garder l\'intensité). Arriver frais et confiant.',
+      'Ne jamais tester nutrition, matériel ou allure pour la première fois le jour J.',
+      'Le secret de l\'Ironman : être patient sur la nage, conservateur sur le vélo, et courir à l\'écoute du corps.',
+      'Quand tu franchieras la ligne, tu entendras "You are an Ironman". Tout le reste ne compte plus.',
     ],
   },
 ];
