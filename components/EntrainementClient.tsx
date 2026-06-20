@@ -2,7 +2,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import type { AppState } from '@/types';
 import { ensureDay, todayStr } from '@/lib/compute';
-import { SESSIONS, PHASES, getCurrentWeek, getCurrentPhase, PROGRAM_START } from '@/lib/program';
+import { SESSIONS, PHASES, getCurrentWeek, getCurrentPhase, PROGRAM_START, DATE_OVERRIDES } from '@/lib/program';
 import type { WeekDay, ProgramPhase } from '@/lib/program';
 import MissionList from './MissionList';
 import QuestList from './QuestList';
@@ -25,6 +25,8 @@ function phaseForDate(date: Date): ProgramPhase {
 }
 
 function sessionIdForDate(date: Date): string {
+  const ds = dateStr(date);
+  if (DATE_OVERRIDES[ds]) return DATE_OVERRIDES[ds];
   if (weekNum(date) < 1) return 'rest';
   const phase = phaseForDate(date);
   return phase.template[DAY_MAP[date.getDay()]] ?? 'rest';
