@@ -52,13 +52,23 @@ const IconNutrition = () => (
   </svg>
 );
 
+const IconMateriel = () => (
+  <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M7 5V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+    <rect x="2" y="5" width="16" height="13" rx="2" />
+    <path d="M2 10h16" />
+    <path d="M8 10v3h4v-3" />
+  </svg>
+);
+
 const NAV_ITEMS = [
   { href: '/',             Icon: IconDashboard,   label: 'Dashboard' },
   { href: '/entrainement', Icon: IconEntrainement, label: 'Entraînement' },
   { href: '/nutrition',    Icon: IconNutrition,   label: 'Nutrition' },
   { href: '/tabac',        Icon: IconTabac,        label: 'Tabac' },
-  { href: '/galerie',      Icon: IconGalerie,      label: 'Galerie' },
   { href: '/mental',       Icon: IconMental,       label: 'Mental' },
+  { href: '/materiel',     Icon: IconMateriel,     label: 'Matériel' },
+  { href: '/galerie',      Icon: IconGalerie,      label: 'Galerie' },
 ];
 
 export default function Nav() {

@@ -1,3 +1,5 @@
+'use client';
+import { useState } from 'react';
 import { DAILY } from '@/lib/constants';
 
 interface Props {
@@ -12,7 +14,17 @@ const CHECK_SVG = (
   </svg>
 );
 
+const MOB_ROUTINE = [
+  { name: 'Psoas & fléchisseur de hanche', detail: 'Genou au sol, bascule le bassin vers l\'avant — sens l\'étirement à l\'avant de la hanche. Doux.', dur: '45 s / côté', tag: 'Pubalgie' },
+  { name: 'Mollet & tendon d\'Achille', detail: 'Talon bien ancré au sol, jambe tendue contre un mur ou une marche. Ne force pas.', dur: '45 s / côté', tag: 'Périostite' },
+  { name: 'Ischio-jambiers', detail: 'Debout, pose le talon sur une chaise ou un banc, incline le buste vers l\'avant, dos droit.', dur: '45 s / côté', tag: '' },
+  { name: 'Pigeon (rotateur hanche)', detail: 'Jambe avant pliée à 90° au sol, jambe arrière tendue. Aide à protéger l\'aine et la pubalgie.', dur: '60 s / côté', tag: 'Pubalgie' },
+  { name: 'Ouverture poitrine & épaules', detail: 'Bras en croix, main contre un mur ou un encadrement de porte, rotation douce du buste.', dur: '45 s / côté', tag: 'Natation' },
+  { name: 'Rotations thoraciques', detail: 'Assis en tailleur, main derrière la nuque, rotation lente gauche-droite. Déverrouille le dos après le vélo.', dur: '30 s / côté', tag: '' },
+];
+
 export default function MissionList({ missions, onToggle }: Props) {
+  const [mobOpen, setMobOpen] = useState(false);
   const dl = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
 
   return (
@@ -21,18 +33,48 @@ export default function MissionList({ missions, onToggle }: Props) {
       <div className="item-list">
         {DAILY.map(t => {
           const done = !!missions[t.id];
+          const isMob = t.id === 'mob';
           return (
-            <div
-              key={t.id}
-              className={`item${done ? ' done' : ''}`}
-              role="button"
-              tabIndex={0}
-              onClick={() => onToggle(t.id, !done)}
-              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle(t.id, !done); } }}
-            >
-              <div className="item-box">{CHECK_SVG}</div>
-              <div className="item-txt">{t.txt}</div>
-              <div className="item-xp">+{t.xp}</div>
+            <div key={t.id}>
+              <div
+                className={`item${done ? ' done' : ''}`}
+                role="button"
+                tabIndex={0}
+                onClick={() => onToggle(t.id, !done)}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle(t.id, !done); } }}
+              >
+                <div className="item-box">{CHECK_SVG}</div>
+                <div className="item-txt">{t.txt}</div>
+                {isMob && (
+                  <button
+                    className="mob-expand-btn"
+                    onClick={e => { e.stopPropagation(); setMobOpen(o => !o); }}
+                    aria-label="Voir la séance"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                      <polyline points={mobOpen ? '5 13 10 8 15 13' : '5 8 10 13 15 8'} />
+                    </svg>
+                  </button>
+                )}
+                <div className="item-xp">+{t.xp}</div>
+              </div>
+
+              {isMob && mobOpen && (
+                <div className="mob-routine">
+                  <div className="mob-routine-title">Séance mobilité — 10 min après le sport</div>
+                  {MOB_ROUTINE.map((ex, i) => (
+                    <div key={i} className="mob-ex">
+                      <div className="mob-ex-top">
+                        <span className="mob-ex-name">{ex.name}</span>
+                        <span className="mob-ex-dur">{ex.dur}</span>
+                      </div>
+                      <div className="mob-ex-detail">{ex.detail}</div>
+                      {ex.tag && <span className="mob-ex-tag">{ex.tag}</span>}
+                    </div>
+                  ))}
+                  <div className="mob-routine-note">Respire lentement. Si une zone tire trop fort, recule.</div>
+                </div>
+              )}
             </div>
           );
         })}
