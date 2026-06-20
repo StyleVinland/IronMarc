@@ -1,9 +1,8 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { computeXP, computeLevel, computeLevelTitle, computeStreak, computeCheckpointPct } from '@/lib/compute';
-import type { AppState } from '@/types';
+import { useAppState } from './AppStateProvider';
 
 // ── Inline SVG icons ────────────────────────────────────────────────
 const IconDashboard = () => (
@@ -62,28 +61,19 @@ const NAV_ITEMS = [
   { href: '/mental',       Icon: IconMental,       label: 'Mental' },
 ];
 
-interface SidebarStats { xp: number; level: number; title: string; streak: number; cpPct: number; }
-
 export default function Nav() {
   const pathname = usePathname();
-  const [stats, setStats] = useState<SidebarStats>({ xp: 0, level: 1, title: '—', streak: 0, cpPct: 0 });
+  const { state } = useAppState();
 
-  useEffect(() => {
-    fetch('/api/state')
-      .then(r => r.json())
-      .then((state: AppState) => {
-        const xp = computeXP(state);
-        const level = computeLevel(xp);
-        setStats({
-          xp,
-          level,
-          title: computeLevelTitle(level),
-          streak: computeStreak(state),
-          cpPct: computeCheckpointPct(state),
-        });
-      })
-      .catch(() => {});
-  }, [pathname]);
+  const xp = computeXP(state);
+  const level = computeLevel(xp);
+  const stats = {
+    xp,
+    level,
+    title: computeLevelTitle(level),
+    streak: computeStreak(state),
+    cpPct: computeCheckpointPct(state),
+  };
 
   return (
     <>

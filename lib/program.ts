@@ -301,6 +301,7 @@ export const PHASES: ProgramPhase[] = [
 // Nage du 20/06 manquée → prochaine nage naturellement mardi 23/06 (template mar = swim)
 export const DATE_OVERRIDES: Record<string, string> = {
   '2026-06-21': 'renfo_a',  // Dimanche de rattrapage — renfo pubalgie
+  '2026-06-27': 'swim',     // Nage samedi — rattrapage du 20/06 manqué
 };
 
 // ── HELPERS ───────────────────────────────────────────────────────

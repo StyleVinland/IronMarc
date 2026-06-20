@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import Nav from '@/components/Nav';
+import { AppStateProvider } from '@/components/AppStateProvider';
+import { getFullState } from '@/lib/db';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -8,6 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const initialState = getFullState();
   return (
     <html lang="fr">
       <head>
@@ -19,14 +22,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <div className="app-root">
-          <Nav />
-          <main className="page-main">
-            <div className="page-inner">
-              {children}
-            </div>
-          </main>
-        </div>
+        <AppStateProvider initial={initialState}>
+          <div className="app-root">
+            <Nav />
+            <main className="page-main">
+              <div className="page-inner">
+                {children}
+              </div>
+            </main>
+          </div>
+        </AppStateProvider>
       </body>
     </html>
   );

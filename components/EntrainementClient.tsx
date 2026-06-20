@@ -1,7 +1,6 @@
 'use client';
-import { useState, useCallback, useMemo } from 'react';
-import type { AppState } from '@/types';
-import { ensureDay, todayStr } from '@/lib/compute';
+import { useState, useMemo } from 'react';
+import { useAppState } from './AppStateProvider';
 import { SESSIONS, PHASES, getCurrentWeek, getCurrentPhase, PROGRAM_START, DATE_OVERRIDES } from '@/lib/program';
 import type { WeekDay, ProgramPhase } from '@/lib/program';
 import MissionList from './MissionList';
@@ -58,13 +57,12 @@ function fmtDayLong(d: Date): string {
   return `${DAY_SHORT[d.getDay()]} ${d.getDate()} ${MONTHS_FR[d.getMonth()]}`;
 }
 
-export default function EntrainementClient({ initialState }: { initialState: AppState }) {
-  const [state, setState] = useState<AppState>(() => ensureDay(initialState, todayStr()));
+export default function EntrainementClient() {
+  const { state, today, toggleMission, toggleQuest } = useAppState();
   const [weekOffset, setWeekOffset] = useState(0);
-  const [selectedDate, setSelectedDate] = useState<string>(() => todayStr());
+  const [selectedDate, setSelectedDate] = useState<string>(() => today);
   const [pain, setPain] = useState({ aine: 0, tibia: 0 });
 
-  const today = todayStr();
   const todayData = state.days[today] ?? {
     date: today, cigs: 0,
     mind: { mood: null, journal: '', grat: ['', '', ''] },
@@ -103,24 +101,6 @@ export default function EntrainementClient({ initialState }: { initialState: App
     setSelectedDate(todayD >= mon && todayD <= sun ? today : dateStr(mon));
   }
 
-  const handleMission = useCallback((id: string, completed: boolean) => {
-    setState(prev => {
-      const s = ensureDay(prev, today);
-      return { ...s, days: { ...s.days, [today]: { ...s.days[today], missions: { ...s.days[today].missions, [id]: completed } } } };
-    });
-    fetch(`/api/days/${today}/missions/${id}`, {
-      method: 'PUT', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ completed }),
-    });
-  }, [today]);
-
-  const handleQuest = useCallback((id: string, completed: boolean) => {
-    setState(prev => ({ ...prev, quests: { ...prev.quests, [id]: completed } }));
-    fetch(`/api/quests/${id}`, {
-      method: 'PUT', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ completed }),
-    });
-  }, []);
 
   return (
     <>
@@ -255,8 +235,8 @@ export default function EntrainementClient({ initialState }: { initialState: App
 
       {/* ── MISSIONS + QUÊTES ── */}
       <div className="two-col" style={{ marginTop: 4 }}>
-        <MissionList missions={todayData.missions} onToggle={handleMission} date={today} />
-        <QuestList quests={state.quests} onToggle={handleQuest} />
+        <MissionList missions={todayData.missions} onToggle={toggleMission} date={today} />
+        <QuestList quests={state.quests} onToggle={toggleQuest} />
       </div>
     </>
   );
