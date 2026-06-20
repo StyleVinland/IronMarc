@@ -993,3 +993,65 @@ body { padding: 0; }
 .dash-aside section { margin-top: 18px; }
 .dash-main section:first-child,
 .dash-aside section:first-child { margin-top: 0; }
+
+/* ================================================================
+   MOBILE AMÉLIORATIONS (≤ 480px)
+   ================================================================ */
+
+/* Labels nav semaine — full par défaut, court sur mobile */
+.prog-nav-label-short { display: none; }
+
+@media (max-width: 480px) {
+  /* Titres de page */
+  .page-title-block h1 { font-size: 26px; }
+  .page-title-block p  { font-size: 13px; }
+  .page-title-block { margin-bottom: 18px; padding-bottom: 14px; }
+
+  /* Hero */
+  .hero { padding: 18px 14px 16px; }
+
+  /* Stats */
+  .stat { padding: 10px 6px; }
+  .stat-n { font-size: 24px; }
+  .stat-k { font-size: 10px; }
+
+  /* Phase banner */
+  .prog-phase-banner { padding: 13px 14px; gap: 10px; }
+  .prog-phase-left { min-width: 0; }
+
+  /* Boutons nav semaine — flèches seulement */
+  .prog-nav-label-full  { display: none; }
+  .prog-nav-label-short { display: inline; }
+  .prog-nav-btn { padding: 6px 12px !important; }
+  .prog-week-title { font-size: 12px; }
+
+  /* Grille 7 jours — cellules compactes */
+  .prog-week-grid { gap: 4px; }
+  .prog-day-cell  { padding: 7px 3px; gap: 2px; border-radius: 9px; }
+  .prog-day-session { font-size: 10px; }
+  .prog-day-dur   { font-size: 9px; }
+  .prog-day-name  { font-size: 9px; }
+  .prog-day-date-num { font-size: 10px; }
+
+  /* Échelle douleur (11 boutons × 26px + 3px gap = 319px — ça rentre dans 347px) */
+  .prog-pain-btn  { width: 26px; height: 26px; font-size: 11px; }
+  .prog-pain-scale { gap: 3px; }
+  .prog-pain-row  { gap: 8px; }
+
+  /* Carte séance */
+  .prog-session-header { padding: 13px 14px; gap: 8px; }
+  .prog-exercise { padding: 10px 14px; }
+
+  /* Nutrition tabs — plus petit */
+  .nutri-day-tab { padding: 6px 10px; font-size: 12px; }
+
+  /* Bottom nav — icônes seules sur très petit écran */
+  .bottom-nav-link { overflow: hidden; }
+}
+
+@media (max-width: 360px) {
+  .bottom-nav-link span { display: none; }
+  .bottom-nav-link svg  { width: 24px; height: 24px; }
+  .bottom-nav { height: 54px; }
+  .page-main  { padding-bottom: 68px !important; }
+}

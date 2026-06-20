@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Nav from '@/components/Nav';
 import { AppStateProvider } from '@/components/AppStateProvider';
 import { getFullState } from '@/lib/db';
@@ -6,9 +6,23 @@ import './globals.css';
 
 export const dynamic = 'force-dynamic';
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#0F0F0E',
+};
+
 export const metadata: Metadata = {
   title: 'IronMarc · Journal de bord',
   description: 'Quête Ironman — journal de bord gamifié',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'IronMarc',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

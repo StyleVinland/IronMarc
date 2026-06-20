@@ -124,12 +124,18 @@ export default function EntrainementClient() {
       {/* ── CALENDRIER PAR DATES ── */}
       <section className="prog-week-section">
         <div className="prog-week-nav">
-          <button className="btn-ghost prog-nav-btn" onClick={() => handleWeekChange(-1)}>← Précédente</button>
+          <button className="btn-ghost prog-nav-btn" onClick={() => handleWeekChange(-1)}>
+            <span className="prog-nav-label-full">← Précédente</span>
+            <span className="prog-nav-label-short">←</span>
+          </button>
           <span className="prog-week-title">
             {displayedWeek > 0 ? <><strong>S{displayedWeek}</strong> · </> : null}
             {fmtWeekHeader(monday)}
           </span>
-          <button className="btn-ghost prog-nav-btn" onClick={() => handleWeekChange(1)}>Suivante →</button>
+          <button className="btn-ghost prog-nav-btn" onClick={() => handleWeekChange(1)}>
+            <span className="prog-nav-label-full">Suivante →</span>
+            <span className="prog-nav-label-short">→</span>
+          </button>
         </div>
 
         <div className="prog-week-grid">
