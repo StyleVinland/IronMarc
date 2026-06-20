@@ -78,7 +78,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
     label: 'Natation',
     short: 'Nage',
     type: 'swim',
-    color: '#C8C0B0',
+    color: '#6EC6D8',
     duration: '20-40 min selon semaine',
     desc: 'Priorité : technique + respiration. Allure très douce.',
     exercises: [
@@ -94,7 +94,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
     label: 'Vélo appartement',
     short: 'Vélo',
     type: 'bike',
-    color: '#C07840',
+    color: '#88C49A',
     duration: '30-45 min',
     desc: 'Cadence souple, zéro impact articulaire. Ménage le pubis.',
     exercises: [
@@ -124,7 +124,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
     label: 'Marche / Course',
     short: 'MC',
     type: 'run',
-    color: '#8A9870',
+    color: '#C26060',
     duration: '20-25 min',
     desc: '1 min course / 2 min marche. Seulement dès semaine 9, si marche indolore.',
     exercises: [
