@@ -1,134 +1,210 @@
 'use client';
 import { useState } from 'react';
 
-interface GearItem { name: string; note: string; done: boolean; later?: boolean; }
-interface GearSection { id: string; label: string; color: string; priority?: string; items: GearItem[]; }
+interface GearItem {
+  name: string;
+  price: string;
+  why: string;
+  when: string;
+  color: string;
+}
 
-const GEAR_SECTIONS: GearSection[] = [
+const OWNED = ['Maillot de bain', 'Chaussures de course'];
+
+const GEAR: GearItem[] = [
   {
-    id: 'stock',
-    label: 'Déjà en stock',
-    color: '#88C49A',
-    items: [
-      { name: 'Maillot de bain', note: '', done: true },
-      { name: 'Chaussures de course', note: '', done: true },
-    ],
-  },
-  {
-    id: 'swim',
-    label: 'Natation',
+    name: 'Lunettes de natation',
+    price: '20-30 €',
+    why: 'Sans lunettes tu ne peux pas t\'entraîner en piscine. Premier achat, aucune négociation.',
+    when: 'Cette semaine',
     color: '#6EC6D8',
-    priority: 'Priorité immédiate — première séance en piscine',
-    items: [
-      { name: 'Lunettes de natation', note: 'Speedo Vanquisher 2.0 ou Aqua Sphere Kayenne — 20 à 40 €', done: false },
-      { name: 'Bonnet de silicone', note: 'Souvent fourni en piscine, sinon 5-15 €', done: false },
-      { name: 'Planche de natation', note: 'Entraînement jambes — 10-20 €', done: false, later: true },
-      { name: 'Pull buoy', note: 'Entraînement bras — 10-20 €', done: false, later: true },
-    ],
   },
   {
-    id: 'recovery',
-    label: 'Récupération',
+    name: 'Bonnet de silicone',
+    price: '5-10 €',
+    why: 'Obligatoire dans la plupart des piscines publiques. Le prendre en même temps que les lunettes.',
+    when: 'Cette semaine',
+    color: '#6EC6D8',
+  },
+  {
+    name: 'Foam roller',
+    price: '20-30 €',
+    why: 'Outil de récup numéro 1 pour ta pubalgie et tes périostites. Mollets, cuisses, dos — après chaque séance. Sans ça tu risques de te blesser et d\'arrêter.',
+    when: 'Mois 1',
     color: '#CF8E42',
-    priority: 'Priorité haute — indispensable avec ta pubalgie et tes périostites',
-    items: [
-      { name: 'Foam roller', note: 'TriggerPoint GRID ou similaire — 25-40 €. Après chaque séance sur mollets, cuisses, dos.', done: false },
-      { name: 'Balle de massage (lacrosse)', note: 'Pour points précis : plante du pied, fessier, pectoral — 8-15 €', done: false },
-      { name: 'Manchons de compression mollets', note: 'Raidlight, CEP ou BV Sport — 30-60 €. Contre les périostites, à porter après l\'effort.', done: false },
-      { name: 'Pistolet de massage', note: 'Theragun Mini ou Hypervolt Go — 80-150 €. Pas urgent, mais game-changer pour la récup.', done: false, later: true },
-    ],
   },
   {
-    id: 'bike',
-    label: 'Vélo',
-    color: '#88C49A',
-    priority: 'Dans 2-3 mois quand la base cardio est posée',
-    items: [
-      { name: 'Vélo de route (occasion)', note: 'Commencer avec un vélo d\'occasion en bon état — 400-800 €. Leboncoin / Decathlon Seconde Vie.', done: false },
-      { name: 'Casque vélo', note: 'Obligatoire en compétition. Giro / Bell / Specialized — 50-150 €', done: false },
-      { name: 'Chaussures vélo + pédales SPD', note: 'Shimano XT ou Look — 80-200 €. Les pédales automatiques changent tout.', done: false },
-      { name: 'Cuissard rembourré', note: 'Essentiel pour les longues sorties. Pas de sous-vêtement en dessous — 40-80 €', done: false },
-      { name: 'Bidon + porte-bidon', note: '20-30 €', done: false },
-    ],
+    name: 'Balle de massage (lacrosse)',
+    price: '8-12 €',
+    why: 'Complémente le foam roller pour les zones précises : plante du pied, fessier, pectoral. Quasi gratuit.',
+    when: 'Mois 1 — avec le foam roller',
+    color: '#CF8E42',
   },
   {
-    id: 'run',
-    label: 'Course',
+    name: 'Manchons de compression mollets',
+    price: '25-45 €',
+    why: 'Direct contre les périostites. À porter pendant la marche/course et 1-2 h après. Les périostites peuvent te sortir du programme — c\'est une priorité.',
+    when: 'Mois 2',
+    color: '#CF8E42',
+  },
+  {
+    name: 'Pull buoy',
+    price: '10-15 €',
+    why: 'Flotteur entre les jambes pour travailler les bras en piscine. Permet de progresser en nage même quand les jambes sont fatiguées.',
+    when: 'Mois 2-3',
+    color: '#6EC6D8',
+  },
+  {
+    name: 'Planche de natation',
+    price: '10-15 €',
+    why: 'Travail des jambes en piscine — améliore le crawl. Certaines piscines en prêtent, vérifie avant d\'acheter.',
+    when: 'Mois 3',
+    color: '#6EC6D8',
+  },
+  {
+    name: 'Chaussettes de compression',
+    price: '20-35 €',
+    why: 'Périostites : essentielles pour les sorties de course dès que la course arrive dans le programme. Marque : BV Sport, Falke.',
+    when: 'Mois 4 — avant la phase course',
     color: '#C26060',
-    priority: 'Phase 1C+ quand la course arrive',
-    items: [
-      { name: 'Chaussettes de compression', note: 'Falke, CEP — 20-50 €. Périostites : les porter pendant et après les sorties.', done: false },
-      { name: 'Ceinture hydratation avec bidons', note: 'Nathan ou Salomon — 30-60 €. Pour les sorties > 45 min.', done: false },
-      { name: 'Montre GPS / cardio (optionnel)', note: 'Garmin Forerunner 55 ou Polar Pacer — 150-250 €. Utile pour doser l\'intensité.', done: false, later: true },
-    ],
   },
   {
-    id: 'tri',
-    label: 'Triathlon',
+    name: 'Vélo de route (occasion)',
+    price: '400-700 €',
+    why: 'Le plus gros investissement. Commence à économiser maintenant. Leboncoin ou Decathlon Seconde Vie. Pas besoin d\'un vélo de triathlon — un vélo de route d\'occasion suffit largement pour les 2 ans.',
+    when: 'Mois 4-5 — commencer à économiser dès maintenant',
+    color: '#88C49A',
+  },
+  {
+    name: 'Casque vélo',
+    price: '40-80 €',
+    why: 'Obligatoire en compétition et indispensable à la sécurité. À acheter en même temps que le vélo.',
+    when: 'Mois 5 — avec le vélo',
+    color: '#88C49A',
+  },
+  {
+    name: 'Cuissard rembourré',
+    price: '30-50 €',
+    why: 'Sans cuissard les longues sorties vélo deviennent vite insupportables. Pas de sous-vêtement en dessous.',
+    when: 'Mois 5 — dès les premières sorties vélo',
+    color: '#88C49A',
+  },
+  {
+    name: 'Chaussures vélo + pédales SPD',
+    price: '70-130 €',
+    why: 'Les pédales automatiques améliorent vraiment l\'efficacité. Shimano M500 ou similaire. À attendre quelques sorties avant d\'investir.',
+    when: 'Mois 6-7',
+    color: '#88C49A',
+  },
+  {
+    name: 'Ceinture hydratation (course)',
+    price: '25-40 €',
+    why: 'Pour les sorties course > 45 min. Nathan ou Salomon. Pas urgent au début.',
+    when: 'Mois 7-8',
+    color: '#C26060',
+  },
+  {
+    name: 'Pistolet de massage',
+    price: '80-150 €',
+    why: 'Confort et récup accélérée, mais pas indispensable si tu utilises bien le foam roller et la balle. À attendre.',
+    when: 'Mois 8-10 si budget',
     color: '#CF8E42',
-    priority: 'Long terme — à acheter 6 mois avant la première compétition',
-    items: [
-      { name: 'Combinaison néoprène de triathlon', note: 'Zone3 Aspire, Orca S7 — 150-400 €. Obligatoire en eau froide (< 22°C).', done: false },
-      { name: 'Tri-suit (combinaison 1 pièce)', note: 'Pour les 3 disciplines sans changement. 100-250 €.', done: false },
-      { name: 'Ceinture porte-dossard', note: 'On ne couds pas son dossard sur la combinaison — 10-15 €', done: false },
-      { name: 'Sac de transition', note: 'Sac étanche pour zone T1/T2 — 30-60 €', done: false },
-    ],
+  },
+  {
+    name: 'Montre GPS / cardio',
+    price: '120-200 €',
+    why: 'Garmin Forerunner 55 ou Polar Pacer. Utile pour doser l\'intensité et ne pas dépasser — important avec tes blessures. Pas urgent les premiers mois.',
+    when: 'Mois 6-9 si budget',
+    color: '#7A7870',
+  },
+  {
+    name: 'Combinaison néoprène de triathlon',
+    price: '150-300 €',
+    why: 'Obligatoire en eau froide (< 22°C). Zone3 Aspire ou Orca S7. À acheter 2-3 mois avant ta première compétition.',
+    when: '3 mois avant la compétition',
+    color: '#6EC6D8',
+  },
+  {
+    name: 'Tri-suit (combinaison 1 pièce)',
+    price: '80-180 €',
+    why: 'Pour faire les 3 disciplines sans se changer. Pas obligatoire pour les premiers triathlons (maillot + cuissard ça marche).',
+    when: 'Avant le premier triathlon Sprint',
+    color: '#7A7870',
+  },
+  {
+    name: 'Ceinture porte-dossard + sac transition',
+    price: '15-25 €',
+    why: 'Petits accessoires indispensables le jour J. Acheter la semaine avant la compétition.',
+    when: 'Juste avant la compétition',
+    color: '#7A7870',
   },
 ];
 
 export default function MaterielClient() {
-  const [checked, setChecked] = useState<Record<string, boolean>>({});
+  const [bought, setBought] = useState<Record<number, boolean>>({});
+  const toggle = (i: number) => setBought(p => ({ ...p, [i]: !p[i] }));
 
-  const toggle = (key: string) => setChecked(p => ({ ...p, [key]: !p[key] }));
+  const doneCount = Object.values(bought).filter(Boolean).length;
 
   return (
     <>
       <div className="page-title-block">
         <h1>Matériel</h1>
-        <p>Ce dont tu as besoin pour aller jusqu'à l'Ironman — dans l'ordre des priorités</p>
+        <p>Dans l'ordre d'importance — 1 achat par mois</p>
       </div>
 
-      {GEAR_SECTIONS.map(sec => (
-        <section key={sec.id}>
-          <div className="shead">
-            <h2 style={{ color: sec.color }}>{sec.label}</h2>
-          </div>
-          {sec.priority && (
-            <div className="gear-priority">{sec.priority}</div>
-          )}
-          <div className="gear-list">
-            {sec.items.map((item, i) => {
-              const key = `${sec.id}-${i}`;
-              const isChecked = item.done || !!checked[key];
-              return (
-                <div
-                  key={key}
-                  className={`gear-item${isChecked ? ' done' : ''}${item.later ? ' later' : ''}`}
-                  onClick={() => !item.done && toggle(key)}
-                  role={item.done ? undefined : 'button'}
-                  tabIndex={item.done ? undefined : 0}
-                  onKeyDown={e => { if (!item.done && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); toggle(key); } }}
-                >
-                  <div className="gear-check" style={{ borderColor: isChecked ? sec.color : undefined, background: isChecked ? sec.color : undefined }}>
-                    {isChecked && (
-                      <svg viewBox="0 0 24 24" fill="none" stroke="#0a1a0a" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
-                    )}
+      {/* Déjà en stock */}
+      <section>
+        <div className="shead"><h2>Déjà en stock</h2><span className="hint">✓</span></div>
+        <div className="gear-list">
+          {OWNED.map(name => (
+            <div key={name} className="gear-item done">
+              <div className="gear-check" style={{ borderColor: '#88C49A', background: '#88C49A' }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#0a1a0a" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+              <div className="gear-content">
+                <div className="gear-name">{name}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Liste prioritaire */}
+      <section>
+        <div className="shead">
+          <h2>À acheter dans l'ordre</h2>
+          <span className="hint">{doneCount}/{GEAR.length} achetés</span>
+        </div>
+
+        <div className="gear-list">
+          {GEAR.map((item, i) => {
+            const isDone = !!bought[i];
+            return (
+              <div
+                key={i}
+                className={`gear-item${isDone ? ' done' : ''}`}
+                role="button"
+                tabIndex={0}
+                onClick={() => toggle(i)}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(i); } }}
+              >
+                <div className="gear-num" style={{ color: isDone ? '#4a4845' : item.color }}>{isDone ? '✓' : i + 1}</div>
+                <div className="gear-content">
+                  <div className="gear-name" style={{ color: isDone ? 'var(--muted)' : 'var(--foam)' }}>
+                    {item.name}
+                    <span className="gear-price">{item.price}</span>
                   </div>
-                  <div className="gear-content">
-                    <div className="gear-name">
-                      {item.name}
-                      {item.later && <span className="gear-later-badge">plus tard</span>}
-                    </div>
-                    {item.note && <div className="gear-note">{item.note}</div>}
-                  </div>
+                  {!isDone && <div className="gear-note">{item.why}</div>}
+                  <div className="gear-when" style={{ color: isDone ? '#3a3a35' : item.color }}>{item.when}</div>
                 </div>
-              );
-            })}
-          </div>
-        </section>
-      ))}
+              </div>
+            );
+          })}
+        </div>
+      </section>
     </>
   );
 }

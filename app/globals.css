@@ -1061,29 +1061,18 @@ body { padding: 0; }
    MATÉRIEL — page équipement
    ================================================================ */
 
-.gear-priority {
-  font-size: 13px; color: var(--dawn);
-  background: rgba(207,142,66,.08);
-  border-left: 3px solid var(--dawn);
-  border-radius: 0 8px 8px 0;
-  padding: 8px 12px; margin-bottom: 12px;
-  line-height: 1.4;
-}
-
 .gear-list {
   display: flex; flex-direction: column; gap: 8px;
 }
 
 .gear-item {
-  display: flex; align-items: flex-start; gap: 12px;
+  display: flex; align-items: flex-start; gap: 14px;
   background: var(--card); border: 1px solid var(--line); border-radius: 13px;
   padding: 13px 14px; cursor: pointer;
-  transition: border-color .15s;
+  transition: border-color .15s, opacity .15s;
 }
 .gear-item:hover { border-color: #3a3a35; }
-.gear-item.done { opacity: .55; cursor: default; }
-.gear-item.later { opacity: .7; border-style: dashed; }
-.gear-item.later:hover { border-color: #3a3a35; }
+.gear-item.done { opacity: .5; }
 
 .gear-check {
   flex: none; width: 22px; height: 22px; border-radius: 6px;
@@ -1092,16 +1081,27 @@ body { padding: 0; }
   transition: background .15s, border-color .15s;
 }
 
-.gear-content { flex: 1; min-width: 0; }
-.gear-name { font-size: 14px; font-weight: 600; color: var(--foam); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.gear-item.done .gear-name { text-decoration: line-through; text-decoration-color: var(--muted); }
-.gear-note { font-size: 12.5px; color: var(--muted); margin-top: 3px; line-height: 1.45; }
+.gear-num {
+  flex: none; width: 24px; text-align: center;
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+  font-size: 16px; margin-top: 1px; line-height: 1;
+}
 
-.gear-later-badge {
-  font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: .06em;
-  text-transform: uppercase; color: var(--muted);
-  border: 1px solid var(--line); border-radius: 999px;
-  padding: 1px 7px; font-weight: 400;
+.gear-content { flex: 1; min-width: 0; }
+.gear-name {
+  font-size: 14px; font-weight: 600; color: var(--foam);
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.gear-item.done .gear-name { text-decoration: line-through; text-decoration-color: var(--muted); color: var(--muted); }
+.gear-price {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 13px;
+  color: var(--muted); font-weight: 400; letter-spacing: .02em;
+}
+.gear-note { font-size: 12.5px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+.gear-when {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 11px;
+  letter-spacing: .06em; text-transform: uppercase;
+  margin-top: 5px; font-weight: 600;
 }
 
 /* ================================================================
