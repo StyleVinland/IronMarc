@@ -5,6 +5,7 @@ interface GearItem {
   name: string;
   price: string;
   why: string;
+  brands: string;
   when: string;
   color: string;
 }
@@ -16,6 +17,7 @@ const GEAR: GearItem[] = [
     name: 'Lunettes de natation',
     price: '20-30 €',
     why: 'Sans lunettes tu ne peux pas t\'entraîner en piscine. Premier achat, aucune négociation.',
+    brands: 'Speedo Vanquisher 2.0 · Aqua Sphere Kayenne · Arena Cobra',
     when: 'Cette semaine',
     color: '#6EC6D8',
   },
@@ -23,6 +25,7 @@ const GEAR: GearItem[] = [
     name: 'Bonnet de silicone',
     price: '5-10 €',
     why: 'Obligatoire dans la plupart des piscines publiques. Le prendre en même temps que les lunettes.',
+    brands: 'Speedo · Arena · Decathlon Nabaiji',
     when: 'Cette semaine',
     color: '#6EC6D8',
   },
@@ -30,6 +33,7 @@ const GEAR: GearItem[] = [
     name: 'Foam roller',
     price: '20-30 €',
     why: 'Outil de récup numéro 1 pour ta pubalgie et tes périostites. Mollets, cuisses, dos — après chaque séance. Sans ça tu risques de te blesser et d\'arrêter.',
+    brands: 'TriggerPoint GRID · Blackroll Standard · Decathlon Domyos',
     when: 'Mois 1',
     color: '#CF8E42',
   },
@@ -37,6 +41,7 @@ const GEAR: GearItem[] = [
     name: 'Balle de massage (lacrosse)',
     price: '8-12 €',
     why: 'Complémente le foam roller pour les zones précises : plante du pied, fessier, pectoral. Quasi gratuit.',
+    brands: 'TriggerPoint MB1 · Blackroll Ball · balle de lacrosse générique',
     when: 'Mois 1 — avec le foam roller',
     color: '#CF8E42',
   },
@@ -44,6 +49,7 @@ const GEAR: GearItem[] = [
     name: 'Manchons de compression mollets',
     price: '25-45 €',
     why: 'Direct contre les périostites. À porter pendant la marche/course et 1-2 h après. Les périostites peuvent te sortir du programme — c\'est une priorité.',
+    brands: 'BV Sport Booster Elite · CEP Run Merino · Raidlight Trail',
     when: 'Mois 2',
     color: '#CF8E42',
   },
@@ -51,6 +57,7 @@ const GEAR: GearItem[] = [
     name: 'Pull buoy',
     price: '10-15 €',
     why: 'Flotteur entre les jambes pour travailler les bras en piscine. Permet de progresser en nage même quand les jambes sont fatiguées.',
+    brands: 'Speedo · Arena · Decathlon Nabaiji',
     when: 'Mois 2-3',
     color: '#6EC6D8',
   },
@@ -58,20 +65,23 @@ const GEAR: GearItem[] = [
     name: 'Planche de natation',
     price: '10-15 €',
     why: 'Travail des jambes en piscine — améliore le crawl. Certaines piscines en prêtent, vérifie avant d\'acheter.',
+    brands: 'Speedo · Arena · Decathlon Nabaiji',
     when: 'Mois 3',
     color: '#6EC6D8',
   },
   {
     name: 'Chaussettes de compression',
     price: '20-35 €',
-    why: 'Périostites : essentielles pour les sorties de course dès que la course arrive dans le programme. Marque : BV Sport, Falke.',
+    why: 'Périostites : essentielles pour les sorties de course dès que la course arrive dans le programme.',
+    brands: 'BV Sport Run Compressport · Falke RU4 · CEP Run 3.0',
     when: 'Mois 4 — avant la phase course',
     color: '#C26060',
   },
   {
     name: 'Vélo de route (occasion)',
     price: '400-700 €',
-    why: 'Le plus gros investissement. Commence à économiser maintenant. Leboncoin ou Decathlon Seconde Vie. Pas besoin d\'un vélo de triathlon — un vélo de route d\'occasion suffit largement pour les 2 ans.',
+    why: 'Le plus gros investissement. Commence à économiser maintenant. Pas besoin d\'un vélo de triathlon — un vélo de route d\'occasion suffit largement pour les 2 ans.',
+    brands: 'Leboncoin · Decathlon Seconde Vie · Trek Domane / Giant Contend / Btwin (Decathlon)',
     when: 'Mois 4-5 — commencer à économiser dès maintenant',
     color: '#88C49A',
   },
@@ -79,6 +89,7 @@ const GEAR: GearItem[] = [
     name: 'Casque vélo',
     price: '40-80 €',
     why: 'Obligatoire en compétition et indispensable à la sécurité. À acheter en même temps que le vélo.',
+    brands: 'Giro Register · Bell Formula · Decathlon Van Rysel RC 500',
     when: 'Mois 5 — avec le vélo',
     color: '#88C49A',
   },
@@ -86,20 +97,23 @@ const GEAR: GearItem[] = [
     name: 'Cuissard rembourré',
     price: '30-50 €',
     why: 'Sans cuissard les longues sorties vélo deviennent vite insupportables. Pas de sous-vêtement en dessous.',
+    brands: 'Decathlon Van Rysel · Castelli Entrata · Rogelli Bike',
     when: 'Mois 5 — dès les premières sorties vélo',
     color: '#88C49A',
   },
   {
     name: 'Chaussures vélo + pédales SPD',
     price: '70-130 €',
-    why: 'Les pédales automatiques améliorent vraiment l\'efficacité. Shimano M500 ou similaire. À attendre quelques sorties avant d\'investir.',
+    why: 'Les pédales automatiques améliorent vraiment l\'efficacité. À attendre quelques sorties avant d\'investir.',
+    brands: 'Shimano MT501 (chaussures) + Shimano PD-M520 (pédales) · Look Keo Easy',
     when: 'Mois 6-7',
     color: '#88C49A',
   },
   {
     name: 'Ceinture hydratation (course)',
     price: '25-40 €',
-    why: 'Pour les sorties course > 45 min. Nathan ou Salomon. Pas urgent au début.',
+    why: 'Pour les sorties course > 45 min. Pas urgent au début.',
+    brands: 'Nathan VaporKrar · Salomon Active Skin 4 · Decathlon Evadict',
     when: 'Mois 7-8',
     color: '#C26060',
   },
@@ -107,20 +121,23 @@ const GEAR: GearItem[] = [
     name: 'Pistolet de massage',
     price: '80-150 €',
     why: 'Confort et récup accélérée, mais pas indispensable si tu utilises bien le foam roller et la balle. À attendre.',
+    brands: 'Theragun Mini · Hyperice Hypervolt Go · Decathlon Kalenji',
     when: 'Mois 8-10 si budget',
     color: '#CF8E42',
   },
   {
     name: 'Montre GPS / cardio',
     price: '120-200 €',
-    why: 'Garmin Forerunner 55 ou Polar Pacer. Utile pour doser l\'intensité et ne pas dépasser — important avec tes blessures. Pas urgent les premiers mois.',
+    why: 'Utile pour doser l\'intensité et ne pas dépasser — important avec tes blessures. Pas urgent les premiers mois.',
+    brands: 'Garmin Forerunner 55 · Polar Pacer · Coros Pace 3',
     when: 'Mois 6-9 si budget',
     color: '#7A7870',
   },
   {
     name: 'Combinaison néoprène de triathlon',
     price: '150-300 €',
-    why: 'Obligatoire en eau froide (< 22°C). Zone3 Aspire ou Orca S7. À acheter 2-3 mois avant ta première compétition.',
+    why: 'Obligatoire en eau froide (< 22°C). À acheter 2-3 mois avant ta première compétition.',
+    brands: 'Zone3 Aspire · Orca S7 · Roka Maverick Comp II',
     when: '3 mois avant la compétition',
     color: '#6EC6D8',
   },
@@ -128,6 +145,7 @@ const GEAR: GearItem[] = [
     name: 'Tri-suit (combinaison 1 pièce)',
     price: '80-180 €',
     why: 'Pour faire les 3 disciplines sans se changer. Pas obligatoire pour les premiers triathlons (maillot + cuissard ça marche).',
+    brands: 'Zone3 Lava · Orca 226 · Decathlon Aptonia',
     when: 'Avant le premier triathlon Sprint',
     color: '#7A7870',
   },
@@ -135,6 +153,7 @@ const GEAR: GearItem[] = [
     name: 'Ceinture porte-dossard + sac transition',
     price: '15-25 €',
     why: 'Petits accessoires indispensables le jour J. Acheter la semaine avant la compétition.',
+    brands: 'Ronhill · Nathan · Decathlon Aptonia',
     when: 'Juste avant la compétition',
     color: '#7A7870',
   },
@@ -198,6 +217,7 @@ export default function MaterielClient() {
                     <span className="gear-price">{item.price}</span>
                   </div>
                   {!isDone && <div className="gear-note">{item.why}</div>}
+                  {!isDone && <div className="gear-brands">{item.brands}</div>}
                   <div className="gear-when" style={{ color: isDone ? '#3a3a35' : item.color }}>{item.when}</div>
                 </div>
               </div>
