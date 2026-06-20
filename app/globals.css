@@ -1239,3 +1239,129 @@ body { padding: 0; }
   .bottom-nav { height: 54px; }
   .page-main  { padding-bottom: 68px !important; }
 }
+
+/* ── DÉBRIEF ─────────────────────────────────────────────────────────────── */
+
+.debrief-wrap { margin-top: 14px; }
+
+.debrief-toggle {
+  display: flex; align-items: center; gap: 10px;
+  background: none; border: none; cursor: pointer; padding: 0;
+  width: 100%;
+}
+.db-toggle-pill {
+  font-size: 12px; font-weight: 600; letter-spacing: .04em;
+  padding: 4px 10px; border-radius: 20px;
+  background: #88C49A33; color: #88C49A;
+  border: 1px solid #88C49A55;
+  font-family: 'Barlow Condensed', sans-serif; text-transform: uppercase;
+}
+.db-toggle-pill.db-toggle-empty {
+  background: #CF8E4222; color: var(--dawn); border-color: #CF8E4255;
+}
+.db-toggle-hint { font-size: 12px; color: var(--muted); }
+
+.debrief-body {
+  margin-top: 10px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+
+/* Dernier débrief */
+.db-last {
+  background: #1A1A18;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+}
+.db-last-title { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+.db-last-row { display: flex; flex-wrap: wrap; gap: 10px; font-size: 12px; color: var(--muted); }
+.db-last-row span { color: var(--foam); }
+.db-last-notes { font-size: 13px; color: var(--muted); font-style: italic; margin-top: 8px; }
+
+/* Formulaire */
+.db-form { display: flex; flex-direction: column; gap: 14px; }
+.db-field { display: flex; flex-direction: column; gap: 6px; }
+.db-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+.db-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* Statuts */
+.db-status-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.db-status-btn {
+  font-size: 12px; font-weight: 600;
+  padding: 5px 11px; border-radius: 6px;
+  background: var(--surface); border: 1px solid var(--line);
+  color: var(--muted); cursor: pointer;
+  font-family: 'Barlow Condensed', sans-serif; text-transform: uppercase;
+  letter-spacing: .03em; transition: all .15s;
+}
+.db-status-btn.sel { font-weight: 700; }
+.db-status-btn:hover:not(.sel) { border-color: var(--muted); color: var(--foam); }
+
+/* Échelle douleur */
+.db-scale { display: flex; gap: 4px; flex-wrap: wrap; }
+.db-scale-btn {
+  width: 28px; height: 28px; border-radius: 6px;
+  font-size: 12px; font-weight: 600;
+  background: var(--surface); border: 1px solid var(--line);
+  color: var(--muted); cursor: pointer; transition: all .15s;
+}
+.db-scale-btn.sel { background: #CF8E42; border-color: #CF8E42; color: #0F0F0E; }
+.db-scale-btn.hi  { color: #C26060; }
+.db-scale-btn.hi.sel { background: #C26060; border-color: #C26060; color: #fff; }
+
+/* Étoiles */
+.db-stars { display: flex; gap: 4px; }
+.db-star {
+  font-size: 22px; background: none; border: none; cursor: pointer;
+  color: var(--line); transition: color .1s; padding: 2px;
+}
+.db-star.on { color: var(--dawn); }
+.db-star:hover { color: #CF8E4299; }
+
+/* Textarea */
+.db-textarea {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--foam);
+  font-family: 'Barlow', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 10px 12px;
+  resize: vertical;
+  width: 100%;
+}
+.db-textarea:focus { outline: none; border-color: var(--dawn); }
+.db-textarea::placeholder { color: var(--muted); }
+
+/* Alerte douleur */
+.db-alert {
+  background: #C2606022; border: 1px solid #C2606066;
+  border-radius: 8px; padding: 10px 14px;
+  font-size: 13px; color: #C26060;
+}
+
+/* Bouton sauvegarder */
+.db-save {
+  align-self: flex-start;
+  font-size: 13px; padding: 8px 18px;
+}
+.btn-primary {
+  background: var(--dawn); color: #0F0F0E;
+  border: none; border-radius: 8px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; font-size: 14px;
+  letter-spacing: .04em; text-transform: uppercase;
+  cursor: pointer; transition: background .15s;
+}
+.btn-primary:hover { background: var(--dawn-d); }
+.btn-primary:disabled { opacity: .5; cursor: default; }
+
+@media (max-width: 480px) {
+  .db-field-row { grid-template-columns: 1fr; }
+  .db-scale-btn { width: 24px; height: 24px; font-size: 11px; }
+}

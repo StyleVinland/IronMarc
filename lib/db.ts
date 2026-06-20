@@ -72,6 +72,17 @@ function openDb(): NodeSqliteDb {
       size          INTEGER NOT NULL DEFAULT 0,
       created_at    TEXT NOT NULL DEFAULT (datetime('now'))
     );
+    CREATE TABLE IF NOT EXISTS debriefs (
+      date       TEXT PRIMARY KEY,
+      session_id TEXT NOT NULL,
+      status     TEXT NOT NULL DEFAULT 'done',
+      pain_aine  INTEGER NOT NULL DEFAULT 0,
+      pain_tibia INTEGER NOT NULL DEFAULT 0,
+      energy     INTEGER NOT NULL DEFAULT 3,
+      difficulty INTEGER NOT NULL DEFAULT 3,
+      notes      TEXT NOT NULL DEFAULT '',
+      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
   `);
 
   global._db = db;
@@ -199,6 +210,67 @@ export function deleteMedia(id: number): string | undefined {
   if (!row) return undefined;
   db.prepare('DELETE FROM media WHERE id = ?').run(id);
   return row.filename as string;
+}
+
+export interface DebriefData {
+  date: string;
+  session_id: string;
+  status: string;
+  pain_aine: number;
+  pain_tibia: number;
+  energy: number;
+  difficulty: number;
+  notes: string;
+  created_at: string;
+}
+
+export function saveDebrief(date: string, data: Omit<DebriefData, 'date' | 'created_at'>) {
+  openDb().prepare(`
+    INSERT INTO debriefs (date, session_id, status, pain_aine, pain_tibia, energy, difficulty, notes)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ON CONFLICT(date) DO UPDATE SET
+      session_id = excluded.session_id,
+      status     = excluded.status,
+      pain_aine  = excluded.pain_aine,
+      pain_tibia = excluded.pain_tibia,
+      energy     = excluded.energy,
+      difficulty = excluded.difficulty,
+      notes      = excluded.notes
+  `).run(date, data.session_id, data.status, data.pain_aine, data.pain_tibia, data.energy, data.difficulty, data.notes);
+}
+
+export function getDebrief(date: string): DebriefData | undefined {
+  const row = openDb().prepare('SELECT * FROM debriefs WHERE date = ?').get(date);
+  if (!row) return undefined;
+  return {
+    date: row.date as string,
+    session_id: row.session_id as string,
+    status: row.status as string,
+    pain_aine: Number(row.pain_aine),
+    pain_tibia: Number(row.pain_tibia),
+    energy: Number(row.energy),
+    difficulty: Number(row.difficulty),
+    notes: (row.notes as string) ?? '',
+    created_at: row.created_at as string,
+  };
+}
+
+export function getLastDebriefBySession(sessionId: string, beforeDate: string): DebriefData | undefined {
+  const row = openDb().prepare(
+    'SELECT * FROM debriefs WHERE session_id = ? AND date < ? ORDER BY date DESC LIMIT 1'
+  ).get(sessionId, beforeDate);
+  if (!row) return undefined;
+  return {
+    date: row.date as string,
+    session_id: row.session_id as string,
+    status: row.status as string,
+    pain_aine: Number(row.pain_aine),
+    pain_tibia: Number(row.pain_tibia),
+    energy: Number(row.energy),
+    difficulty: Number(row.difficulty),
+    notes: (row.notes as string) ?? '',
+    created_at: row.created_at as string,
+  };
 }
 
 export function resetAll() {

@@ -5,6 +5,7 @@ import { SESSIONS, PHASES, getCurrentWeek, getCurrentPhase, PROGRAM_START, DATE_
 import type { WeekDay, ProgramPhase } from '@/lib/program';
 import MissionList from './MissionList';
 import QuestList from './QuestList';
+import DebriefPanel from './DebriefPanel';
 
 const MONTHS_FR = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
   'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
@@ -220,6 +221,14 @@ export default function EntrainementClient() {
           <div className="prog-notes">
             {displayedPhase.notes.map((n, i) => <div key={i} className="prog-note">— {n}</div>)}
           </div>
+        )}
+
+        {selSessionId !== 'rest' && (
+          <DebriefPanel
+            date={selectedDate}
+            sessionId={selSessionId}
+            sessionLabel={selSession.label}
+          />
         )}
       </section>
 
