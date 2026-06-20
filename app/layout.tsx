@@ -4,13 +4,17 @@ import { AppStateProvider } from '@/components/AppStateProvider';
 import { getFullState } from '@/lib/db';
 import './globals.css';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'IronMarc · Journal de bord',
   description: 'Quête Ironman — journal de bord gamifié',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const initialState = getFullState();
+  let initialState;
+  try { initialState = getFullState(); }
+  catch { initialState = { days: {}, quests: {}, affIdx: 0 }; }
   return (
     <html lang="fr">
       <head>
