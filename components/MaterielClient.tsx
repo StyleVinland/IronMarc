@@ -159,11 +159,18 @@ const GEAR: GearItem[] = [
   },
 ];
 
+const CHECK = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="#0a1a0a" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
+    <polyline points="20 6 9 17 4 12" />
+  </svg>
+);
+
 export default function MaterielClient() {
   const [bought, setBought] = useState<Record<number, boolean>>({});
   const toggle = (i: number) => setBought(p => ({ ...p, [i]: !p[i] }));
 
-  const doneCount = Object.values(bought).filter(Boolean).length;
+  const boughtItems = GEAR.filter((_, i) => !!bought[i]);
+  const remaining = GEAR.filter((_, i) => !bought[i]);
 
   return (
     <>
@@ -174,17 +181,24 @@ export default function MaterielClient() {
 
       {/* Déjà en stock */}
       <section>
-        <div className="shead"><h2>Déjà en stock</h2><span className="hint">✓</span></div>
+        <div className="shead">
+          <h2>Déjà en stock</h2>
+          <span className="hint">{OWNED.length + boughtItems.length} items</span>
+        </div>
         <div className="gear-list">
           {OWNED.map(name => (
             <div key={name} className="gear-item done">
-              <div className="gear-check" style={{ borderColor: '#88C49A', background: '#88C49A' }}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="#0a1a0a" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              </div>
+              <div className="gear-check" style={{ borderColor: '#88C49A', background: '#88C49A' }}>{CHECK}</div>
               <div className="gear-content">
                 <div className="gear-name">{name}</div>
+              </div>
+            </div>
+          ))}
+          {boughtItems.map(item => (
+            <div key={item.name} className="gear-item done" style={{ borderColor: item.color + '44' }}>
+              <div className="gear-check" style={{ borderColor: item.color, background: item.color }}>{CHECK}</div>
+              <div className="gear-content">
+                <div className="gear-name">{item.name}</div>
               </div>
             </div>
           ))}
@@ -195,34 +209,39 @@ export default function MaterielClient() {
       <section>
         <div className="shead">
           <h2>À acheter dans l'ordre</h2>
-          <span className="hint">{doneCount}/{GEAR.length} achetés</span>
+          <span className="hint">{boughtItems.length}/{GEAR.length} achetés</span>
         </div>
-
         <div className="gear-list">
-          {GEAR.map((item, i) => {
-            const isDone = !!bought[i];
+          {remaining.map((item) => {
+            const origIdx = GEAR.indexOf(item);
+            const rank = remaining.indexOf(item) + 1;
             return (
               <div
-                key={i}
-                className={`gear-item${isDone ? ' done' : ''}`}
+                key={origIdx}
+                className="gear-item"
                 role="button"
                 tabIndex={0}
-                onClick={() => toggle(i)}
-                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(i); } }}
+                onClick={() => toggle(origIdx)}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(origIdx); } }}
               >
-                <div className="gear-num" style={{ color: isDone ? '#4a4845' : item.color }}>{isDone ? '✓' : i + 1}</div>
+                <div className="gear-num" style={{ color: item.color }}>{rank}</div>
                 <div className="gear-content">
-                  <div className="gear-name" style={{ color: isDone ? 'var(--muted)' : 'var(--foam)' }}>
+                  <div className="gear-name">
                     {item.name}
                     <span className="gear-price">{item.price}</span>
                   </div>
-                  {!isDone && <div className="gear-note">{item.why}</div>}
-                  {!isDone && <div className="gear-brands">{item.brands}</div>}
-                  <div className="gear-when" style={{ color: isDone ? '#3a3a35' : item.color }}>{item.when}</div>
+                  <div className="gear-note">{item.why}</div>
+                  <div className="gear-brands">{item.brands}</div>
+                  <div className="gear-when" style={{ color: item.color }}>{item.when}</div>
                 </div>
               </div>
             );
           })}
+          {remaining.length === 0 && (
+            <div style={{ textAlign: 'center', padding: '24px 0', color: 'var(--muted)', fontSize: 14 }}>
+              Tout est en stock — tu es prêt pour l'Ironman.
+            </div>
+          )}
         </div>
       </section>
     </>
