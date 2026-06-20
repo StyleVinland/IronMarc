@@ -194,14 +194,25 @@ export default function MaterielClient() {
               </div>
             </div>
           ))}
-          {boughtItems.map(item => (
-            <div key={item.name} className="gear-item done" style={{ borderColor: item.color + '44' }}>
-              <div className="gear-check" style={{ borderColor: item.color, background: item.color }}>{CHECK}</div>
-              <div className="gear-content">
-                <div className="gear-name">{item.name}</div>
+          {boughtItems.map(item => {
+            const origIdx = GEAR.indexOf(item);
+            return (
+              <div
+                key={item.name}
+                className="gear-item done"
+                style={{ borderColor: item.color + '44', cursor: 'pointer' }}
+                role="button"
+                tabIndex={0}
+                onClick={() => toggle(origIdx)}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(origIdx); } }}
+              >
+                <div className="gear-check" style={{ borderColor: item.color, background: item.color }}>{CHECK}</div>
+                <div className="gear-content">
+                  <div className="gear-name">{item.name}</div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
