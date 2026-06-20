@@ -1,17 +1,65 @@
 'use client';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import type { AppState } from '@/types';
 import { ensureDay, todayStr } from '@/lib/compute';
-import {
-  SESSIONS, PHASES, getCurrentWeek, getCurrentPhase, getTodaySession,
-  WEEK_DAYS, WEEK_DAY_LABELS,
-} from '@/lib/program';
+import { SESSIONS, PHASES, getCurrentWeek, getCurrentPhase, PROGRAM_START } from '@/lib/program';
+import type { WeekDay, ProgramPhase } from '@/lib/program';
 import MissionList from './MissionList';
 import QuestList from './QuestList';
 
+const MONTHS_FR = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+  'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+const DAY_SHORT = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+const DAY_MAP: Record<number, WeekDay> = { 0: 'dim', 1: 'lun', 2: 'mar', 3: 'mer', 4: 'jeu', 5: 'ven', 6: 'sam' };
+
+function weekNum(date: Date): number {
+  const start = new Date(PROGRAM_START);
+  const diff = date.getTime() - start.getTime();
+  if (diff < 0) return 0;
+  return Math.floor(diff / (1000 * 60 * 60 * 24 * 7)) + 1;
+}
+
+function phaseForDate(date: Date): ProgramPhase {
+  const w = weekNum(date);
+  return PHASES.find(p => w >= p.weeks[0] && w <= p.weeks[1]) ?? PHASES[PHASES.length - 1];
+}
+
+function sessionIdForDate(date: Date): string {
+  if (weekNum(date) < 1) return 'rest';
+  const phase = phaseForDate(date);
+  return phase.template[DAY_MAP[date.getDay()]] ?? 'rest';
+}
+
+function mondayOfWeek(offset: number): Date {
+  const now = new Date();
+  const dow = (now.getDay() + 6) % 7;
+  const d = new Date(now);
+  d.setDate(d.getDate() - dow + offset * 7);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+function dateStr(d: Date): string {
+  return d.toLocaleDateString('fr-CA');
+}
+
+function fmtWeekHeader(monday: Date): string {
+  const sun = new Date(monday);
+  sun.setDate(sun.getDate() + 6);
+  if (monday.getMonth() === sun.getMonth()) {
+    return `${monday.getDate()} – ${sun.getDate()} ${MONTHS_FR[sun.getMonth()]} ${sun.getFullYear()}`;
+  }
+  return `${monday.getDate()} ${MONTHS_FR[monday.getMonth()]} – ${sun.getDate()} ${MONTHS_FR[sun.getMonth()]} ${sun.getFullYear()}`;
+}
+
+function fmtDayLong(d: Date): string {
+  return `${DAY_SHORT[d.getDay()]} ${d.getDate()} ${MONTHS_FR[d.getMonth()]}`;
+}
+
 export default function EntrainementClient({ initialState }: { initialState: AppState }) {
   const [state, setState] = useState<AppState>(() => ensureDay(initialState, todayStr()));
-  const [openSession, setOpenSession] = useState<string | null>(null);
+  const [weekOffset, setWeekOffset] = useState(0);
+  const [selectedDate, setSelectedDate] = useState<string>(() => todayStr());
   const [pain, setPain] = useState({ aine: 0, tibia: 0 });
 
   const today = todayStr();
@@ -23,26 +71,43 @@ export default function EntrainementClient({ initialState }: { initialState: App
 
   const currentWeek = getCurrentWeek();
   const currentPhase = getCurrentPhase(currentWeek);
-  const todaySessionId = getTodaySession(currentPhase);
-  const todaySession = SESSIONS[todaySessionId];
+
+  const monday = useMemo(() => mondayOfWeek(weekOffset), [weekOffset]);
+
+  const weekDates = useMemo(() =>
+    Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(monday);
+      d.setDate(d.getDate() + i);
+      return d;
+    }),
+  [monday]);
+
+  const displayedWeek = weekNum(monday);
+  const displayedPhase = phaseForDate(monday);
+
+  const selDateObj = new Date(selectedDate + 'T12:00:00');
+  const selSessionId = sessionIdForDate(selDateObj);
+  const selSession = SESSIONS[selSessionId];
+  const isSelToday = selectedDate === today;
+
+  const painHigh = pain.aine > 4 || pain.tibia > 4;
+
+  function handleWeekChange(delta: number) {
+    const newOffset = weekOffset + delta;
+    setWeekOffset(newOffset);
+    const mon = mondayOfWeek(newOffset);
+    const sun = new Date(mon); sun.setDate(sun.getDate() + 6);
+    const todayD = new Date(today + 'T12:00:00');
+    setSelectedDate(todayD >= mon && todayD <= sun ? today : dateStr(mon));
+  }
 
   const handleMission = useCallback((id: string, completed: boolean) => {
     setState(prev => {
       const s = ensureDay(prev, today);
-      return {
-        ...s,
-        days: {
-          ...s.days,
-          [today]: {
-            ...s.days[today],
-            missions: { ...s.days[today].missions, [id]: completed },
-          },
-        },
-      };
+      return { ...s, days: { ...s.days, [today]: { ...s.days[today], missions: { ...s.days[today].missions, [id]: completed } } } };
     });
     fetch(`/api/days/${today}/missions/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'PUT', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ completed }),
     });
   }, [today]);
@@ -50,13 +115,10 @@ export default function EntrainementClient({ initialState }: { initialState: App
   const handleQuest = useCallback((id: string, completed: boolean) => {
     setState(prev => ({ ...prev, quests: { ...prev.quests, [id]: completed } }));
     fetch(`/api/quests/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'PUT', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ completed }),
     });
   }, []);
-
-  const painHigh = pain.aine > 4 || pain.tibia > 4;
 
   return (
     <>
@@ -65,7 +127,7 @@ export default function EntrainementClient({ initialState }: { initialState: App
         <p>Programme complet pubalgie + périostites → Ironman en 2 ans</p>
       </div>
 
-      {/* ── PHASE ACTUELLE ──────────────────────────────────────── */}
+      {/* ── PHASE ACTUELLE ── */}
       <div className="prog-phase-banner">
         <div className="prog-phase-left">
           <div className="prog-phase-week">Semaine {currentWeek}</div>
@@ -73,96 +135,89 @@ export default function EntrainementClient({ initialState }: { initialState: App
           <div className="prog-phase-tagline">{currentPhase.tagline}</div>
         </div>
         <div className="prog-phase-focus">
-          {currentPhase.focus.map((f, i) => (
-            <span key={i} className="prog-focus-tag">{f}</span>
-          ))}
+          {currentPhase.focus.map((f, i) => <span key={i} className="prog-focus-tag">{f}</span>)}
         </div>
       </div>
 
-      {/* ── CALENDRIER SEMAINE ──────────────────────────────────── */}
+      {/* ── CALENDRIER PAR DATES ── */}
       <section className="prog-week-section">
-        <div className="shead"><h2>Semaine type</h2><span className="hint">{currentPhase.id.toUpperCase()}</span></div>
+        <div className="prog-week-nav">
+          <button className="btn-ghost prog-nav-btn" onClick={() => handleWeekChange(-1)}>← Précédente</button>
+          <span className="prog-week-title">
+            {displayedWeek > 0 ? <><strong>S{displayedWeek}</strong> · </> : null}
+            {fmtWeekHeader(monday)}
+          </span>
+          <button className="btn-ghost prog-nav-btn" onClick={() => handleWeekChange(1)}>Suivante →</button>
+        </div>
+
         <div className="prog-week-grid">
-          {WEEK_DAYS.map(d => {
-            const sessionId = currentPhase.template[d];
-            const session = SESSIONS[sessionId];
-            const isToday = d === (['dim', 'lun', 'mar', 'mer', 'jeu', 'ven', 'sam'][new Date().getDay()]);
+          {weekDates.map(date => {
+            const ds = dateStr(date);
+            const sid = sessionIdForDate(date);
+            const sess = SESSIONS[sid];
+            const isToday = ds === today;
+            const isPast = ds < today;
+            const isSel = ds === selectedDate;
             return (
               <button
-                key={d}
-                className={`prog-day-cell${isToday ? ' today' : ''}${openSession === sessionId ? ' open' : ''}`}
-                style={{ '--session-color': session.color } as React.CSSProperties}
-                onClick={() => setOpenSession(prev => prev === sessionId ? null : sessionId)}
+                key={ds}
+                className={`prog-day-cell${isToday ? ' today' : ''}${isSel ? ' open' : ''}${isPast && !isToday ? ' past' : ''}`}
+                style={{ '--session-color': sess.color } as React.CSSProperties}
+                onClick={() => setSelectedDate(ds)}
               >
-                <span className="prog-day-name">{WEEK_DAY_LABELS[d]}</span>
-                <span className="prog-day-session">{session.short}</span>
-                <span className="prog-day-dur">{session.duration || '—'}</span>
+                <span className="prog-day-name">{DAY_SHORT[date.getDay()]}</span>
+                <span className="prog-day-date-num">{date.getDate()}/{date.getMonth() + 1}</span>
+                <span className="prog-day-session">{sess.short}</span>
+                <span className="prog-day-dur">{sess.duration || '—'}</span>
               </button>
             );
           })}
         </div>
       </section>
 
-      {/* ── SÉANCE DU JOUR ──────────────────────────────────────── */}
+      {/* ── SÉANCE DU JOUR SÉLECTIONNÉ ── */}
       <section>
         <div className="shead">
-          <h2>Séance du jour</h2>
-          <span className="hint" style={{ color: todaySession.color }}>{todaySession.label}</span>
+          <h2>{isSelToday ? "Aujourd'hui" : fmtDayLong(selDateObj)}</h2>
+          <span className="hint" style={{ color: selSession.color }}>{selSession.label}</span>
         </div>
 
-        {/* Alerte douleur haute */}
-        {painHigh && (
+        {isSelToday && painHigh && (
           <div className="prog-pain-alert">
-            Douleur {'>'} 4/10 — repose-toi aujourd&apos;hui. Ce n&apos;est pas un échec, c&apos;est de l&apos;intelligence.
+            Douleur &gt; 4/10 — repose-toi aujourd&apos;hui. Ce n&apos;est pas un échec, c&apos;est de l&apos;intelligence.
           </div>
         )}
 
-        {/* Check douleur (avant les séances de renfo / run) */}
-        {todaySession.painCheck && !painHigh && (
+        {isSelToday && selSession.painCheck && !painHigh && (
           <div className="prog-pain-check">
             <div className="prog-pain-title">Check douleur avant de commencer</div>
-            <div className="prog-pain-row">
-              <label className="prog-pain-label">Aine / pubis</label>
-              <div className="prog-pain-scale">
-                {[0,1,2,3,4,5,6,7,8,9,10].map(v => (
-                  <button
-                    key={v}
-                    className={`prog-pain-btn${pain.aine === v ? ' sel' : ''}${v > 4 ? ' danger' : ''}`}
-                    onClick={() => setPain(p => ({ ...p, aine: v }))}
-                  >{v}</button>
-                ))}
+            {(['aine', 'tibia'] as const).map(zone => (
+              <div key={zone} className="prog-pain-row">
+                <label className="prog-pain-label">{zone === 'aine' ? 'Aine / pubis' : 'Tibia'}</label>
+                <div className="prog-pain-scale">
+                  {[0,1,2,3,4,5,6,7,8,9,10].map(v => (
+                    <button key={v}
+                      className={`prog-pain-btn${pain[zone] === v ? ' sel' : ''}${v > 4 ? ' danger' : ''}`}
+                      onClick={() => setPain(p => ({ ...p, [zone]: v }))}>{v}</button>
+                  ))}
+                </div>
               </div>
-            </div>
-            <div className="prog-pain-row">
-              <label className="prog-pain-label">Tibia</label>
-              <div className="prog-pain-scale">
-                {[0,1,2,3,4,5,6,7,8,9,10].map(v => (
-                  <button
-                    key={v}
-                    className={`prog-pain-btn${pain.tibia === v ? ' sel' : ''}${v > 4 ? ' danger' : ''}`}
-                    onClick={() => setPain(p => ({ ...p, tibia: v }))}
-                  >{v}</button>
-                ))}
-              </div>
-            </div>
-            <div className="prog-pain-rule">≤ 4/10 = vert → faire la séance · {'>'} 4/10 = stop · Courbatures légères = normales</div>
+            ))}
+            <div className="prog-pain-rule">≤ 4/10 = vert → faire la séance · &gt; 4/10 = stop · Courbatures légères = normales</div>
           </div>
         )}
 
-        <div className="prog-session-card" style={{ '--session-color': todaySession.color } as React.CSSProperties}>
+        <div className="prog-session-card" style={{ '--session-color': selSession.color } as React.CSSProperties}>
           <div className="prog-session-header">
             <div>
-              <div className="prog-session-label">{todaySession.label}</div>
-              <div className="prog-session-desc">{todaySession.desc}</div>
+              <div className="prog-session-label">{selSession.label}</div>
+              <div className="prog-session-desc">{selSession.desc}</div>
             </div>
-            {todaySession.duration && (
-              <div className="prog-session-dur">{todaySession.duration}</div>
-            )}
+            {selSession.duration && <div className="prog-session-dur">{selSession.duration}</div>}
           </div>
-
-          {todaySession.exercises.length > 0 && (
+          {selSession.exercises.length > 0 && (
             <div className="prog-exercise-list">
-              {todaySession.exercises.map((ex, i) => (
+              {selSession.exercises.map((ex, i) => (
                 <div key={i} className={`prog-exercise${ex.required ? ' required' : ''}${ex.warning ? ' warning' : ''}`}>
                   <div className="prog-ex-name">{ex.name}</div>
                   <div className="prog-ex-detail">{ex.detail}</div>
@@ -173,42 +228,14 @@ export default function EntrainementClient({ initialState }: { initialState: App
           )}
         </div>
 
-        {/* Notes de phase */}
-        {currentPhase.notes.length > 0 && (
+        {displayedPhase.notes.length > 0 && (
           <div className="prog-notes">
-            {currentPhase.notes.map((n, i) => (
-              <div key={i} className="prog-note">— {n}</div>
-            ))}
+            {displayedPhase.notes.map((n, i) => <div key={i} className="prog-note">— {n}</div>)}
           </div>
         )}
       </section>
 
-      {/* ── DÉTAIL SESSION OUVERTE (depuis calendrier) ────────── */}
-      {openSession && openSession !== todaySessionId && SESSIONS[openSession] && (
-        <section>
-          <div className="shead">
-            <h2>Détail : {SESSIONS[openSession].label}</h2>
-            <button className="btn-ghost" style={{ fontSize: 12 }} onClick={() => setOpenSession(null)}>Fermer</button>
-          </div>
-          <div className="prog-session-card" style={{ '--session-color': SESSIONS[openSession].color } as React.CSSProperties}>
-            <div className="prog-session-header">
-              <div className="prog-session-desc">{SESSIONS[openSession].desc}</div>
-              {SESSIONS[openSession].duration && <div className="prog-session-dur">{SESSIONS[openSession].duration}</div>}
-            </div>
-            <div className="prog-exercise-list">
-              {SESSIONS[openSession].exercises.map((ex, i) => (
-                <div key={i} className={`prog-exercise${ex.required ? ' required' : ''}${ex.warning ? ' warning' : ''}`}>
-                  <div className="prog-ex-name">{ex.name}</div>
-                  <div className="prog-ex-detail">{ex.detail}</div>
-                  {ex.sets && <div className="prog-ex-sets">{ex.sets}</div>}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ── TOUTES LES PHASES (accordéon) ────────────────────── */}
+      {/* ── FEUILLE DE ROUTE ── */}
       <section>
         <div className="shead"><h2>Feuille de route 2 ans</h2><span className="hint">6 phases</span></div>
         <div className="prog-roadmap">
@@ -224,7 +251,7 @@ export default function EntrainementClient({ initialState }: { initialState: App
         </div>
       </section>
 
-      {/* ── MISSIONS + QUÊTES ─────────────────────────────────── */}
+      {/* ── MISSIONS + QUÊTES ── */}
       <div className="two-col" style={{ marginTop: 4 }}>
         <MissionList missions={todayData.missions} onToggle={handleMission} date={today} />
         <QuestList quests={state.quests} onToggle={handleQuest} />
