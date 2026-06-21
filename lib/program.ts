@@ -819,10 +819,10 @@ export function computeRaceOverrides(): Record<string, string> {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const DATE_OVERRIDES: Record<string, string> = {
-  '2026-06-20': 'rest',           // Samedi — nage déplacée au 23/06
-  '2026-06-21': 'renfo_a',        // Dimanche de rattrapage — renfo pubalgie
-  '2026-06-23': 'swim_debutant',  // Mardi — PREMIÈRE SÉANCE PISCINE (début programme natation)
-  '2026-06-27': 'swim_debutant',  // Nage samedi — enchaînement S1
+  '2026-06-20': 'rest',              // Samedi — nage déplacée au 23/06
+  '2026-06-21': 'renfo_a',           // Dimanche de rattrapage — renfo pubalgie
+  '2026-06-23': 'swim_apprivoiser',  // Mardi — PREMIÈRE SÉANCE PISCINE S1
+  '2026-06-27': 'swim_apprivoiser',  // Nage samedi S1
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
