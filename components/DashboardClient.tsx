@@ -52,7 +52,7 @@ export default function DashboardClient() {
   const [sessionXp, setSessionXp] = useState(0);
   useEffect(() => {
     function load() {
-      fetch('/api/xp').then(r => r.json()).then(d => setSessionXp(d.total ?? 0)).catch(() => {});
+      fetch('/api/xp', { cache: 'no-store' }).then(r => r.json()).then(d => setSessionXp(d.total ?? 0)).catch(() => {});
     }
     load();
     window.addEventListener('session-validated', load);

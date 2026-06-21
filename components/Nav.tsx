@@ -79,7 +79,7 @@ export default function Nav() {
 
   useEffect(() => {
     function load() {
-      fetch('/api/xp').then(r => r.json()).then(d => setSessionXp(d.total ?? 0)).catch(() => {});
+      fetch('/api/xp', { cache: 'no-store' }).then(r => r.json()).then(d => setSessionXp(d.total ?? 0)).catch(() => {});
     }
     load();
     window.addEventListener('session-validated', load);
@@ -121,7 +121,7 @@ export default function Nav() {
           <div className="topnav-stats">
             <span className="topnav-pill tide">🔥 {streak}j</span>
             <span className="topnav-pill dawn">⚡ {totalXp} XP</span>
-            <span className="topnav-pill purple" title="% du plan Ironman 3 ans accompli">{planPct}%</span>
+            <span className="topnav-pill purple" title="% du plan Ironman 3 ans accompli">{planPct}</span>
           </div>
 
         </div>

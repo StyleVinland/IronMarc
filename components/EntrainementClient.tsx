@@ -131,7 +131,7 @@ export default function EntrainementClient() {
   const [validating, setValidating] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
-  const refreshXp = () => fetch('/api/xp').then(r => r.json()).then(setTotalXp).catch(() => {});
+  const refreshXp = () => fetch('/api/xp', { cache: 'no-store' }).then(r => r.json()).then(setTotalXp).catch(() => {});
 
   useEffect(() => { refreshXp(); }, []);
 

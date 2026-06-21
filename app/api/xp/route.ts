@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getAllSessionCompletions } from '@/lib/db';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   const completions = getAllSessionCompletions();
   const total = completions.reduce((s, c) => s + c.xp, 0);
@@ -25,5 +27,7 @@ export async function GET() {
     return { label: `${wStart.getDate()}/${wStart.getMonth() + 1}`, count: wCount, xp: wXp };
   });
 
-  return NextResponse.json({ total, count, weekly });
+  return NextResponse.json({ total, count, weekly }, {
+    headers: { 'Cache-Control': 'no-store' },
+  });
 }

@@ -553,53 +553,66 @@ canvas.chart-mood   { width: 100%; height: 88px; display: block; }
 /* ── LIGHTBOX ────────────────────────────────────────────────────── */
 .lb-overlay {
   position: fixed; inset: 0; z-index: 9000;
-  background: rgba(0,0,0,.82); backdrop-filter: blur(18px) saturate(.6);
-  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,.88); backdrop-filter: blur(22px) saturate(.5);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
   animation: lb-in .18s ease;
 }
-@keyframes lb-in { from { opacity: 0 } to { opacity: 1 } }
-.lb-inner {
-  position: relative; display: flex; flex-direction: column;
-  align-items: center; max-width: min(92vw, 900px); width: 100%; gap: 12px;
-}
+@keyframes lb-in { from { opacity: 0; transform: scale(.97) } to { opacity: 1; transform: scale(1) } }
+
+/* Croix fermeture — toujours visible coin haut-droit */
 .lb-close {
-  position: absolute; top: -42px; right: 0;
-  background: rgba(255,255,255,.15); border: none; border-radius: 50%;
-  width: 34px; height: 34px; color: #fff; font-size: 16px;
+  position: fixed; top: 16px; right: 18px; z-index: 9010;
+  background: rgba(255,255,255,.18); border: 1.5px solid rgba(255,255,255,.25);
+  border-radius: 50%; width: 38px; height: 38px; color: #fff; font-size: 18px;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
-  backdrop-filter: blur(8px); transition: background .15s;
+  backdrop-filter: blur(10px); transition: background .15s;
 }
-.lb-close:hover { background: rgba(255,255,255,.28); }
-.lb-media {
-  width: 100%; display: flex; align-items: center; justify-content: center;
-  max-height: 72vh;
+.lb-close:hover { background: rgba(255,255,255,.32); }
+
+/* Ligne principale : flèche — photo — flèche */
+.lb-layout {
+  display: flex; align-items: center; gap: 0;
+  width: 100%; max-width: min(95vw, 1100px); padding: 0 8px;
 }
-.lb-img {
-  max-width: 100%; max-height: 72vh;
-  object-fit: contain; border-radius: 12px;
-  box-shadow: 0 8px 40px rgba(0,0,0,.5);
+.lb-arrow {
+  flex-shrink: 0; width: 52px; height: 52px;
+  background: rgba(255,255,255,.14); border: 1.5px solid rgba(255,255,255,.2);
+  border-radius: 50%; color: #fff; font-size: 32px; line-height: 1;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background .15s; user-select: none; margin: 0 8px;
 }
-.lb-nav {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  background: rgba(255,255,255,.15); backdrop-filter: blur(8px);
-  border: none; border-radius: 50%; width: 42px; height: 42px;
-  color: #fff; font-size: 26px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: background .15s; line-height: 1; user-select: none;
+.lb-arrow:hover { background: rgba(255,255,255,.28); }
+.lb-arrow-hidden { visibility: hidden; pointer-events: none; }
+
+/* Zone image + infos */
+.lb-center { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 14px; min-width: 0; }
+.lb-media  { display: flex; align-items: center; justify-content: center; max-height: 72vh; width: 100%; }
+.lb-img    {
+  max-width: 100%; max-height: 72vh; object-fit: contain;
+  border-radius: 10px; box-shadow: 0 8px 48px rgba(0,0,0,.6);
 }
-.lb-nav:hover { background: rgba(255,255,255,.28); }
-.lb-prev { left: -52px; }
-.lb-next { right: -52px; }
+
+/* Infos sous la photo */
 .lb-info {
-  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-  justify-content: center;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  justify-content: center; padding: 0 12px;
 }
-.lb-date   { font-size: 13px; color: rgba(255,255,255,.7); }
-.lb-note   { font-size: 14px; color: #fff; font-weight: 500; }
-.lb-counter { font-size: 12px; color: rgba(255,255,255,.45); margin-left: 4px; }
+.lb-date    { font-size: 13px; color: rgba(255,255,255,.65); }
+.lb-note    { font-size: 14px; color: #fff; font-weight: 600; }
+.lb-counter { font-size: 12px; color: rgba(255,255,255,.38); }
+.lb-actions { display: flex; gap: 8px; margin-left: 6px; }
+.lb-dl, .lb-del {
+  font-size: 12px; padding: 4px 10px; border-radius: 8px; cursor: pointer;
+  background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.2);
+  color: #fff; text-decoration: none; transition: background .15s;
+}
+.lb-dl:hover  { background: rgba(255,255,255,.25); }
+.lb-del       { color: rgba(255,120,120,1); border-color: rgba(255,80,80,.3); }
+.lb-del:hover { background: rgba(255,59,48,.35); }
+
 @media (max-width: 600px) {
-  .lb-prev { left: 4px; } .lb-next { right: 4px; }
-  .lb-close { top: -46px; right: 4px; }
+  .lb-arrow { width: 40px; height: 40px; font-size: 24px; margin: 0 4px; }
+  .lb-close { top: 10px; right: 10px; width: 34px; height: 34px; font-size: 16px; }
 }
 
 /* ── GALLERY ─────────────────────────────────────────────────────── */
@@ -629,9 +642,9 @@ canvas.chart-mood   { width: 100%; height: 88px; display: block; }
 .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 10px; }
 .gal-item { position: relative; border-radius: 12px; overflow: hidden; background: var(--bg); box-shadow: var(--shadow-sm); }
 .gal-item img, .gal-item video { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
-.gal-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,.65)); padding: 7px 8px 8px; }
-.gal-date    { font-size: 10px; color: rgba(255,255,255,.8); letter-spacing: .02em; }
-.gal-note    { font-size: 12px; color: #fff; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gal-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,.82)); padding: 20px 8px 8px; }
+.gal-date    { font-size: 10px; color: rgba(255,255,255,.92); letter-spacing: .02em; text-shadow: 0 1px 4px rgba(0,0,0,.8); }
+.gal-note    { font-size: 12px; color: #fff; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; text-shadow: 0 1px 4px rgba(0,0,0,.8); }
 .gal-actions { display: flex; gap: 5px; margin-top: 5px; }
 .gal-btn {
   background: rgba(255,255,255,.2); backdrop-filter: blur(8px);

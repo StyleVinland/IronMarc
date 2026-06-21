@@ -68,7 +68,7 @@ export default function SessionsChart({ refreshKey }: { refreshKey?: number }) {
   const [count, setCount]   = useState(0);
 
   useEffect(() => {
-    fetch('/api/xp').then(r => r.json()).then(d => {
+    fetch('/api/xp', { cache: 'no-store' }).then(r => r.json()).then(d => {
       setWeekly(d.weekly ?? []);
       setTotal(d.total ?? 0);
       setCount(d.count ?? 0);

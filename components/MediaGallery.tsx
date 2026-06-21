@@ -8,9 +8,10 @@ function fmtDate(d: string) {
   return new Date(d + 'T00:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
-function Lightbox({ items, idx, onClose, onNav }: {
+function Lightbox({ items, idx, onClose, onNav, onRemove }: {
   items: MediaItem[]; idx: number;
   onClose: () => void; onNav: (delta: number) => void;
+  onRemove: (id: number) => void;
 }) {
   const item = items[idx];
   const touchStartX = useRef<number | null>(null);
@@ -23,10 +24,7 @@ function Lightbox({ items, idx, onClose, onNav }: {
     }
     window.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      document.body.style.overflow = '';
-    };
+    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = ''; };
   }, [onClose, onNav]);
 
   function onTouchStart(e: React.TouchEvent) { touchStartX.current = e.touches[0].clientX; }
@@ -41,30 +39,43 @@ function Lightbox({ items, idx, onClose, onNav }: {
   const isVideo = item.mimeType.startsWith('video/');
 
   return (
-    <div className="lb-overlay" onClick={onClose} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-      <div className="lb-inner" onClick={e => e.stopPropagation()}>
-        <button className="lb-close" onClick={onClose} aria-label="Fermer">✕</button>
+    <div className="lb-overlay" onClick={onClose}>
+      {/* Croix fermer — toujours visible, coin supérieur droit */}
+      <button className="lb-close" onClick={onClose} aria-label="Fermer">✕</button>
 
-        {items.length > 1 && (
-          <button className="lb-nav lb-prev" onClick={() => onNav(-1)} aria-label="Précédent">‹</button>
-        )}
+      <div className="lb-layout" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+        {/* Flèche gauche */}
+        <button
+          className={`lb-arrow lb-prev${items.length < 2 ? ' lb-arrow-hidden' : ''}`}
+          onClick={e => { e.stopPropagation(); onNav(-1); }}
+          aria-label="Précédent"
+        >‹</button>
 
-        <div className="lb-media">
-          {isVideo
-            ? <video src={src} controls autoPlay className="lb-img" />
-            : <img src={src} alt={item.note || item.originalName} className="lb-img" />
-          }
+        {/* Média + infos */}
+        <div className="lb-center" onClick={e => e.stopPropagation()}>
+          <div className="lb-media">
+            {isVideo
+              ? <video src={src} controls autoPlay className="lb-img" />
+              : <img src={src} alt={item.note || item.originalName} className="lb-img" />
+            }
+          </div>
+          <div className="lb-info">
+            <span className="lb-date">{fmtDate(item.date)}</span>
+            {item.note && <span className="lb-note">{item.note}</span>}
+            {items.length > 1 && <span className="lb-counter">{idx + 1} / {items.length}</span>}
+            <div className="lb-actions">
+              <a className="lb-dl" href={src} download={item.originalName}>Télécharger</a>
+              <button className="lb-del" onClick={() => onRemove(item.id)}>Supprimer</button>
+            </div>
+          </div>
         </div>
 
-        {items.length > 1 && (
-          <button className="lb-nav lb-next" onClick={() => onNav(1)} aria-label="Suivant">›</button>
-        )}
-
-        <div className="lb-info">
-          <span className="lb-date">{fmtDate(item.date)}</span>
-          {item.note && <span className="lb-note">{item.note}</span>}
-          <span className="lb-counter">{idx + 1} / {items.length}</span>
-        </div>
+        {/* Flèche droite */}
+        <button
+          className={`lb-arrow lb-next${items.length < 2 ? ' lb-arrow-hidden' : ''}`}
+          onClick={e => { e.stopPropagation(); onNav(1); }}
+          aria-label="Suivant"
+        >›</button>
       </div>
     </div>
   );
@@ -124,15 +135,12 @@ export default function MediaGallery() {
   async function remove(id: number) {
     if (!confirm('Supprimer ce fichier ?')) return;
     await fetch(`/api/media/${id}`, { method: 'DELETE' });
-    setItems(prev => prev.filter(i => i.id !== id));
-    setLightboxIdx(null);
-  }
-
-  function download(id: number, name: string) {
-    const a = document.createElement('a');
-    a.href = `/api/media/${id}`;
-    a.download = name;
-    a.click();
+    setItems(prev => {
+      const next = prev.filter(i => i.id !== id);
+      if (next.length === 0) setLightboxIdx(null);
+      else setLightboxIdx(li => li !== null ? Math.min(li, next.length - 1) : null);
+      return next;
+    });
   }
 
   const navigate = useCallback((delta: number) => {
@@ -192,6 +200,7 @@ export default function MediaGallery() {
           idx={lightboxIdx}
           onClose={() => setLightboxIdx(null)}
           onNav={navigate}
+          onRemove={remove}
         />
       )}
     </section>

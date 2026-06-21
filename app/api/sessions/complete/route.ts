@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSessionCompletion, saveSessionCompletion, deleteSessionCompletion } from '@/lib/db';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   const date = req.nextUrl.searchParams.get('date');
   if (!date) return NextResponse.json(null);
