@@ -204,7 +204,7 @@ export const LUNCHES: MealOption[] = [
     desc: '130g bœuf haché + riz + épinards sautés + carotte râpée + œuf frit + tamari-sésame',
     tip: 'Le bibimbap est naturellement sans lactose et très rassasiant. Économique avec du haché.',
     ingredients: [
-      { name: 'Bœuf haché 5%', qty: '130 g', cat: 'Protéines' },
+      { name: 'Bœuf haché', qty: '130 g', cat: 'Protéines' },
       { name: 'Riz basmati', qty: '80 g', cat: 'Féculents & céréales' },
       { name: 'Épinards frais', qty: 'poignée', cat: 'Fruits & légumes' },
       { name: 'Carotte', qty: '1', cat: 'Fruits & légumes' },
@@ -214,12 +214,12 @@ export const LUNCHES: MealOption[] = [
     ],
   },
   {
-    id: 'l6', label: 'Pâtes de riz saumon fumé épinards', kcal: 570, protein: 32,
-    desc: '80g pâtes riz + 80g saumon fumé + épinards + tomates cerises + huile olive + citron',
-    tip: 'Saumon fumé = protéines rapides, oméga-3 sans cuisson.',
+    id: 'l6', label: 'Pâtes de riz maquereau épinards', kcal: 565, protein: 35,
+    desc: '80g pâtes riz + 1 boîte maquereau au naturel (125g) + épinards + tomates cerises + citron',
+    tip: 'Le maquereau en boîte est encore plus riche en oméga-3 que le saumon, et 3× moins cher. Parfait IBS.',
     ingredients: [
       { name: 'Pâtes de riz', qty: '80 g', cat: 'Féculents & céréales' },
-      { name: 'Saumon fumé', qty: '80 g', cat: 'Protéines' },
+      { name: 'Maquereau au naturel (boîte)', qty: '125 g', cat: 'Protéines' },
       { name: 'Épinards frais', qty: 'poignée', cat: 'Fruits & légumes' },
       { name: 'Tomates cerises', qty: '8', cat: 'Fruits & légumes' },
       { name: 'Citron', qty: '½', cat: 'Fruits & légumes' },
@@ -258,11 +258,11 @@ export const LUNCHES: MealOption[] = [
 
 export const DINNERS: MealOption[] = [
   {
-    id: 'd1', label: 'Saumon papillote + quinoa + épinards', kcal: 620, protein: 38,
-    desc: '150g saumon + 80g quinoa + épinards sautés + citron + herbes',
-    tip: 'Oméga-3 anti-inflammatoires — à manger 2× par semaine si possible.',
+    id: 'd1', label: 'Truite papillote + quinoa + épinards', kcal: 520, protein: 38,
+    desc: '150g filet de truite + 80g quinoa + épinards sautés + citron + herbes',
+    tip: 'La truite saumonée a les mêmes oméga-3 que le saumon pour 3× moins cher. En papillote four = 20 min sans surveillance.',
     ingredients: [
-      { name: 'Filet de saumon', qty: '150 g', cat: 'Protéines' },
+      { name: 'Filet de truite', qty: '150 g', cat: 'Protéines' },
       { name: 'Quinoa', qty: '80 g', cat: 'Féculents & céréales' },
       { name: 'Épinards frais', qty: 'poignée', cat: 'Fruits & légumes' },
       { name: 'Citron', qty: '½', cat: 'Fruits & légumes' },
@@ -303,10 +303,10 @@ export const DINNERS: MealOption[] = [
   },
   {
     id: 'd5', label: 'Steak haché bœuf + patate douce + salade', kcal: 640, protein: 38,
-    desc: '150g steak haché bœuf 5% + 200g patate douce rôtie + salade verte + tomates',
-    tip: 'Bien cuire le haché à cœur. La patate douce supporte l\'index glycémique de l\'effort.',
+    desc: '150g bœuf haché + 200g patate douce rôtie + salade verte + tomates cerises',
+    tip: 'Le haché standard (15% MG) est 30% moins cher que le 5%. Pour l\'Ironman, un peu plus de gras saturé dans 1 repas/semaine est négligeable.',
     ingredients: [
-      { name: 'Bœuf haché 5%', qty: '150 g', cat: 'Protéines' },
+      { name: 'Bœuf haché', qty: '150 g', cat: 'Protéines' },
       { name: 'Patate douce', qty: '200 g', cat: 'Fruits & légumes' },
       { name: 'Salade verte', qty: 'poignée', cat: 'Fruits & légumes' },
       { name: 'Tomates cerises', qty: '6', cat: 'Fruits & légumes' },
@@ -326,11 +326,11 @@ export const DINNERS: MealOption[] = [
     ],
   },
   {
-    id: 'd7', label: 'Filet de porc + quinoa + courgettes rôties', kcal: 590, protein: 40,
-    desc: '150g filet de porc + 80g quinoa + 1 courgette rôtie au four + herbes de Provence',
-    tip: 'Le porc est très économique. Le filet est la coupe la plus maigre.',
+    id: 'd7', label: 'Porc haché + quinoa + courgettes rôties', kcal: 560, protein: 34,
+    desc: '150g porc haché + 80g quinoa + 1 courgette rôtie au four + herbes de Provence',
+    tip: 'Le haché de porc (~3,50€/300g) coûte 4× moins cher que le filet mignon. Même goût en poêlée, parfait en galette façon burger.',
     ingredients: [
-      { name: 'Filet de porc', qty: '150 g', cat: 'Protéines' },
+      { name: 'Porc haché', qty: '150 g', cat: 'Protéines' },
       { name: 'Quinoa', qty: '80 g', cat: 'Féculents & céréales' },
       { name: 'Courgette', qty: '1', cat: 'Fruits & légumes' },
       { name: 'Herbes de Provence', qty: '1 cc', cat: 'Épicerie sèche' },
@@ -606,15 +606,15 @@ const UNIT_PRICES: Record<string, { price: number; per: number }> = {
   'patate douce':                  { price: 1.80, per: 400 },
   'pommes de terre':               { price: 4.20, per: 2500 },
   // Protéines — au poids (g)
-  'blanc de poulet':               { price: 5.50, per: 500 },
-  'bœuf haché 5%':                 { price: 4.50, per: 300 },
+  'blanc de poulet':               { price: 4.00, per: 400 }, // pack 2 escalopes Lidl
+  'bœuf haché':                    { price: 3.20, per: 300 }, // haché standard 15% MG
   'crevettes décortiquées':        { price: 4.50, per: 400 },
   'cuisses de poulet':             { price: 3.50, per: 600 },
   'dinde hachée':                  { price: 3.50, per: 300 },
   'filet de cabillaud':            { price: 3.50, per: 200 },
-  'filet de porc':                 { price: 4.00, per: 400 },
-  'filet de saumon':               { price: 5.50, per: 200 },
-  'saumon fumé':                   { price: 3.90, per: 100 },
+  'filet de truite':               { price: 3.20, per: 300 }, // pack 2 filets ~300g, ≈10€/kg vs 27€/kg saumon
+  'maquereau au naturel (boîte)':  { price: 1.50, per: 125 }, // 3× moins cher que saumon fumé
+  'porc haché':                    { price: 3.50, per: 300 },
   'sardines à l\'huile (boîte)':   { price: 1.30, per: 90  },
   'thon au naturel (boîte)':       { price: 1.80, per: 140 },
   // Féculents — au poids (g) ou pièce (count)
