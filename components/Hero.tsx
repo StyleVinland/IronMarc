@@ -6,7 +6,7 @@ export default function Hero({ checkpointPct }: Props) {
   return (
     <header className="hero">
       <div className="hero-text">
-        <div className="hero-eyebrow">Objectif de vie · Ironman 2026</div>
+        <div className="hero-eyebrow">Objectif de vie · Ironman 2029</div>
         <div className="hero-goal">Ironman</div>
         <p className="hero-why">
           Je ne me reconstruis pas pour être repris — je me reconstruis pour redevenir entier.

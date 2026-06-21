@@ -134,7 +134,7 @@ export default function EntrainementClient() {
     <>
       <div className="page-title-block reveal">
         <h1>Entraînement</h1>
-        <p>Programme complet pubalgie + périostites → Ironman en 2 ans</p>
+        <p>Programme complet pubalgie + périostites → Ironman en 3 ans</p>
       </div>
 
       {/* ── PHASE ACTUELLE ── */}
