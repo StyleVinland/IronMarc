@@ -386,14 +386,23 @@ function toShopQty(name: string, total: number, unit: QtyUnit): string {
 
   if (unit === 'count') {
     const cnt = Math.ceil(total);
-    if (n.includes('banane'))    return `${cnt} banane${cnt > 1 ? 's' : ''}`;
+    if (n.includes('banane')) {
+      const r = Math.max(1, Math.ceil(cnt / 5));
+      return `${r} régime${r > 1 ? 's' : ''} de bananes`;
+    }
+    if (n.includes('carotte')) {
+      const s = Math.max(1, Math.ceil(cnt / 7));
+      return `${s} sac${s > 1 ? 's' : ''} de carottes (1 kg)`;
+    }
+    if (n.includes('courgette')) {
+      const f = Math.max(1, Math.ceil(cnt / 3));
+      return `${f} filet${f > 1 ? 's' : ''} de courgettes`;
+    }
     if (n.includes('pomme'))     return `${cnt} pomme${cnt > 1 ? 's' : ''}`;
     if (n.includes('citron'))    return `${cnt} citron${cnt > 1 ? 's' : ''}`;
-    if (n.includes('carotte'))   return `${cnt} carotte${cnt > 1 ? 's' : ''}`;
-    if (n.includes('courgette')) return `${cnt} courgette${cnt > 1 ? 's' : ''}`;
     if (n.includes('poireau'))   return `${cnt} poireau${cnt > 1 ? 'x' : ''}`;
     if (n.includes('tomate'))    return `${cnt} tomate${cnt > 1 ? 's' : ''}`;
-    if (n.includes('salade'))    return '1 sac de salade';
+    if (n.includes('salade'))    return '1 sachet de salade';
     if (n.includes('œuf') || n.includes('oeuf')) return `${cnt} œuf${cnt > 1 ? 's' : ''}`;
     if (n.includes('galette'))   return `${cnt} galettes de riz`;
     if (n.includes('sardines'))  return `${cnt} boîte${cnt > 1 ? 's' : ''} sardines`;
