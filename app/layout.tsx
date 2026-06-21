@@ -5,6 +5,7 @@ import { AuthProvider } from '@/components/AuthProvider';
 import ThemeProvider from '@/components/ThemeProvider';
 import { getFullState } from '@/lib/db';
 import './globals.css';
+import 'leaflet/dist/leaflet.css';
 
 export const dynamic = 'force-dynamic';
 
