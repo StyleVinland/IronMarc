@@ -1,5 +1,5 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useAppState } from './AppStateProvider';
 import { SESSIONS, PHASES, RACES, WEEK_DAYS, WEEK_DAY_LABELS, getCurrentWeek, getCurrentPhase, PROGRAM_START, DATE_OVERRIDES, computeRaceOverrides, RACE_COLORS, RACE_LABELS } from '@/lib/program';
 import type { WeekDay, ProgramPhase } from '@/lib/program';
@@ -96,6 +96,11 @@ export default function EntrainementClient() {
   const [selectedDate, setSelectedDate] = useState<string>(() => today);
   const [pain, setPain] = useState({ aine: 0, tibia: 0 });
   const [openPhaseId, setOpenPhaseId] = useState<string | null>(null);
+  const [totalXp, setTotalXp] = useState<{ total: number; count: number } | null>(null);
+
+  useEffect(() => {
+    fetch('/api/xp').then(r => r.json()).then(setTotalXp).catch(() => {});
+  }, []);
 
   const currentWeek = getCurrentWeek();
   const currentPhase = getCurrentPhase(currentWeek);
@@ -140,7 +145,14 @@ export default function EntrainementClient() {
       {/* ── PHASE ACTUELLE ── */}
       <div className="prog-phase-banner reveal reveal-d1">
         <div className="prog-phase-left">
-          <div className="prog-phase-week">Semaine {currentWeek}</div>
+          <div className="prog-phase-week">
+            Semaine {currentWeek}
+            {totalXp && totalXp.count > 0 && (
+              <span className="prog-xp-badge" title={`${totalXp.count} séance${totalXp.count > 1 ? 's' : ''} validée${totalXp.count > 1 ? 's' : ''}`}>
+                ⚡ {totalXp.total} XP
+              </span>
+            )}
+          </div>
           <div className="prog-phase-label">{currentPhase.label}</div>
           <div className="prog-phase-tagline">{currentPhase.tagline}</div>
         </div>
@@ -261,6 +273,10 @@ export default function EntrainementClient() {
               date={selectedDate}
               sessionId={selSessionId}
               sessionLabel={selSession.label}
+              sessionType={selSession.type}
+              today={today}
+              prePainAine={pain.aine}
+              prePainTibia={pain.tibia}
             />
           )}
         </section>

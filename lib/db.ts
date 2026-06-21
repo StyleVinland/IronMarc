@@ -243,6 +243,20 @@ export function getDebrief(date: string): DebriefData | undefined {
   };
 }
 
+export function getAllDebriefs(): DebriefData[] {
+  return openDb().prepare('SELECT * FROM debriefs ORDER BY date DESC').all().map(r => ({
+    date: r.date as string,
+    session_id: r.session_id as string,
+    status: r.status as string,
+    pain_aine: Number(r.pain_aine),
+    pain_tibia: Number(r.pain_tibia),
+    energy: Number(r.energy),
+    difficulty: Number(r.difficulty),
+    notes: (r.notes as string) ?? '',
+    created_at: r.created_at as string,
+  }));
+}
+
 export function getLastDebriefBySession(sessionId: string, beforeDate: string): DebriefData | undefined {
   const row = openDb().prepare(
     'SELECT * FROM debriefs WHERE session_id = ? AND date < ? ORDER BY date DESC LIMIT 1'

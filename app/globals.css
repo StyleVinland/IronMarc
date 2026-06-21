@@ -1593,6 +1593,73 @@ body { padding: 0; }
 .db-alert { background: rgba(255,59,48,0.06); border: 1px solid rgba(255,59,48,0.2); border-radius: 10px; padding: 10px 14px; font-size: 13px; color: var(--warn); }
 .db-save  { align-self: flex-start; font-size: 13px; padding: 8px 18px; width: auto !important; }
 
+/* XP badge dans le header de phase */
+.prog-xp-badge {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px;
+  background: rgba(255,204,0,0.15); color: #E5A800; border: 1px solid rgba(255,204,0,0.3);
+  margin-left: 10px; vertical-align: middle; letter-spacing: .03em;
+}
+
+/* Vue compacte débrief (après save) */
+.db-compact {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+  padding: 10px 14px; cursor: pointer; transition: background .15s;
+}
+.db-compact:hover { background: var(--bg); }
+.db-compact-status { font-size: 12px; font-weight: 700; letter-spacing: .03em; }
+.db-compact-edit   { font-size: 12px; color: var(--muted); margin-left: auto; }
+.db-xp-badge {
+  font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px;
+  background: rgba(255,204,0,0.15); color: #C8920A; border: 1px solid rgba(255,204,0,0.3);
+}
+.db-xp-pop {
+  font-size: 13px; font-weight: 700; color: #C8920A;
+  animation: xp-pop .35s cubic-bezier(.18,.89,.32,1.28);
+}
+.db-xp-zero { color: var(--muted); font-weight: 400; }
+@keyframes xp-pop {
+  0%   { transform: scale(.7); opacity: 0; }
+  100% { transform: scale(1);  opacity: 1; }
+}
+
+/* Header formulaire */
+.db-validate-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 2px;
+}
+.db-validate-title {
+  font-size: 13px; font-weight: 700; color: var(--label); text-transform: uppercase; letter-spacing: .05em;
+}
+.db-header-close {
+  font-size: 11px; color: var(--muted); background: none; border: none; cursor: pointer; padding: 2px 6px;
+}
+
+/* Notes XP label */
+.db-notes-xp {
+  color: #C8920A; font-size: 9px; font-weight: 700; background: rgba(255,204,0,0.15);
+  border-radius: 6px; padding: 1px 5px; margin-left: 5px; letter-spacing: .04em;
+}
+
+/* Status note (skipped/injury message) */
+.db-status-note {
+  font-size: 12px; color: var(--muted); padding: 6px 10px;
+  background: var(--bg); border-radius: 8px; margin-top: 4px;
+}
+.db-status-warn { color: var(--warn) !important; }
+
+/* Détails optionnels */
+.db-details-toggle {
+  font-size: 11px; color: var(--dawn); background: none; border: none;
+  cursor: pointer; text-align: left; padding: 0; letter-spacing: .02em;
+}
+.db-details-block { display: flex; flex-direction: column; gap: 14px; }
+
+/* Rangée save + XP pop */
+.db-save-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.db-save-row .db-save { margin: 0; }
+
 /* ================================================================
    MOBILE AMÉLIORATIONS
    ================================================================ */
