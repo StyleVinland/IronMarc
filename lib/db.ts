@@ -83,6 +83,14 @@ function openDb(): NodeSqliteDb {
       notes      TEXT NOT NULL DEFAULT '',
       created_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
+    CREATE TABLE IF NOT EXISTS session_completions (
+      date         TEXT PRIMARY KEY,
+      session_id   TEXT NOT NULL,
+      xp           INTEGER NOT NULL DEFAULT 0,
+      pain_aine    INTEGER NOT NULL DEFAULT 0,
+      pain_tibia   INTEGER NOT NULL DEFAULT 0,
+      validated_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
   `);
 
   global._db = db;
@@ -241,6 +249,37 @@ export function getDebrief(date: string): DebriefData | undefined {
     notes: (row.notes as string) ?? '',
     created_at: row.created_at as string,
   };
+}
+
+export interface SessionCompletion {
+  date: string; session_id: string; xp: number;
+  pain_aine: number; pain_tibia: number; validated_at: string;
+}
+
+export function saveSessionCompletion(d: Omit<SessionCompletion, 'validated_at'>) {
+  openDb().prepare(`
+    INSERT INTO session_completions (date, session_id, xp, pain_aine, pain_tibia)
+    VALUES (?, ?, ?, ?, ?)
+    ON CONFLICT(date) DO UPDATE SET
+      session_id   = excluded.session_id,
+      xp           = excluded.xp,
+      pain_aine    = excluded.pain_aine,
+      pain_tibia   = excluded.pain_tibia,
+      validated_at = datetime('now')
+  `).run(d.date, d.session_id, d.xp, d.pain_aine, d.pain_tibia);
+}
+
+export function getSessionCompletion(date: string): SessionCompletion | undefined {
+  const r = openDb().prepare('SELECT * FROM session_completions WHERE date = ?').get(date);
+  if (!r) return undefined;
+  return { date: r.date as string, session_id: r.session_id as string, xp: Number(r.xp), pain_aine: Number(r.pain_aine), pain_tibia: Number(r.pain_tibia), validated_at: r.validated_at as string };
+}
+
+export function getAllSessionCompletions(): SessionCompletion[] {
+  return openDb().prepare('SELECT * FROM session_completions ORDER BY date DESC').all().map(r => ({
+    date: r.date as string, session_id: r.session_id as string, xp: Number(r.xp),
+    pain_aine: Number(r.pain_aine), pain_tibia: Number(r.pain_tibia), validated_at: r.validated_at as string,
+  }));
 }
 
 export function getAllDebriefs(): DebriefData[] {

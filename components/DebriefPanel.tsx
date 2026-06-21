@@ -1,13 +1,11 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import type { DebriefData } from '@/types';
-import { computeXp } from '@/lib/xp';
 
 interface Props {
   date: string;
   sessionId: string;
   sessionLabel: string;
-  sessionType: string;
   today: string;
   prePainAine?: number;
   prePainTibia?: number;
@@ -38,7 +36,7 @@ function Stars({ value, onChange }: { value: number; onChange: (v: number) => vo
 }
 
 export default function DebriefPanel({
-  date, sessionId, sessionLabel, sessionType, today,
+  date, sessionId, sessionLabel, today,
   prePainAine = 0, prePainTibia = 0,
 }: Props) {
   const isToday = date === today;
@@ -46,7 +44,7 @@ export default function DebriefPanel({
   const [open, setOpen]       = useState(false);
   const [loaded, setLoaded]   = useState(false);
   const [loading, setLoading] = useState(false);
-  const [justSaved, setJustSaved] = useState<number | null>(null);
+  const [justSaved, setJustSaved] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
   const [saved, setSaved]     = useState<DebriefData | null>(null);
@@ -89,7 +87,6 @@ export default function DebriefPanel({
 
   async function handleSave() {
     setLoading(true);
-    const xp = computeXp(sessionType, status, notes);
     await fetch(`/api/debriefs/${date}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -97,15 +94,13 @@ export default function DebriefPanel({
     });
     await load();
     setOpen(false);
-    setJustSaved(xp);
+    setJustSaved(true);
     setLoading(false);
-    setTimeout(() => setJustSaved(null), 4000);
+    setTimeout(() => setJustSaved(false), 3000);
   }
 
   if (!loaded) return null;
 
-  const xpPreview  = computeXp(sessionType, status, notes);
-  const savedXp    = saved ? computeXp(sessionType, saved.status, saved.notes) : 0;
   const savedColor = STATUSES.find(s => s.id === saved?.status)?.color;
   const savedLabel = STATUSES.find(s => s.id === saved?.status)?.label;
 
@@ -115,10 +110,7 @@ export default function DebriefPanel({
       <div className="debrief-wrap">
         <button className="db-compact" onClick={() => setOpen(true)}>
           <span className="db-compact-status" style={{ color: savedColor }}>{savedLabel}</span>
-          {savedXp > 0 && <span className="db-xp-badge">+{savedXp} XP</span>}
-          {justSaved !== null && (
-            <span className="db-xp-pop">{justSaved > 0 ? `+${justSaved} XP !` : 'Enregistré'}</span>
-          )}
+          {justSaved && <span className="db-xp-pop">Débrief enregistré</span>}
           <span className="db-compact-edit">Modifier ▼</span>
         </button>
       </div>
@@ -247,19 +239,9 @@ export default function DebriefPanel({
         {/* Bouton sauvegarde */}
         <div className="db-save-row">
           <button className="btn-primary db-save" onClick={handleSave} disabled={loading}>
-            {loading
-              ? 'Sauvegarde…'
-              : saved
-                ? 'Mettre à jour'
-                : xpPreview > 0
-                  ? `Valider → +${xpPreview} XP`
-                  : 'Valider (0 XP)'}
+            {loading ? 'Sauvegarde…' : saved ? 'Mettre à jour' : 'Sauvegarder le débrief'}
           </button>
-          {justSaved !== null && (
-            <div className={`db-xp-pop${justSaved === 0 ? ' db-xp-zero' : ''}`}>
-              {justSaved > 0 ? `+${justSaved} XP gagnés !` : 'Enregistré — courage pour la prochaine.'}
-            </div>
-          )}
+          {justSaved && <div className="db-xp-pop">Débrief enregistré ✓</div>}
         </div>
       </div>
     </div>

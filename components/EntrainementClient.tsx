@@ -90,18 +90,58 @@ const PHASE_MILESTONES: Record<string, { label: string; color: string }> = {
   p4c: { label: '🏅 IRONMAN — 22 juin 2029 · 3 800 m nage · 180 km vélo · 42,2 km course', color: '#CF8E42' },
 };
 
+const DAILY_PHRASES = [
+  'La régularité bat la perfection. Reviens demain.',
+  'Chaque séance est une promesse tenue.',
+  "L'Ironman se construit une séance à la fois.",
+  'Ce que tu fais aujourd\'hui, ton futur toi te remerciera.',
+  'Pas besoin d\'être rapide — juste régulier.',
+  'Tu as fait le plus dur : tu as commencé.',
+  'Les jours où tu ne veux pas y aller sont les plus importants.',
+  'Le corps s\'adapte à ce qu\'on lui demande. Continue.',
+  'Une séance de plus dans la banque. Ça compte.',
+  'La transformation est silencieuse mais elle avance.',
+  'Ironman 2029 : tu viens de faire un pas de plus.',
+  'Même une séance imparfaite vaut mieux que pas de séance.',
+  'Les champions s\'entraînent même quand ils n\'en ont pas envie.',
+  'Ta discipline d\'aujourd\'hui est ta liberté de demain.',
+  'Encore une braise dans le feu. Garde-le allumé.',
+  'Tu ne construis pas un Ironman — tu te construis, toi.',
+  'Persévérance : faire la même chose, encore et encore, jusqu\'à ce que ça marche.',
+  'Petit à petit, l\'oiseau fait son nid.',
+];
+
+function getDailyPhrase(dateStr: string): string {
+  const d = new Date(dateStr + 'T12:00:00');
+  const idx = (d.getDate() + d.getMonth() * 31) % DAILY_PHRASES.length;
+  return DAILY_PHRASES[idx];
+}
+
 export default function EntrainementClient() {
   useScrollReveal();
   const { state, today } = useAppState();
   const [weekOffset, setWeekOffset] = useState(0);
   const [selectedDate, setSelectedDate] = useState<string>(() => today);
   const [pain, setPain] = useState({ aine: 0, tibia: 0 });
+  const [painChecked, setPainChecked] = useState(false);
   const [openPhaseId, setOpenPhaseId] = useState<string | null>(null);
   const [totalXp, setTotalXp] = useState<{ total: number; count: number } | null>(null);
+  const [sessionDone, setSessionDone] = useState<{ xp: number } | null>(null);
+  const [showExercises, setShowExercises] = useState(false);
+  const [validating, setValidating] = useState(false);
+
+  const refreshXp = () => fetch('/api/xp').then(r => r.json()).then(setTotalXp).catch(() => {});
+
+  useEffect(() => { refreshXp(); }, []);
 
   useEffect(() => {
-    fetch('/api/xp').then(r => r.json()).then(setTotalXp).catch(() => {});
-  }, []);
+    fetch(`/api/sessions/complete?date=${selectedDate}`)
+      .then(r => r.json())
+      .then(data => { setSessionDone(data ? { xp: data.xp } : null); setShowExercises(false); })
+      .catch(() => { setSessionDone(null); });
+    setPainChecked(false);
+    setPain({ aine: 0, tibia: 0 });
+  }, [selectedDate]);
 
   const currentWeek = getCurrentWeek();
   const currentPhase = getCurrentPhase(currentWeek);
@@ -125,6 +165,20 @@ export default function EntrainementClient() {
   const isSelToday = selectedDate === today;
 
   const painHigh = pain.aine > 4 || pain.tibia > 4;
+
+  async function handleValidateSession() {
+    setValidating(true);
+    const xp = ({ swim: 60, run: 55, bike: 50, brick: 75, renfo: 40 } as Record<string, number>)[selSession.type] ?? 50;
+    await fetch('/api/sessions/complete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ date: selectedDate, session_id: selSessionId, xp, pain_aine: pain.aine, pain_tibia: pain.tibia }),
+    });
+    setSessionDone({ xp });
+    setShowExercises(false);
+    setValidating(false);
+    refreshXp();
+  }
 
   function handleWeekChange(delta: number) {
     const newOffset = weekOffset + delta;
@@ -217,51 +271,88 @@ export default function EntrainementClient() {
             <span className="hint" style={{ color: selSession.color }}>{selSession.label}</span>
           </div>
 
-          {isSelToday && painHigh && (
-            <div className="prog-pain-alert">
-              Douleur &gt; 4/10 — repose-toi aujourd&apos;hui. Ce n&apos;est pas un échec, c&apos;est de l&apos;intelligence.
-            </div>
-          )}
-
-          {isSelToday && selSession.painCheck && !painHigh && (
-            <div className="prog-pain-check">
-              <div className="prog-pain-title">Check douleur avant de commencer</div>
-              {(['aine', 'tibia'] as const).map(zone => (
-                <div key={zone} className="prog-pain-row">
-                  <label className="prog-pain-label">{zone === 'aine' ? 'Aine / pubis' : 'Tibia'}</label>
-                  <div className="prog-pain-scale">
-                    {[0,1,2,3,4,5,6,7,8,9,10].map(v => (
-                      <button key={v}
-                        className={`prog-pain-btn${pain[zone] === v ? ' sel' : ''}${v > 4 ? ' danger' : ''}`}
-                        onClick={() => setPain(p => ({ ...p, [zone]: v }))}>{v}</button>
-                    ))}
-                  </div>
-                </div>
-              ))}
-              <div className="prog-pain-rule">≤ 4/10 = vert → faire la séance · &gt; 4/10 = stop · Courbatures légères = normales</div>
-            </div>
-          )}
-
-          <div className="prog-session-card" style={{ '--session-color': selSession.color } as React.CSSProperties}>
-            <div className="prog-session-header">
-              <div>
-                <div className="prog-session-label">{selSession.label}</div>
-                <div className="prog-session-desc">{selSession.desc}</div>
+          {/* ── PAIN CHECK ── */}
+          {selSession.painCheck && !sessionDone && (
+            painChecked ? (
+              <div className={`prog-pain-ok${painHigh ? ' danger' : ''}`}>
+                {painHigh
+                  ? 'Douleur > 4/10 — adapte ou repose-toi. Ce n\'est pas un échec.'
+                  : '✓ Check douleur OK — bonne séance !'}
               </div>
-              {selSession.duration && <div className="prog-session-dur">{selSession.duration}</div>}
-            </div>
-            {selSession.exercises.length > 0 && (
-              <div className="prog-exercise-grid">
-                {selSession.exercises.map((ex, i) => (
-                  <div key={i} className={`prog-ex-card${ex.required ? ' required' : ''}${ex.warning ? ' warning' : ''}`}>
-                    <div className="prog-ex-name">{ex.name}</div>
-                    {ex.sets && <div className="prog-ex-sets">{ex.sets}</div>}
-                    <div className="prog-ex-detail">{ex.detail}</div>
+            ) : (
+              <div className="prog-pain-check">
+                <div className="prog-pain-title">Check douleur avant de commencer</div>
+                {(['aine', 'tibia'] as const).map(zone => (
+                  <div key={zone} className="prog-pain-row">
+                    <label className="prog-pain-label">{zone === 'aine' ? 'Aine / pubis' : 'Tibia'}</label>
+                    <div className="prog-pain-scale">
+                      {[0,1,2,3,4,5,6,7,8,9,10].map(v => (
+                        <button key={v}
+                          className={`prog-pain-btn${pain[zone] === v ? ' sel' : ''}${v > 4 ? ' danger' : ''}`}
+                          onClick={() => setPain(p => ({ ...p, [zone]: v }))}>{v}</button>
+                      ))}
+                    </div>
                   </div>
                 ))}
+                <div className="prog-pain-footer">
+                  <div className="prog-pain-rule">≤ 4/10 = go · &gt; 4/10 = repos · Courbatures = normal</div>
+                  <button className="prog-pain-confirm" onClick={() => setPainChecked(true)}>
+                    Confirmer ✓
+                  </button>
+                </div>
               </div>
-            )}
-          </div>
+            )
+          )}
+
+          {/* ── CARTE SÉANCE : vue repliée si validée ── */}
+          {sessionDone && !showExercises ? (
+            <div className="prog-session-done" style={{ '--session-color': selSession.color } as React.CSSProperties}>
+              <div className="prog-session-done-top">
+                <span className="prog-session-done-check">✓</span>
+                <span className="prog-session-done-label">{selSession.label}</span>
+                <span className="prog-session-done-xp">+{sessionDone.xp} XP</span>
+              </div>
+              <div className="prog-session-done-phrase">« {getDailyPhrase(selectedDate)} »</div>
+              <button className="prog-session-done-toggle" onClick={() => setShowExercises(true)}>
+                Voir les exercices ▼
+              </button>
+            </div>
+          ) : (
+            <div className="prog-session-card" style={{ '--session-color': selSession.color } as React.CSSProperties}>
+              {sessionDone && (
+                <button className="prog-session-close-exercises" onClick={() => setShowExercises(false)}>▲ Fermer</button>
+              )}
+              <div className="prog-session-header">
+                <div>
+                  <div className="prog-session-label">{selSession.label}</div>
+                  <div className="prog-session-desc">{selSession.desc}</div>
+                </div>
+                {selSession.duration && <div className="prog-session-dur">{selSession.duration}</div>}
+              </div>
+              {selSession.exercises.length > 0 && (
+                <div className="prog-exercise-grid">
+                  {selSession.exercises.map((ex, i) => (
+                    <div key={i} className={`prog-ex-card${ex.required ? ' required' : ''}${ex.warning ? ' warning' : ''}`}>
+                      <div className="prog-ex-name">{ex.name}</div>
+                      {ex.sets && <div className="prog-ex-sets">{ex.sets}</div>}
+                      <div className="prog-ex-detail">{ex.detail}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {selSessionId !== 'rest' && !sessionDone && (
+                <div className="prog-validate-row">
+                  <button
+                    className="prog-validate-btn"
+                    onClick={handleValidateSession}
+                    disabled={validating}
+                  >
+                    {validating ? '…' : '✓ Valider la séance'}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
           {displayedPhase.notes.length > 0 && (
             <div className="prog-notes">
@@ -274,7 +365,6 @@ export default function EntrainementClient() {
               date={selectedDate}
               sessionId={selSessionId}
               sessionLabel={selSession.label}
-              sessionType={selSession.type}
               today={today}
               prePainAine={pain.aine}
               prePainTibia={pain.tibia}
