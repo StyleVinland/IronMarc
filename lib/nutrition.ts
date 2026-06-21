@@ -206,9 +206,9 @@ export const LUNCHES: MealOption[] = [
     ingredients: [
       { name: 'Bœuf haché 5%', qty: '130 g', cat: 'Protéines' },
       { name: 'Riz', qty: '80 g', cat: 'Féculents & céréales' },
-      { name: 'Épinards', qty: 'poignée', cat: 'Fruits & légumes' },
+      { name: 'Épinards frais', qty: 'poignée', cat: 'Fruits & légumes' },
       { name: 'Carotte', qty: '1', cat: 'Fruits & légumes' },
-      { name: 'Œuf', qty: '1', cat: 'Frais' },
+      { name: 'Œufs', qty: '1', cat: 'Frais' },
       { name: 'Sauce tamari', qty: '1 cs', cat: 'Épicerie sèche' },
       { name: 'Huile de sésame', qty: '1 cc', cat: 'Épicerie sèche' },
     ],
@@ -231,7 +231,7 @@ export const LUNCHES: MealOption[] = [
     tip: 'Idéal à emporter. Garder le poulet et l\'avocat séparés jusqu\'au moment de manger.',
     ingredients: [
       { name: 'Galettes de riz (grandes)', qty: '2', cat: 'Féculents & céréales' },
-      { name: 'Blanc de poulet cuit', qty: '130 g', cat: 'Protéines' },
+      { name: 'Blanc de poulet', qty: '130 g', cat: 'Protéines' },
       { name: 'Avocat', qty: '½', cat: 'Fruits & légumes' },
       { name: 'Salade verte', qty: 'poignée', cat: 'Fruits & légumes' },
       { name: 'Tomate', qty: '1', cat: 'Fruits & légumes' },
@@ -286,7 +286,7 @@ export const DINNERS: MealOption[] = [
     ingredients: [
       { name: 'Cuisses de poulet', qty: '180 g', cat: 'Protéines' },
       { name: 'Pommes de terre', qty: '200 g', cat: 'Fruits & légumes' },
-      { name: 'Carottes', qty: '150 g', cat: 'Fruits & légumes' },
+      { name: 'Carotte', qty: '2', cat: 'Fruits & légumes' },
       { name: 'Romarin', qty: '1 branche', cat: 'Épicerie sèche' },
     ],
   },
@@ -346,7 +346,7 @@ export const DINNERS: MealOption[] = [
       { name: 'Vert de poireau', qty: '1 tige', cat: 'Fruits & légumes' },
       { name: 'Tomates', qty: '2', cat: 'Fruits & légumes' },
       { name: 'Riz', qty: '60 g', cat: 'Féculents & céréales' },
-      { name: 'Œuf', qty: '1', cat: 'Frais' },
+      { name: 'Œufs', qty: '1', cat: 'Frais' },
     ],
   },
 ];
