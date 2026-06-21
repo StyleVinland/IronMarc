@@ -25,19 +25,11 @@ interface NodeSqliteDb {
 declare global {
   // eslint-disable-next-line no-var
   var _db: NodeSqliteDb | undefined;
+  // eslint-disable-next-line no-var
+  var _dbMigrated: boolean | undefined;
 }
 
-function openDb(): NodeSqliteDb {
-  if (global._db) return global._db;
-
-  const dir = path.join(process.cwd(), 'storage');
-  const mediaDir = path.join(dir, 'media');
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  if (!fs.existsSync(mediaDir)) fs.mkdirSync(mediaDir, { recursive: true });
-
-  const db = new DatabaseSync(path.join(dir, 'tracker.db'));
-
-  db.exec('PRAGMA journal_mode = WAL;');
+function migrate(db: NodeSqliteDb) {
   db.exec(`
     CREATE TABLE IF NOT EXISTS days (
       date       TEXT PRIMARY KEY,
@@ -92,9 +84,27 @@ function openDb(): NodeSqliteDb {
       validated_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
   `);
+}
 
-  global._db = db;
-  return db;
+function openDb(): NodeSqliteDb {
+  if (!global._db) {
+    const dir = path.join(process.cwd(), 'storage');
+    const mediaDir = path.join(dir, 'media');
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    if (!fs.existsSync(mediaDir)) fs.mkdirSync(mediaDir, { recursive: true });
+
+    const db = new DatabaseSync(path.join(dir, 'tracker.db'));
+    db.exec('PRAGMA journal_mode = WAL;');
+    global._db = db;
+  }
+
+  // Migrations run once per process, even après un hot-reload qui garde _db en cache
+  if (!global._dbMigrated) {
+    migrate(global._db);
+    global._dbMigrated = true;
+  }
+
+  return global._db;
 }
 
 export function getFullState(): AppState {

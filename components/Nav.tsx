@@ -2,10 +2,11 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { computeLevel, computeLevelTitle, computeStreak } from '@/lib/compute';
+import { computeXP, computeLevel, computeLevelTitle, computeStreak } from '@/lib/compute';
 import { useAppState } from './AppStateProvider';
 
-const XP_PLAN_TARGET = 15000; // XP total pour finir le plan Ironman 3 ans
+// XP total atteignable sur 3 ans : ~300 séances × 55 XP + missions quotidiennes + quêtes
+export const XP_PLAN_TARGET = 50000;
 
 // ── Icons pour la bottom nav mobile ─────────────────────────────────
 const IconDashboard = () => (
@@ -78,10 +79,12 @@ export default function Nav() {
     return () => window.removeEventListener('session-validated', load);
   }, []);
 
-  const streak  = computeStreak(state);
-  const level   = computeLevel(sessionXp);
-  const title   = computeLevelTitle(level);
-  const planPct = Math.min(100, Math.round(sessionXp / XP_PLAN_TARGET * 100));
+  const habitXp  = computeXP(state);
+  const totalXp  = habitXp + sessionXp;
+  const streak   = computeStreak(state);
+  const level    = computeLevel(totalXp);
+  const title    = computeLevelTitle(level);
+  const planPct  = Math.min(100, Math.round(totalXp / XP_PLAN_TARGET * 100));
 
   return (
     <>
@@ -110,7 +113,7 @@ export default function Nav() {
           {/* Stats rapides — desktop */}
           <div className="topnav-stats">
             <span className="topnav-pill tide">🔥 {streak}j</span>
-            <span className="topnav-pill dawn">⚡ {sessionXp} XP</span>
+            <span className="topnav-pill dawn">⚡ {totalXp} XP</span>
             <span className="topnav-pill purple" title="% du plan Ironman 3 ans accompli">{planPct}%</span>
           </div>
 

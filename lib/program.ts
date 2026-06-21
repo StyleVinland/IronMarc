@@ -60,6 +60,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
       { name: 'Copenhagen genou (niveau 1→3)', detail: 'Planche latérale, jambe du dessus pliée sur appui bas. Soulever le bassin. Augmenter durée chaque semaine.', sets: '2 × 6-10 / côté', warning: false },
       { name: 'Planche ventrale', detail: 'Corps droit, sur les coudes', sets: '3 × 20-45 s' },
       { name: 'Dead bug', detail: 'Dos au sol, étendre bras droit + jambe gauche en alternance, dos collé au sol', sets: '3 × 8 / côté' },
+      { name: 'Pompes', detail: 'Mains à largeur d\'épaules, corps gainé, coudes à ~45°. Si trop dur : genoux au sol. Progresser : 3 × 10 → 3 × 15 → 3 × 20 au fil des semaines.', sets: '50 au total (fractionne comme tu veux)', required: true },
       { name: 'Mobilité', detail: 'Fente basse 30 s / côté, pigeon couché 30 s / côté', required: true },
     ],
   },
@@ -77,6 +78,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
       { name: 'Tibialis raises', detail: 'Dos au mur, talons à 30 cm, lever les pointes de pied', sets: '3 × 20' },
       { name: 'Clamshell', detail: 'Couché sur le côté, genoux à 45°, ouvrir le genou du dessus', sets: '3 × 12 / côté' },
       { name: 'Équilibre 1 pied', detail: 'Sur une jambe, regard fixe. Progresser : yeux ouverts → fermés → surface instable', sets: '3 × 30 s / côté' },
+      { name: 'Pompes', detail: 'Mains à largeur d\'épaules, corps gainé, coudes à ~45°. Si trop dur : genoux au sol. Progresser : 3 × 10 → 3 × 15 → 3 × 20 au fil des semaines.', sets: '50 au total (fractionne comme tu veux)', required: true },
       { name: 'Mobilité', detail: 'Étirement mollet debout + assis, 30 s × 2 / côté', required: true },
     ],
   },
@@ -91,6 +93,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
       { name: 'Planche avec rotation', detail: 'En planche, ouvrir un bras vers le plafond, regard vers le haut. Stabilité.', sets: '3 × 8 / côté' },
       { name: 'Excentrique mollet 1 jambe', detail: 'Descendre lentement en 4 secondes sur 1 jambe. Protection tibia.', sets: '3 × 10 / côté' },
       { name: 'Superman', detail: 'À plat ventre, soulever bras + jambe opposés. Renforce le dos pour le vélo.', sets: '3 × 12' },
+      { name: 'Pompes', detail: 'Mains à largeur d\'épaules, corps gainé, coudes à ~45°. Si trop dur : genoux au sol. Progresser : 3 × 10 → 3 × 15 → 3 × 20 au fil des semaines.', sets: '50 au total (fractionne comme tu veux)', required: true },
     ],
   },
 

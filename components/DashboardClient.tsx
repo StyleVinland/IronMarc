@@ -1,9 +1,10 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAppState } from './AppStateProvider';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { computeXP, computeLevel, computeLevelTitle, computeStreak, computeCheckpointPct } from '@/lib/compute';
-import { DAILY, QUESTS } from '@/lib/constants';
+import { DAILY, QUESTS, XP_PER_LEVEL } from '@/lib/constants';
+import { XP_PLAN_TARGET } from './Nav';
 import Hero from './Hero';
 import Affirmation from './Affirmation';
 import ProgressCharts from './ProgressCharts';
@@ -48,11 +49,25 @@ export default function DashboardClient() {
   const { state, today, toggleMission, toggleQuest, nextAff } = useAppState();
   const todayData = state.days[today] ?? { date: today, cigs: 0, mind: { mood: null, journal: '', grat: ['', '', ''] }, missions: {} };
 
-  const xp         = computeXP(state);
+  const [sessionXp, setSessionXp] = useState(0);
+  useEffect(() => {
+    function load() {
+      fetch('/api/xp').then(r => r.json()).then(d => setSessionXp(d.total ?? 0)).catch(() => {});
+    }
+    load();
+    window.addEventListener('session-validated', load);
+    return () => window.removeEventListener('session-validated', load);
+  }, []);
+
+  const habitXp    = computeXP(state);
+  const xp         = habitXp + sessionXp;
   const level      = computeLevel(xp);
   const levelTitle = computeLevelTitle(level);
   const streak     = computeStreak(state);
   const phasePct   = computeCheckpointPct(state);
+  const planPct    = Math.min(100, Math.round(xp / XP_PLAN_TARGET * 100));
+  const xpInLevel  = xp % XP_PER_LEVEL;
+  const xpPct      = Math.round((xpInLevel / XP_PER_LEVEL) * 100);
   const mDone      = DAILY.filter(t => !!todayData.missions[t.id]).length;
   const mTotal     = DAILY.length;
   const qDone      = QUESTS.filter(q => !!state.quests[q.id]).length;
@@ -85,7 +100,10 @@ export default function DashboardClient() {
           <div className="widget-cat" style={{ color: '#007AFF' }}>⚡ Niveau</div>
           <div className="widget-val">{level}</div>
           <div className="widget-unit">{levelTitle}</div>
-          <div className="widget-sub">{xp} XP totale</div>
+          <div className="widget-sub">{xp} XP · Niv.{level + 1} dans {XP_PER_LEVEL - xpInLevel} XP</div>
+          <div className="widget-bar">
+            <div className="widget-bar-fill" style={{ width: `${xpPct}%`, background: '#007AFF' }} />
+          </div>
         </div>
         <div className="widget reveal reveal-d2">
           <div className="widget-cat" style={{ color: '#FF9500' }}>📋 Missions</div>
@@ -98,13 +116,13 @@ export default function DashboardClient() {
           </div>
         </div>
         <div className="widget reveal reveal-d3">
-          <div className="widget-cat" style={{ color: '#AF52DE' }}>🏁 Phase 1</div>
+          <div className="widget-cat" style={{ color: '#AF52DE' }}>🏁 Plan 3 ans</div>
           <div className="widget-val">
-            {phasePct}<span className="widget-val-of">%</span>
+            {planPct}<span className="widget-val-of">%</span>
           </div>
-          <div className="widget-unit">checkpoint atteint</div>
+          <div className="widget-unit">vers l&apos;Ironman</div>
           <div className="widget-bar">
-            <div className="widget-bar-fill" style={{ width: `${phasePct}%`, background: '#AF52DE' }} />
+            <div className="widget-bar-fill" style={{ width: `${planPct}%`, background: '#AF52DE' }} />
           </div>
         </div>
       </div>
