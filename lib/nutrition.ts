@@ -172,7 +172,7 @@ export const LUNCHES: MealOption[] = [
       { name: 'Riz jasmin', qty: '80 g', cat: 'Féculents & céréales' },
       { name: 'Carotte', qty: '1 grande', cat: 'Fruits & légumes' },
       { name: 'Gingembre frais', qty: '2 cm', cat: 'Fruits & légumes' },
-      { name: 'Sauce tamari (sans gluten)', qty: '2 cs', cat: 'Épicerie sèche' },
+      { name: 'Sauce tamari', qty: '2 cs', cat: 'Épicerie sèche' },
       { name: 'Huile de sésame', qty: '1 cs', cat: 'Épicerie sèche' },
     ],
   },
@@ -205,7 +205,7 @@ export const LUNCHES: MealOption[] = [
     tip: 'Le bibimbap est naturellement sans lactose et très rassasiant. Économique avec du haché.',
     ingredients: [
       { name: 'Bœuf haché 5%', qty: '130 g', cat: 'Protéines' },
-      { name: 'Riz', qty: '80 g', cat: 'Féculents & céréales' },
+      { name: 'Riz basmati', qty: '80 g', cat: 'Féculents & céréales' },
       { name: 'Épinards frais', qty: 'poignée', cat: 'Fruits & légumes' },
       { name: 'Carotte', qty: '1', cat: 'Fruits & légumes' },
       { name: 'Œufs', qty: '1', cat: 'Frais' },
@@ -230,7 +230,7 @@ export const LUNCHES: MealOption[] = [
     desc: '2 galettes de riz grande taille + 130g poulet effilé + ½ avocat + salade + tomate',
     tip: 'Idéal à emporter. Garder le poulet et l\'avocat séparés jusqu\'au moment de manger.',
     ingredients: [
-      { name: 'Galettes de riz (grandes)', qty: '2', cat: 'Féculents & céréales' },
+      { name: 'Galettes de riz', qty: '2', cat: 'Féculents & céréales' },
       { name: 'Blanc de poulet', qty: '130 g', cat: 'Protéines' },
       { name: 'Avocat', qty: '½', cat: 'Fruits & légumes' },
       { name: 'Salade verte', qty: 'poignée', cat: 'Fruits & légumes' },
@@ -243,7 +243,7 @@ export const LUNCHES: MealOption[] = [
     tip: 'Jour léger ou ventre sensible — très digeste, chaud et réconfortant.',
     ingredients: [
       { name: 'Thon au naturel (boîte)', qty: '120 g', cat: 'Protéines' },
-      { name: 'Riz', qty: '60 g', cat: 'Féculents & céréales' },
+      { name: 'Riz basmati', qty: '60 g', cat: 'Féculents & céréales' },
       { name: 'Carotte', qty: '1', cat: 'Fruits & légumes' },
       { name: 'Courgette', qty: '½', cat: 'Fruits & légumes' },
       { name: 'Gingembre frais', qty: '2 cm', cat: 'Fruits & légumes' },
@@ -306,7 +306,7 @@ export const DINNERS: MealOption[] = [
     desc: '150g steak haché bœuf 5% + 200g patate douce rôtie + salade verte + tomates',
     tip: 'Bien cuire le haché à cœur. La patate douce supporte l\'index glycémique de l\'effort.',
     ingredients: [
-      { name: 'Steak haché bœuf 5%', qty: '150 g', cat: 'Protéines' },
+      { name: 'Bœuf haché 5%', qty: '150 g', cat: 'Protéines' },
       { name: 'Patate douce', qty: '200 g', cat: 'Fruits & légumes' },
       { name: 'Salade verte', qty: 'poignée', cat: 'Fruits & légumes' },
       { name: 'Tomates cerises', qty: '6', cat: 'Fruits & légumes' },
@@ -344,8 +344,8 @@ export const DINNERS: MealOption[] = [
       { name: 'Carotte', qty: '2', cat: 'Fruits & légumes' },
       { name: 'Courgette', qty: '1', cat: 'Fruits & légumes' },
       { name: 'Vert de poireau', qty: '1 tige', cat: 'Fruits & légumes' },
-      { name: 'Tomates', qty: '2', cat: 'Fruits & légumes' },
-      { name: 'Riz', qty: '60 g', cat: 'Féculents & céréales' },
+      { name: 'Tomate', qty: '2', cat: 'Fruits & légumes' },
+      { name: 'Riz basmati', qty: '60 g', cat: 'Féculents & céréales' },
       { name: 'Œufs', qty: '1', cat: 'Frais' },
     ],
   },
@@ -377,8 +377,8 @@ export const SNACKS_AM: MealOption[] = [
     id: 'sam3', label: 'Fruits rouges + 20g noix', kcal: 200, protein: 5,
     desc: '150g fraises ou myrtilles + 20g noix ou amandes',
     ingredients: [
-      { name: 'Fraises ou myrtilles', qty: '150 g', cat: 'Fruits & légumes' },
-      { name: 'Noix ou amandes', qty: '20 g', cat: 'Épicerie sèche' },
+      { name: 'Fraises', qty: '150 g', cat: 'Fruits & légumes' },
+      { name: 'Amandes', qty: '20 g', cat: 'Épicerie sèche' },
     ],
   },
 ];
