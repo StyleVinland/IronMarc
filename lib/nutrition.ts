@@ -532,14 +532,19 @@ function toShopQty(name: string, total: number, unit: QtyUnit): string {
     if (n.includes('courgette'))                        return `${cnt} courgette${cnt > 1 ? 's' : ''}`;
     if (n.includes('avocat'))                           return `${cnt} avocat${cnt > 1 ? 's' : ''}`;
     if (n.includes('poivron'))                          return `${cnt} poivron${cnt > 1 ? 's' : ''}`;
-    if (n.includes('tomate') && !n.includes('cerises')) return `${cnt} tomate${cnt > 1 ? 's' : ''}`;
-    if (n.includes('œuf') || n.includes('oeuf'))        return `${cnt} œuf${cnt > 1 ? 's' : ''}`;
-    if (n.includes('galette'))                          return `${cnt} galettes de riz`;
-    if (n.includes('pain de riz'))                      return '1 pain de riz';
-    if (n.includes('poireau'))                          return `${cnt} poireau${cnt > 1 ? 'x' : ''} (vert uniquement)`;
-    if (n.includes('gingembre'))                        return `1 morceau (~${Math.ceil(total * 2)} cm)`;
-    if (n.includes('sardines'))                         return `${cnt} boîte${cnt > 1 ? 's' : ''} sardines`;
-    if (n.includes('thon'))                             return `${cnt} boîte${cnt > 1 ? 's' : ''} thon`;
+    if (n.includes('cerises')) {
+      const barq = Math.max(1, Math.ceil(total / 20));
+      return `${barq} barquette${barq > 1 ? 's' : ''} 250g`;
+    }
+    if (n.includes('tomate'))                            return `${cnt} tomate${cnt > 1 ? 's' : ''}`;
+    if (n.includes('salade'))                            return '1 sac de salade';
+    if (n.includes('œuf') || n.includes('oeuf'))         return `${cnt} œuf${cnt > 1 ? 's' : ''}`;
+    if (n.includes('galette'))                           return `${cnt} galettes de riz`;
+    if (n.includes('pain de riz'))                       return '1 pain de riz';
+    if (n.includes('poireau'))                           return `${cnt} poireau${cnt > 1 ? 'x' : ''} (vert uniquement)`;
+    if (n.includes('gingembre'))                         return `1 morceau (~${Math.ceil(total * 2)} cm)`;
+    if (n.includes('sardines'))                          return `${cnt} boîte${cnt > 1 ? 's' : ''} sardines`;
+    if (n.includes('thon'))                              return `${cnt} boîte${cnt > 1 ? 's' : ''} thon`;
     return `${cnt}`;
   }
 
