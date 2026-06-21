@@ -96,27 +96,42 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   // ── NATATION ─────────────────────────────────────────────────────────────
 
+  swim_apprivoiser: {
+    id: 'swim_apprivoiser', label: 'Natation — Apprivoiser l\'eau', short: 'Nage',
+    type: 'swim', color: '#007AFF', duration: '20-30 min',
+    desc: 'S1-8 : le bord est ton ami. Respiration d\'abord, distance ensuite. Aucune pression.',
+    exercises: [
+      { name: 'Règle absolue', detail: 'Tu restes TOUJOURS à portée du bord. Si tu paniques → pose les mains sur le bord, expire lentement, attends 30 s. C\'est la bonne décision, pas un échec.', required: true, warning: true },
+      { name: 'Bulles debout', detail: 'Debout en eau peu profonde, penche la tête et souffle lentement par le nez dans l\'eau. Vide les poumons avant de relever la tête. Répète 10 fois. But : apprivoiser le visage dans l\'eau.', sets: '3 séries de 10' },
+      { name: 'Glissée bord → bord', detail: 'Pousse doucement sur le mur, bras tendus, visage dans l\'eau, corps horizontal. Laisse-toi glisser 3-5 m puis reprends pied. Pas de battement obligatoire.', sets: '6 à 8 glissées — arrête avant de paniquer' },
+      { name: 'Battements planche (court)', detail: 'Planche devant, battements pieds, reste collé au bord. Distance = 10-15 m max. Retourne-toi et récupère en tenant le bord. SI tu arrives à faire 25 m → victoire de la séance.', sets: 'S1-2 : 4 × 10 m · S3-4 : 4 × 15 m · S5-6 : 2 × 25 m si possible · S7-8 : 3-4 × 25 m', required: true },
+      { name: 'Respiration rythme', detail: 'En planche : expire dans l\'eau 2 secondes, tourne la tête et inspire vite. Pas besoin de nager loin — juste trouver ce rythme. C\'est ça le plus dur au début.', sets: '' },
+      { name: 'Fin de séance', detail: 'Flotte sur le dos (facile, instinctif) 1 min. Récupère. Chaque séance où tu es entré dans l\'eau est une victoire.', required: true },
+    ],
+  },
+
   swim_debutant: {
     id: 'swim_debutant', label: 'Natation — Débutant', short: 'Nage',
     type: 'swim', color: '#007AFF', duration: '25-35 min',
-    desc: 'S1-8 : technique + respiration. 25 → 200 m. Chaque longueur compte.',
+    desc: 'S9-16 : 25 m planche maîtrisé → premiers 25 m crawl → 100 m total. Bord accessible.',
     exercises: [
-      { name: 'Flottaison ventrale', detail: 'Bras tendus, souffler lentement dans l\'eau, sentir le corps horizontaliser', sets: '4 × 15 m' },
-      { name: 'Battements planche', detail: 'Planche devant, jambes qui battent, petite amplitude, chevilles relâchées', sets: '4 × 25 m' },
-      { name: 'Crawl technique', detail: 'Allure très douce. 1 bras tire → rotation corps → expiration dans l\'eau. PAS de précipitation.', sets: 'S1 : 50 m total · S2 : 75 m · S3 : 100 m · S4-6 : 150 m · S7-8 : 200 m' },
-      { name: 'Récupération', detail: 'Dos crawl ou marche dans l\'eau entre chaque série. Si tu t\'essouffle → ralentis.', required: true },
+      { name: 'Bord toujours accessible', detail: 'Tu nages en longueur côté bord. Chaque fois que tu t\'essouffles ou panique → touche le bord, expire, reprends. C\'est la technique, pas de la faiblesse.', required: true },
+      { name: 'Échauffement planche', detail: 'Battements avec planche, 25 m aller-retour. Expiration dans l\'eau pendant les battements.', sets: '4 × 25 m — récupère en tenant le bord 30 s entre chaque' },
+      { name: 'Premiers crawl courts', detail: 'Sans planche : 10 m de crawl → reprends pied ou tiens le bord → reprends. 1 bras tire, rotation, expire dans l\'eau, inspire côté.', sets: 'S9-10 : 6 × 10 m · S11-12 : 4 × 15 m · S13-14 : 3 × 25 m · S15-16 : 4 × 25 m', required: true },
+      { name: 'Respiration rythmée', detail: 'Tu expires TOUJOURS dans l\'eau (pas en apnée). Règle : expire 2 temps dans l\'eau → tourne tête → inspire 1 temps. Si tu retiens ton souffle = tu paniques plus vite.', sets: '' },
+      { name: 'Retour calme', detail: 'Flotte sur le dos en bout de bassin ou marche dans l\'eau 2 min.', required: true },
     ],
   },
 
   swim_initiation: {
     id: 'swim_initiation', label: 'Natation — Initiation', short: 'Nage',
     type: 'swim', color: '#007AFF', duration: '35-45 min',
-    desc: 'S9-16 : construire 200-400 m continus. Technique bras + respiration bilatérale.',
+    desc: 'S17-30 : enchaîner 50 m → 200 m. Confiance croissante, s\'éloigner progressivement du bord.',
     exercises: [
-      { name: 'Échauffement', detail: '100 m dos crawl ou 4 × 25 m crawl technique lent', required: true },
-      { name: 'Drills bras', detail: 'Catch-up drill : un bras tire pendant que l\'autre attend devant. Sentir la traction.', sets: '4 × 25 m' },
-      { name: 'Crawl progressif', detail: 'Allure douce → légèrement soutenue. Expiration complète dans l\'eau.', sets: 'S9-10 : 4 × 50 m (30 s repos) · S11-12 : 3 × 75 m · S13-14 : 2 × 100 m · S15-16 : 200 m continu' },
-      { name: 'Objectif S16', detail: 'Nager 200 m sans s\'arrêter à allure conversation. Tu y es.', required: true },
+      { name: 'Échauffement', detail: '4 × 25 m crawl lent, récupère en tenant le bord entre chaque', required: true },
+      { name: 'Crawl enchaîné', detail: 'Nager sans t\'arrêter, bord accessible mais sans le toucher sauf urgence. Allure très lente — tu dois pouvoir expirer régulièrement.', sets: 'S17-18 : 4 × 50 m (30 s repos) · S19-22 : 3 × 75 m · S23-26 : 2 × 100 m · S27-30 : 200 m continu' },
+      { name: 'Drill bras (catch-up)', detail: 'Un bras attend devant pendant que l\'autre tire — sentiment de flotter. Ralentit le rythme et force l\'expiration complète.', sets: '2 × 25 m en drill' },
+      { name: 'Objectif S30', detail: 'Nager 200 m sans toucher le bord. Tu seras prêt pour le premier 400 m en Phase 2A.', required: true },
     ],
   },
 
@@ -472,14 +487,15 @@ export const PHASES: ProgramPhase[] = [
     label: 'Phase 1A — Fondations',
     weeks: [1, 4],
     tagline: 'Bâtir les bases sans solliciter les blessures',
-    focus: ['Renfo A+B', 'Technique nage (25-100 m)', 'Vélo 20-30 min appart.', 'Zéro course'],
+    focus: ['Renfo A+B', 'Apprivoiser l\'eau — rester au bord', 'Vélo 20-30 min appart.', 'Zéro course'],
     template: {
-      lun: 'renfo_a', mar: 'swim_debutant', mer: 'renfo_b',
-      jeu: 'bike_stationnaire', ven: 'renfo_a', sam: 'swim_debutant', dim: 'rest',
+      lun: 'renfo_a', mar: 'swim_apprivoiser', mer: 'renfo_b',
+      jeu: 'bike_stationnaire', ven: 'renfo_a', sam: 'swim_apprivoiser', dim: 'rest',
     },
     notes: [
       'Zéro course à pied — le tibia et l\'aine doivent se reconditionner en premier.',
-      'Nage : 1 longueur après l\'autre, peu importe la distance totale.',
+      'Nage : objectif = entrer dans l\'eau et souffler dedans. La distance ne compte pas encore.',
+      'Panique = pose les mains sur le bord, expire, attends. C\'est toujours la bonne décision.',
       'Vélo appartement : jamais douloureux à l\'aine. Baisser résistance si besoin.',
     ],
   },
@@ -488,14 +504,14 @@ export const PHASES: ProgramPhase[] = [
     label: 'Phase 1B — Marche',
     weeks: [5, 8],
     tagline: 'Marche si les tibias sont silencieux',
-    focus: ['Marche 20-30 min', 'Nage 100-200 m', 'Vélo 30 min', 'Renfo A+B'],
+    focus: ['Marche 20-30 min', 'Nage : 25 m planche régulier', 'Vélo 30 min', 'Renfo A+B'],
     template: {
-      lun: 'renfo_a', mar: 'swim_debutant', mer: 'renfo_b',
-      jeu: 'bike_stationnaire', ven: 'marche', sam: 'swim_debutant', dim: 'rest',
+      lun: 'renfo_a', mar: 'swim_apprivoiser', mer: 'renfo_b',
+      jeu: 'bike_stationnaire', ven: 'marche', sam: 'swim_apprivoiser', dim: 'rest',
     },
     notes: [
       'Critère marche : marcher 20 min au quotidien sans douleur tibiale depuis 1 semaine.',
-      'Si les tibias protestent → garder renfo B vendredi et patienter.',
+      'Nage : si 25 m planche devient facile et régulier → tu es prêt pour la Phase 1C.',
       'Copenhagen : passer au niveau 2 (jambe plus tendue sur le bord).',
     ],
   },
@@ -504,15 +520,15 @@ export const PHASES: ProgramPhase[] = [
     label: 'Phase 1C — Run/Walk',
     weeks: [9, 16],
     tagline: '1 min course / 2 min marche — ultra-progressif',
-    focus: ['Run/walk 1:2 → 2:1', 'Nage 200-400 m', 'Vélo 40 min', 'Renfo maintien'],
+    focus: ['Run/walk 1:2 → 2:1', 'Premiers crawl 10-25 m', 'Vélo 40 min', 'Renfo maintien'],
     template: {
-      lun: 'renfo_a', mar: 'swim_initiation', mer: 'marche_course',
-      jeu: 'bike_stationnaire', ven: 'renfo_b', sam: 'swim_initiation', dim: 'rest',
+      lun: 'renfo_a', mar: 'swim_debutant', mer: 'marche_course',
+      jeu: 'bike_stationnaire', ven: 'renfo_b', sam: 'swim_debutant', dim: 'rest',
     },
     notes: [
       'Critère course : marcher 30 min sans douleur → alors seulement démarrer les intervalles.',
       'Douleur tibiale le lendemain → semaine entière en marche pure. Pas de négociation.',
-      'Nage : viser 200 m continus en fin de phase (S16).',
+      'Nage : 25 m planche acquis → premiers crawl 10-25 m. Viser 100 m crawl total en fin de phase.',
     ],
   },
 
@@ -522,10 +538,10 @@ export const PHASES: ProgramPhase[] = [
     label: 'Phase 2A — Course progressive',
     weeks: [17, 30],
     tagline: 'Construire jusqu\'à 10 min de course continue — 3,5 mois',
-    focus: ['Run/walk → 10 min continus', 'Nage 400-600 m', 'Vélo route 45-60 min', '2 courses/sem'],
+    focus: ['Run/walk → 10 min continus', 'Nage 50-200 m crawl enchaîné', 'Vélo route 45-60 min', '2 courses/sem'],
     template: {
-      lun: 'renfo_core', mar: 'swim_base', mer: 'marche_course',
-      jeu: 'bike_court', ven: 'marche_course', sam: 'swim_base', dim: 'rest',
+      lun: 'renfo_core', mar: 'swim_initiation', mer: 'marche_course',
+      jeu: 'bike_court', ven: 'marche_course', sam: 'swim_initiation', dim: 'rest',
     },
     notes: [
       'Basculer sur vélo de route dès que disponible (mois 4-5).',
