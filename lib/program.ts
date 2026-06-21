@@ -98,15 +98,15 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   swim_apprivoiser: {
     id: 'swim_apprivoiser', label: 'Natation — Apprivoiser l\'eau', short: 'Nage',
-    type: 'swim', color: '#007AFF', duration: '20-30 min',
-    desc: 'S1-8 : le bord est ton ami. Respiration d\'abord, distance ensuite. Aucune pression.',
+    type: 'swim', color: '#007AFF', duration: '25-35 min',
+    desc: 'S1-8 : crawl court dès le début, toujours près du bord. Répéter = la seule façon de dompter la panique.',
     exercises: [
-      { name: 'Règle absolue', detail: 'Tu restes TOUJOURS à portée du bord. Si tu paniques → pose les mains sur le bord, expire lentement, attends 30 s. C\'est la bonne décision, pas un échec.', required: true, warning: true },
-      { name: 'Bulles debout', detail: 'Debout en eau peu profonde, penche la tête et souffle lentement par le nez dans l\'eau. Vide les poumons avant de relever la tête. Répète 10 fois. But : apprivoiser le visage dans l\'eau.', sets: '3 séries de 10' },
-      { name: 'Glissée bord → bord', detail: 'Pousse doucement sur le mur, bras tendus, visage dans l\'eau, corps horizontal. Laisse-toi glisser 3-5 m puis reprends pied. Pas de battement obligatoire.', sets: '6 à 8 glissées — arrête avant de paniquer' },
-      { name: 'Battements planche (court)', detail: 'Planche devant, battements pieds, reste collé au bord. Distance = 10-15 m max. Retourne-toi et récupère en tenant le bord. SI tu arrives à faire 25 m → victoire de la séance.', sets: 'S1-2 : 4 × 10 m · S3-4 : 4 × 15 m · S5-6 : 2 × 25 m si possible · S7-8 : 3-4 × 25 m', required: true },
-      { name: 'Respiration rythme', detail: 'En planche : expire dans l\'eau 2 secondes, tourne la tête et inspire vite. Pas besoin de nager loin — juste trouver ce rythme. C\'est ça le plus dur au début.', sets: '' },
-      { name: 'Fin de séance', detail: 'Flotte sur le dos (facile, instinctif) 1 min. Récupère. Chaque séance où tu es entré dans l\'eau est une victoire.', required: true },
+      { name: 'Règle du bord', detail: 'Tu nages EN LONGUEUR côté bord (pas en travers). À tout moment tu peux tendre le bras et toucher le mur. Si la panique monte → attrape le bord, expire longuement, reprends quand tu veux. Ce n\'est pas un échec — c\'est la technique.', required: true, warning: true },
+      { name: 'Échauffement souffle', detail: 'Debout, menton à la surface : expire par le nez dans l\'eau, tourne la tête pour inspirer. Trouver ce rythme AVANT de nager. 1 min debout dans l\'eau.', sets: '' },
+      { name: 'Planche × 2', detail: 'Battements avec planche, longueur côté bord. Expire dans l\'eau, inspire côté. Récupère en tenant le bord entre chaque.', sets: '2 × 25 m (ou 2 allers-retours de 12,5 m si 25 m encore difficile)' },
+      { name: 'Crawl court — le cœur de séance', detail: 'Crawl sans planche, toujours côté bord. Nage 10-15 m → tiens le bord 20 s → repart. Si tu arrives à 15 m → tente 20 m la séance suivante. Si tu paniques à 8 m → parfait, la prochaine fois tu tiendras 10 m. C\'est comme ça que ça marche.', sets: 'S1-2 : 6 × 10 m · S3-4 : 5 × 15 m · S5-6 : 4 × 20 m · S7-8 : 4 × 25 m', required: true },
+      { name: 'Respiration crawl', detail: 'Expire TOUJOURS dans l\'eau (pas en apnée). Règle simple : tête dans l\'eau = expire par le nez/bouche → rotation tête = inspire vite. Retenir son souffle = panique garantie.', sets: '' },
+      { name: 'Fin', detail: 'Dos crawl 25 m (plus facile — visage hors de l\'eau). Récupère. Chaque séance ajoute de la confiance même si tu ne le sens pas encore.', required: true },
     ],
   },
 
