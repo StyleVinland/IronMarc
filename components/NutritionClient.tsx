@@ -301,6 +301,9 @@ export default function NutritionClient() {
                           <input type="checkbox" checked={checked} onChange={() => toggleCheck(key)} />
                           <span className="nutri-shop-name">{item.name}</span>
                           <span className="nutri-shop-occ">{item.shopQty}</span>
+                          {item.priceEst > 0 && (
+                            <span className="nutri-shop-price">~{item.priceEst.toFixed(2).replace('.', ',')} €</span>
+                          )}
                         </label>
                       );
                     })}
@@ -308,6 +311,28 @@ export default function NutritionClient() {
                 );
               })}
             </div>
+
+            {/* Total estimé */}
+            {(() => {
+              const total = SHOP_ORDER.flatMap(c => shopList[c]).reduce((s, i) => s + i.priceEst, 0);
+              if (total === 0) return null;
+              const superU = Math.round(total * 1.15 * 100) / 100;
+              return (
+                <div className="nutri-shop-total">
+                  <div className="nutri-shop-total-row">
+                    <span className="nutri-shop-total-label">🛒 Total estimé Lidl</span>
+                    <span className="nutri-shop-total-val">~{total.toFixed(2).replace('.', ',')} €</span>
+                  </div>
+                  <div className="nutri-shop-total-row nutri-shop-total-alt">
+                    <span className="nutri-shop-total-label">Super U</span>
+                    <span className="nutri-shop-total-val">~{superU.toFixed(2).replace('.', ',')} € <span className="nutri-shop-total-note">(+15%)</span></span>
+                  </div>
+                  <div className="nutri-shop-total-note-full">
+                    Prix Lidl France juin 2026. Les condiments (tamari, huile…) ne sont pas comptés car ils durent plusieurs semaines.
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         )}
       </section>

@@ -512,10 +512,11 @@ function parseIngQty(raw: string): { value: number; unit: QtyUnit } {
   if (u === 'g') return { value: val, unit: 'g' };
   if (u === 'ml') return { value: val, unit: 'ml' };
   const rest = s.slice(m[0].length).trim().toLowerCase();
-  // cs/cc → other (condiments, gérés à part)
-  if (rest === 'cs' || rest === 'cc' || rest === 'pincée' || rest === 'branche' || rest === 'tige') {
+  // cs/cc/pincée/branche → condiments non mesurables (au besoin)
+  if (rest === 'cs' || rest === 'cc' || rest === 'pincée' || rest === 'branche') {
     return { value: val, unit: 'other' };
   }
+  // tige/pot/tranche(s) → traités comme des unités countables
   return { value: val, unit: 'count' };
 }
 
@@ -577,10 +578,78 @@ function toShopQty(name: string, total: number, unit: QtyUnit): string {
   return 'au besoin';
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// PRIX LIDL FRANCE (juin 2026) — price: €/unité d'achat, per: qté couverte
+// Source : Lidl.fr, blog.ekip.app/prix-des-aliments-en-2026, combien-coute.net
+// ─────────────────────────────────────────────────────────────────────────────
+
+const UNIT_PRICES: Record<string, { price: number; per: number }> = {
+  // Fruits & légumes — au pièce (count)
+  'avocat':                        { price: 1.00, per: 1 },
+  'banane':                        { price: 0.50, per: 1 },
+  'carotte':                       { price: 0.40, per: 1 },
+  'citron':                        { price: 0.55, per: 1 },
+  'courgette':                     { price: 1.10, per: 1 },
+  'kiwi':                          { price: 0.45, per: 1 },
+  'orange':                        { price: 0.55, per: 1 },
+  'poivron rouge':                 { price: 1.50, per: 1 },
+  'tomate':                        { price: 0.85, per: 1 },
+  'tomates cerises':               { price: 1.29, per: 20 }, // ~20 cerises/barquette 250g
+  'salade verte':                  { price: 1.45, per: 1 },
+  'gingembre frais':               { price: 1.20, per: 10 }, // morceau ~10cm
+  'vert de poireau':               { price: 1.00, per: 1 },
+  // Fruits & légumes — au poids (g)
+  'épinards frais':                { price: 2.20, per: 200 },
+  'fraises':                       { price: 3.50, per: 250 },
+  'myrtilles':                     { price: 2.50, per: 125 },
+  'haricots verts':                { price: 2.50, per: 500 },
+  'patate douce':                  { price: 1.80, per: 400 },
+  'pommes de terre':               { price: 4.20, per: 2500 },
+  // Protéines — au poids (g)
+  'blanc de poulet':               { price: 5.50, per: 500 },
+  'bœuf haché 5%':                 { price: 4.50, per: 300 },
+  'crevettes décortiquées':        { price: 4.50, per: 400 },
+  'cuisses de poulet':             { price: 3.50, per: 600 },
+  'dinde hachée':                  { price: 3.50, per: 300 },
+  'filet de cabillaud':            { price: 3.50, per: 200 },
+  'filet de porc':                 { price: 4.00, per: 400 },
+  'filet de saumon':               { price: 5.50, per: 200 },
+  'saumon fumé':                   { price: 3.90, per: 100 },
+  'sardines à l\'huile (boîte)':   { price: 1.30, per: 90  },
+  'thon au naturel (boîte)':       { price: 1.80, per: 140 },
+  // Féculents — au poids (g) ou pièce (count)
+  'flocons d\'avoine':             { price: 1.50, per: 500  },
+  'galettes de riz':               { price: 1.99, per: 10  }, // ~10/paquet
+  'nouilles de riz':               { price: 2.50, per: 250  },
+  'pain de riz':                   { price: 3.50, per: 8   }, // 8 tranches/pain
+  'pâtes de riz':                  { price: 2.50, per: 250  },
+  'quinoa':                        { price: 3.50, per: 500  },
+  'riz basmati':                   { price: 2.79, per: 1000 },
+  'riz jasmin':                    { price: 2.50, per: 500  },
+  'riz soufflé':                   { price: 2.20, per: 300  },
+  // Frais — ml ou count
+  'lait d\'avoine':                { price: 1.89, per: 1000 },
+  'lait d\'amande':                { price: 1.89, per: 1000 },
+  'œufs':                          { price: 3.15, per: 6   },
+  // Épicerie sèche quantifiable
+  'amandes':                       { price: 2.00, per: 150  },
+  'compote de pommes':             { price: 0.99, per: 1   },
+};
+
+function computeIngredientPrice(name: string, total: number, unit: QtyUnit): number {
+  const entry = UNIT_PRICES[name.toLowerCase()];
+  if (!entry) return 0;
+  const units = Math.max(1, Math.ceil(total / entry.per));
+  return Math.round(units * entry.price * 100) / 100;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 export interface ShoppingItem {
   name: string;
   cat: ShopCat;
   shopQty: string;
+  priceEst: number; // € Lidl estimé pour la semaine (0 = condiment au stock)
 }
 
 export function getWeekShoppingList(dayPlans: DayNutrition[]): Record<ShopCat, ShoppingItem[]> {
@@ -620,6 +689,7 @@ export function getWeekShoppingList(dayPlans: DayNutrition[]): Record<ShopCat, S
       name: accum.name,
       cat: accum.cat,
       shopQty: toShopQty(accum.name, accum.value, accum.unit),
+      priceEst: computeIngredientPrice(accum.name, accum.value, accum.unit),
     });
   }
 
