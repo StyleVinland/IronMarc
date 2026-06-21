@@ -6,6 +6,7 @@ import type { WeekDay, ProgramPhase } from '@/lib/program';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import DebriefPanel from './DebriefPanel';
 import StravaPanel from './StravaPanel';
+import SessionsChart from './SessionsChart';
 
 const MONTHS_FR = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
   'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
@@ -317,6 +318,11 @@ export default function EntrainementClient() {
       {/* ── STRAVA ── */}
       <div className="reveal">
         <StravaPanel />
+      </div>
+
+      {/* ── SÉANCES / SEMAINE ── */}
+      <div className="reveal">
+        <SessionsChart />
       </div>
 
       {/* ── FEUILLE DE ROUTE ── */}

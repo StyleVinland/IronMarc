@@ -377,7 +377,15 @@ section { margin-top: clamp(20px, 3vw, 32px); }
 
 /* ── CHARTS ──────────────────────────────────────────────────────── */
 .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.charts-grid-single { grid-template-columns: 1fr; }
 @media (max-width: 500px) { .charts-grid { grid-template-columns: 1fr; } }
+.chart-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.chart-title-row .chart-title { margin-bottom: 0; }
+.sessions-chart-totals { display: flex; gap: 10px; align-items: center; }
+.sessions-chart-count { font-size: 11px; color: var(--muted); }
+.sessions-chart-xp { font-size: 11px; font-weight: 700; color: #C8920A; }
+.sessions-chart-empty { font-size: 13px; color: var(--muted); text-align: center; padding: 24px 0; font-style: italic; }
+.sessions-chart-section { margin-top: clamp(24px, 3vw, 40px); }
 .chart-card {
   background: var(--surface); border-radius: 16px;
   box-shadow: var(--shadow-sm); padding: 18px;

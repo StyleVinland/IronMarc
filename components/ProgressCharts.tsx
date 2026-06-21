@@ -102,7 +102,6 @@ function drawBars(
 
 export default function ProgressCharts({ days }: Props) {
   const cigRef = useRef<HTMLCanvasElement>(null);
-  const sesRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     function draw() {
@@ -115,27 +114,9 @@ export default function ProgressCharts({ days }: Props) {
         cigV.push(days[k]?.cigs ?? 0);
       }
       if (cigRef.current) drawBars(cigRef.current, cigL, cigV, '#FF3B30', '#FF950088', Math.max(...cigV, 5), 150);
-
-      const sesL: string[] = [], sesV: number[] = [];
-      const now = new Date();
-      const dow = (now.getDay() + 6) % 7;
-      const ws0 = new Date(now); ws0.setDate(ws0.getDate() - dow);
-      for (let w = 5; w >= 0; w--) {
-        const ws = new Date(ws0); ws.setDate(ws.getDate() - w * 7);
-        let s = 0;
-        for (let d = 0; d < 7; d++) {
-          const wd = new Date(ws); wd.setDate(wd.getDate() + d);
-          if (wd > now) break;
-          if (days[wd.toLocaleDateString('fr-CA')]?.missions?.move) s++;
-        }
-        sesL.push(`S${6 - w}`); sesV.push(s);
-      }
-      if (sesRef.current) drawBars(sesRef.current, sesL, sesV, '#34C759', null, 7, 150);
     }
 
     draw();
-
-    // Redessine quand le thème bascule
     const obs = new MutationObserver(draw);
     obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     return () => obs.disconnect();
@@ -143,8 +124,8 @@ export default function ProgressCharts({ days }: Props) {
 
   return (
     <section>
-      <div className="shead"><h2>Progression</h2><span className="hint">14 derniers jours</span></div>
-      <div className="charts-grid">
+      <div className="shead"><h2>Cigarettes</h2><span className="hint">14 derniers jours</span></div>
+      <div className="charts-grid charts-grid-single">
         <div className="chart-card">
           <div className="chart-title">Cigarettes / jour</div>
           <div className="chart-legend">
@@ -152,13 +133,6 @@ export default function ProgressCharts({ days }: Props) {
             <span className="legend-item"><span className="legend-dot" style={{ background: '#FF9500', opacity: .7 }} />tendance</span>
           </div>
           <canvas className="chart-canvas" ref={cigRef} aria-label="Graphique cigarettes par jour" />
-        </div>
-        <div className="chart-card">
-          <div className="chart-title">Séances / semaine</div>
-          <div className="chart-legend">
-            <span className="legend-item"><span className="legend-dot" style={{ background: '#34C759' }} />jours actifs</span>
-          </div>
-          <canvas className="chart-canvas" ref={sesRef} aria-label="Graphique séances par semaine" />
         </div>
       </div>
     </section>
