@@ -67,23 +67,23 @@ function Lightbox({ items, idx, onClose, onNav, onRemove }: {
         </button>
 
         <div className="lb-center">
+          {/* Média + légende superposée en bas */}
           <div className="lb-media">
             {isVideo
               ? <video src={src} controls autoPlay className="lb-img" />
               : <img src={src} alt={item.note || item.originalName} className="lb-img" />
             }
-          </div>
-          <div className="lb-info">
-            <span className="lb-date">{fmtDate(item.date)}</span>
-            {item.note && <span className="lb-note">{item.note}</span>}
-            {items.length > 1 && <span className="lb-counter">{idx + 1} / {items.length}</span>}
-            <div className="lb-actions">
-              <a className="lb-dl" href={src} download={item.originalName} onClick={e => e.stopPropagation()}>
-                Télécharger
-              </a>
-              <button className="lb-del" onClick={e => { e.stopPropagation(); onRemove(item.id); }}>
-                Supprimer
-              </button>
+            {/* Légende sur fond dégradé, toujours lisible */}
+            <div className="lb-caption">
+              <div className="lb-caption-left">
+                <span className="lb-date">{fmtDate(item.date)}</span>
+                {item.note && <span className="lb-note">{item.note}</span>}
+              </div>
+              <div className="lb-caption-right">
+                {items.length > 1 && <span className="lb-counter">{idx + 1} / {items.length}</span>}
+                <a className="lb-dl" href={src} download={item.originalName} onClick={e => e.stopPropagation()}>↓</a>
+                <button className="lb-del" onClick={e => { e.stopPropagation(); onRemove(item.id); }}>✕</button>
+              </div>
             </div>
           </div>
         </div>
