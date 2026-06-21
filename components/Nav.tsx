@@ -1,8 +1,11 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { computeXP, computeLevel, computeLevelTitle, computeStreak, computeCheckpointPct } from '@/lib/compute';
+import { useState, useEffect } from 'react';
+import { computeLevel, computeLevelTitle, computeStreak } from '@/lib/compute';
 import { useAppState } from './AppStateProvider';
+
+const XP_PLAN_TARGET = 15000; // XP total pour finir le plan Ironman 3 ans
 
 // ── Icons pour la bottom nav mobile ─────────────────────────────────
 const IconDashboard = () => (
@@ -64,12 +67,21 @@ const NAV_ITEMS = [
 export default function Nav() {
   const pathname = usePathname();
   const { state } = useAppState();
+  const [sessionXp, setSessionXp] = useState(0);
 
-  const xp     = computeXP(state);
-  const level  = computeLevel(xp);
-  const title  = computeLevelTitle(level);
-  const streak = computeStreak(state);
-  const cpPct  = computeCheckpointPct(state);
+  useEffect(() => {
+    function load() {
+      fetch('/api/xp').then(r => r.json()).then(d => setSessionXp(d.total ?? 0)).catch(() => {});
+    }
+    load();
+    window.addEventListener('session-validated', load);
+    return () => window.removeEventListener('session-validated', load);
+  }, []);
+
+  const streak  = computeStreak(state);
+  const level   = computeLevel(sessionXp);
+  const title   = computeLevelTitle(level);
+  const planPct = Math.min(100, Math.round(sessionXp / XP_PLAN_TARGET * 100));
 
   return (
     <>
@@ -80,7 +92,7 @@ export default function Nav() {
           {/* Logo */}
           <Link href="/" className="topnav-brand">
             <span className="topnav-logo">IronMarc</span>
-            <span className="topnav-sub">Niv. {level} · {title}</span>
+            <span className="topnav-sub">Niv.{level} · {title}</span>
           </Link>
 
           {/* Liens de navigation — desktop */}
@@ -98,15 +110,15 @@ export default function Nav() {
           {/* Stats rapides — desktop */}
           <div className="topnav-stats">
             <span className="topnav-pill tide">🔥 {streak}j</span>
-            <span className="topnav-pill dawn">⚡ Niv.{level}</span>
-            <span className="topnav-pill purple">{cpPct}%</span>
+            <span className="topnav-pill dawn">⚡ {sessionXp} XP</span>
+            <span className="topnav-pill purple" title="% du plan Ironman 3 ans accompli">{planPct}%</span>
           </div>
 
         </div>
 
-        {/* Barre de progression Phase 1 */}
+        {/* Barre de progression plan 3 ans */}
         <div className="topnav-progress-bar">
-          <div className="topnav-progress-fill" style={{ width: `${cpPct}%` }} />
+          <div className="topnav-progress-fill" style={{ width: `${planPct}%` }} />
         </div>
       </header>
 

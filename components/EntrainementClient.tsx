@@ -129,6 +129,7 @@ export default function EntrainementClient() {
   const [sessionDone, setSessionDone] = useState<{ xp: number } | null>(null);
   const [showExercises, setShowExercises] = useState(false);
   const [validating, setValidating] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const refreshXp = () => fetch('/api/xp').then(r => r.json()).then(setTotalXp).catch(() => {});
 
@@ -177,7 +178,9 @@ export default function EntrainementClient() {
     setSessionDone({ xp });
     setShowExercises(false);
     setValidating(false);
+    setRefreshKey(k => k + 1);
     refreshXp();
+    window.dispatchEvent(new Event('session-validated'));
   }
 
   function handleWeekChange(delta: number) {
@@ -412,7 +415,7 @@ export default function EntrainementClient() {
 
       {/* ── SÉANCES / SEMAINE ── */}
       <div className="reveal">
-        <SessionsChart />
+        <SessionsChart refreshKey={refreshKey} />
       </div>
 
       {/* ── FEUILLE DE ROUTE ── */}

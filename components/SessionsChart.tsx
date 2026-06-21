@@ -61,7 +61,7 @@ function drawBars(canvas: HTMLCanvasElement, labels: string[], vals: number[], x
   });
 }
 
-export default function SessionsChart() {
+export default function SessionsChart({ refreshKey }: { refreshKey?: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [weekly, setWeekly] = useState<WeekData[]>([]);
   const [total, setTotal]   = useState(0);
@@ -73,7 +73,7 @@ export default function SessionsChart() {
       setTotal(d.total ?? 0);
       setCount(d.count ?? 0);
     }).catch(() => {});
-  }, []);
+  }, [refreshKey]);
 
   useEffect(() => {
     if (!canvasRef.current || weekly.length === 0) return;
