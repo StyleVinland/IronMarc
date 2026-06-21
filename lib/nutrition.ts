@@ -74,31 +74,31 @@ export interface DayNutrition {
 
 export const BREAKFASTS: MealOption[] = [
   {
-    id: 'b1', label: 'Porridge avoine banane', kcal: 420, protein: 10,
-    desc: '60g flocons avoine + 200ml lait avoine + 1 banane',
+    id: 'b1', label: 'Porridge avoine banane', kcal: 510, protein: 17,
+    desc: '80g flocons avoine + 200ml lait avoine + 1 banane',
     tip: 'Batch : préparer la base avoine/lait pour 3 jours au frigo — réchauffer 1 min au micro avec la banane.',
     ingredients: [
-      { name: 'Flocons d\'avoine', qty: '60 g', cat: 'Féculents & céréales' },
+      { name: 'Flocons d\'avoine', qty: '80 g', cat: 'Féculents & céréales' },
       { name: 'Lait d\'avoine', qty: '200 ml', cat: 'Frais' },
       { name: 'Banane', qty: '1', cat: 'Fruits & légumes' },
     ],
   },
   {
-    id: 'b2', label: 'Œufs brouillés + riz + pomme', kcal: 430, protein: 17,
-    desc: '2 œufs brouillés + 60g riz basmati (du batch) + 1 pomme',
+    id: 'b2', label: 'Œufs brouillés + riz + pomme', kcal: 520, protein: 19,
+    desc: '2 œufs brouillés + 80g riz basmati (du batch) + 1 pomme',
     tip: 'Option protéinée pour les matins d\'entraînement. Le riz précuit réchauffe en 1 min.',
     ingredients: [
       { name: 'Œufs', qty: '2', cat: 'Frais' },
-      { name: 'Riz basmati', qty: '60 g', cat: 'Féculents & céréales' },
+      { name: 'Riz basmati', qty: '80 g', cat: 'Féculents & céréales' },
       { name: 'Pomme', qty: '1', cat: 'Fruits & légumes' },
     ],
   },
   {
-    id: 'b3', label: 'Porridge avoine + 2 œufs durs + banane', kcal: 460, protein: 20,
-    desc: '50g flocons avoine + 200ml lait avoine + 2 œufs durs (cuits la veille) + 1 banane',
+    id: 'b3', label: 'Porridge avoine + 2 œufs durs + banane', kcal: 620, protein: 27,
+    desc: '70g flocons avoine + 200ml lait avoine + 2 œufs durs (cuits la veille) + 1 banane',
     tip: 'Faire cuire 6 œufs durs le dimanche — ils se gardent 5 jours et accélèrent tous les petits-déjeuners.',
     ingredients: [
-      { name: 'Flocons d\'avoine', qty: '50 g', cat: 'Féculents & céréales' },
+      { name: 'Flocons d\'avoine', qty: '70 g', cat: 'Féculents & céréales' },
       { name: 'Lait d\'avoine', qty: '200 ml', cat: 'Frais' },
       { name: 'Œufs', qty: '2', cat: 'Frais' },
       { name: 'Banane', qty: '1', cat: 'Fruits & légumes' },
@@ -112,12 +112,12 @@ export const BREAKFASTS: MealOption[] = [
 
 export const LUNCHES: MealOption[] = [
   {
-    id: 'l1', label: 'Thon riz salade (ultra-rapide)', kcal: 510, protein: 43,
-    desc: '1 boîte thon naturel (140g) + 80g riz basmati + 1 tomate + poignée salade + ½ citron + huile olive',
+    id: 'l1', label: 'Thon riz salade (ultra-rapide)', kcal: 670, protein: 43,
+    desc: '1 boîte thon naturel (140g) + 100g riz basmati + 1 tomate + poignée salade + ½ citron + huile olive',
     tip: '3 min si le riz est cuit. La formule la moins chère avec la meilleure densité protéique.',
     ingredients: [
       { name: 'Thon au naturel (boîte)', qty: '140 g égoutté', cat: 'Protéines' },
-      { name: 'Riz basmati', qty: '80 g', cat: 'Féculents & céréales' },
+      { name: 'Riz basmati', qty: '100 g', cat: 'Féculents & céréales' },
       { name: 'Tomate', qty: '1', cat: 'Fruits & légumes' },
       { name: 'Salade verte', qty: 'poignée', cat: 'Fruits & légumes' },
       { name: 'Citron', qty: '½', cat: 'Fruits & légumes' },
@@ -125,46 +125,46 @@ export const LUNCHES: MealOption[] = [
     ],
   },
   {
-    id: 'l2', label: 'Riz poulet carotte (batch)', kcal: 530, protein: 40,
-    desc: '150g cuisses poulet effilées (du batch) + 80g riz + 1 carotte sautée + herbes + citron',
+    id: 'l2', label: 'Riz poulet carotte (batch)', kcal: 660, protein: 45,
+    desc: '180g cuisses poulet effilées (du batch) + 100g riz + 1 carotte sautée + herbes + citron',
     tip: 'Cuire 600g de cuisses le dimanche — effilocher froid, conserver 4 jours au frigo.',
     ingredients: [
-      { name: 'Cuisses de poulet', qty: '150 g', cat: 'Protéines' },
-      { name: 'Riz basmati', qty: '80 g', cat: 'Féculents & céréales' },
+      { name: 'Cuisses de poulet', qty: '180 g', cat: 'Protéines' },
+      { name: 'Riz basmati', qty: '100 g', cat: 'Féculents & céréales' },
       { name: 'Carotte', qty: '1', cat: 'Fruits & légumes' },
       { name: 'Citron', qty: '½', cat: 'Fruits & légumes' },
       { name: 'Herbes de Provence', qty: '1 cc', cat: 'Épicerie sèche' },
     ],
   },
   {
-    id: 'l3', label: 'Sardines riz épinards (le moins cher)', kcal: 550, protein: 36,
-    desc: '2 boîtes sardines (90g) + 80g riz + 80g épinards surgelés décongelés + ½ citron',
+    id: 'l3', label: 'Sardines riz épinards (le moins cher)', kcal: 620, protein: 36,
+    desc: '2 boîtes sardines (90g) + 100g riz + 80g épinards surgelés décongelés + ½ citron',
     tip: 'Le repas le moins cher (~1,60€) et pourtant l\'un des plus riches en oméga-3 et calcium.',
     ingredients: [
       { name: 'Sardines à l\'huile (boîte)', qty: '2 × 90 g', cat: 'Protéines' },
-      { name: 'Riz basmati', qty: '80 g', cat: 'Féculents & céréales' },
+      { name: 'Riz basmati', qty: '100 g', cat: 'Féculents & céréales' },
       { name: 'Épinards surgelés', qty: '80 g', cat: 'Fruits & légumes' },
       { name: 'Citron', qty: '½', cat: 'Fruits & légumes' },
     ],
   },
   {
-    id: 'l4', label: 'Bowl bœuf haché carotte tamari', kcal: 560, protein: 37,
-    desc: '130g bœuf haché poêlé + 80g riz + 1 carotte râpée + sauce tamari',
+    id: 'l4', label: 'Bowl bœuf haché carotte tamari', kcal: 700, protein: 44,
+    desc: '160g bœuf haché poêlé + 100g riz + 1 carotte râpée + sauce tamari',
     tip: 'Cuire le haché 4 min à feu vif. La sauce tamari remplace avantageusement la sauce soja.',
     ingredients: [
-      { name: 'Bœuf haché', qty: '130 g', cat: 'Protéines' },
-      { name: 'Riz basmati', qty: '80 g', cat: 'Féculents & céréales' },
+      { name: 'Bœuf haché', qty: '160 g', cat: 'Protéines' },
+      { name: 'Riz basmati', qty: '100 g', cat: 'Féculents & céréales' },
       { name: 'Carotte', qty: '1', cat: 'Fruits & légumes' },
       { name: 'Sauce tamari', qty: '1 cs', cat: 'Épicerie sèche' },
     ],
   },
   {
-    id: 'l5', label: 'Maquereau riz courgette (oméga-3 budget)', kcal: 490, protein: 33,
-    desc: '1 boîte maquereau au naturel (125g) + 80g riz + 1 courgette vapeur + herbes + citron',
+    id: 'l5', label: 'Maquereau riz courgette (oméga-3 budget)', kcal: 560, protein: 33,
+    desc: '1 boîte maquereau au naturel (125g) + 100g riz + 1 courgette vapeur + herbes + citron',
     tip: 'Le maquereau en boîte = champion oméga-3 anti-inflammatoire à 1,50€. Parfait pour les périostites.',
     ingredients: [
       { name: 'Maquereau au naturel (boîte)', qty: '125 g', cat: 'Protéines' },
-      { name: 'Riz basmati', qty: '80 g', cat: 'Féculents & céréales' },
+      { name: 'Riz basmati', qty: '100 g', cat: 'Féculents & céréales' },
       { name: 'Courgette', qty: '1', cat: 'Fruits & légumes' },
       { name: 'Citron', qty: '½', cat: 'Fruits & légumes' },
       { name: 'Herbes de Provence', qty: '1 cc', cat: 'Épicerie sèche' },
@@ -178,57 +178,58 @@ export const LUNCHES: MealOption[] = [
 
 export const DINNERS: MealOption[] = [
   {
-    id: 'd1', label: 'Cuisses poulet rôties + riz + carottes', kcal: 600, protein: 42,
-    desc: '180g cuisses poulet rôties au four + 80g riz basmati + 2 carottes rôties',
+    id: 'd1', label: 'Cuisses poulet rôties + riz + carottes', kcal: 680, protein: 43,
+    desc: '180g cuisses poulet rôties au four + 100g riz basmati + 2 carottes rôties',
     tip: 'Batch dominical : rôtir 1 kg de cuisses = 5 repas. Se réchauffe parfaitement 4 jours au frigo.',
     ingredients: [
       { name: 'Cuisses de poulet', qty: '180 g', cat: 'Protéines' },
-      { name: 'Riz basmati', qty: '80 g', cat: 'Féculents & céréales' },
+      { name: 'Riz basmati', qty: '100 g', cat: 'Féculents & céréales' },
       { name: 'Carotte', qty: '2', cat: 'Fruits & légumes' },
       { name: 'Herbes de Provence', qty: '1 cc', cat: 'Épicerie sèche' },
     ],
   },
   {
-    id: 'd2', label: 'Bœuf haché + riz + courgette sauté', kcal: 570, protein: 38,
-    desc: '150g bœuf haché poêlé + 80g riz basmati + 1 courgette sautée + herbes',
+    id: 'd2', label: 'Bœuf haché + riz + courgette sauté', kcal: 650, protein: 39,
+    desc: '150g bœuf haché poêlé + 100g riz basmati + 1 courgette sautée + herbes',
     tip: 'Faire une galette de haché (style burger sans pain) — 4 min par face à feu vif. Se congèle très bien.',
     ingredients: [
       { name: 'Bœuf haché', qty: '150 g', cat: 'Protéines' },
-      { name: 'Riz basmati', qty: '80 g', cat: 'Féculents & céréales' },
+      { name: 'Riz basmati', qty: '100 g', cat: 'Féculents & céréales' },
       { name: 'Courgette', qty: '1', cat: 'Fruits & légumes' },
       { name: 'Herbes de Provence', qty: '1 cc', cat: 'Épicerie sèche' },
     ],
   },
   {
-    id: 'd3', label: 'Dinde hachée + riz + poireau', kcal: 540, protein: 40,
-    desc: '150g dinde hachée + 80g riz basmati + 1 poireau fondu + herbes',
+    id: 'd3', label: 'Dinde hachée + riz + poireau', kcal: 660, protein: 50,
+    desc: '180g dinde hachée + 100g riz basmati + 1 poireau fondu + herbes',
     tip: 'Le vert du poireau uniquement (bas-FODMAP, moins de fructanes). Faire fondre 8 min à feu doux.',
     ingredients: [
-      { name: 'Dinde hachée', qty: '150 g', cat: 'Protéines' },
-      { name: 'Riz basmati', qty: '80 g', cat: 'Féculents & céréales' },
+      { name: 'Dinde hachée', qty: '180 g', cat: 'Protéines' },
+      { name: 'Riz basmati', qty: '100 g', cat: 'Féculents & céréales' },
       { name: 'Poireau', qty: '1', cat: 'Fruits & légumes' },
       { name: 'Herbes de Provence', qty: '1 cc', cat: 'Épicerie sèche' },
     ],
   },
   {
-    id: 'd4', label: '3 œufs + riz + tomates (soir léger)', kcal: 440, protein: 24,
-    desc: '3 œufs brouillés + 60g riz basmati + 2 tomates + herbes + filet d\'huile olive',
+    id: 'd4', label: '4 œufs + riz + tomates (soir léger)', kcal: 590, protein: 31,
+    desc: '4 œufs brouillés + 80g riz basmati + 2 tomates + herbes + filet d\'huile olive',
     tip: 'Soir de repos ou ventre sensible. Très digeste, riche en protéines complètes, prêt en 10 min.',
     ingredients: [
-      { name: 'Œufs', qty: '3', cat: 'Frais' },
-      { name: 'Riz basmati', qty: '60 g', cat: 'Féculents & céréales' },
+      { name: 'Œufs', qty: '4', cat: 'Frais' },
+      { name: 'Riz basmati', qty: '80 g', cat: 'Féculents & céréales' },
       { name: 'Tomate', qty: '2', cat: 'Fruits & légumes' },
       { name: 'Huile d\'olive', qty: '1 cs', cat: 'Épicerie sèche' },
     ],
   },
   {
-    id: 'd5', label: 'Maquereau + patate douce + épinards', kcal: 490, protein: 28,
-    desc: '1 boîte maquereau au naturel (125g) + 200g patate douce rôtie + 80g épinards surgelés',
+    id: 'd5', label: 'Maquereau + patate douce + épinards', kcal: 610, protein: 28,
+    desc: '1 boîte maquereau au naturel (125g) + 250g patate douce rôtie + 100g épinards surgelés + huile olive',
     tip: 'Combo anti-inflammatoire optimal : oméga-3 + bêta-carotène + fer. Idéal le soir après entraînement.',
     ingredients: [
       { name: 'Maquereau au naturel (boîte)', qty: '125 g', cat: 'Protéines' },
-      { name: 'Patate douce', qty: '200 g', cat: 'Fruits & légumes' },
-      { name: 'Épinards surgelés', qty: '80 g', cat: 'Fruits & légumes' },
+      { name: 'Patate douce', qty: '250 g', cat: 'Fruits & légumes' },
+      { name: 'Épinards surgelés', qty: '100 g', cat: 'Fruits & légumes' },
+      { name: 'Huile d\'olive', qty: '1 cs', cat: 'Épicerie sèche' },
     ],
   },
 ];
@@ -260,11 +261,12 @@ export const SNACKS_AM: MealOption[] = [
 
 export const SNACKS_PM: MealOption[] = [
   {
-    id: 'spm1', label: 'Pomme + amandes', kcal: 150, protein: 4,
-    desc: '1 pomme + 15g amandes entières',
+    id: 'spm1', label: 'Pomme + amandes + galette', kcal: 220, protein: 5,
+    desc: '1 pomme + 15g amandes + 1 galette de riz',
     ingredients: [
       { name: 'Pomme', qty: '1', cat: 'Fruits & légumes' },
       { name: 'Amandes', qty: '15 g', cat: 'Épicerie sèche' },
+      { name: 'Galettes de riz', qty: '1', cat: 'Féculents & céréales' },
     ],
   },
   {
