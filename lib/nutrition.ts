@@ -478,30 +478,119 @@ export function getDayNutrition(
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// LISTE DE COURSES — agrégation par catégorie
+// LISTE DE COURSES — vraies quantités d'achat
 // ─────────────────────────────────────────────────────────────────────────────
 
 const SHOP_ORDER: ShopCat[] = [
   'Fruits & légumes', 'Protéines', 'Féculents & céréales', 'Frais', 'Épicerie sèche',
 ];
 
+type QtyUnit = 'g' | 'ml' | 'count' | 'other';
+
+function parseIngQty(raw: string): { value: number; unit: QtyUnit } {
+  let s = raw.trim()
+    .replace(/½/g, '0.5').replace(/¼/g, '0.25').replace(/¾/g, '0.75')
+    .replace(/\s*égoutté.*/i, '')
+    .replace(/\s*grande\s*$/i, '')
+    .replace(/^un peu$/i, '1')
+    .replace(/^poignée$/i, '1')
+    .trim();
+
+  // "2 × 90 g"
+  const mul = s.match(/^(\d[\d.]*)\s*[×x]\s*(\d[\d.]*)\s*(g|ml)?$/i);
+  if (mul) {
+    const v = parseFloat(mul[1]) * parseFloat(mul[2]);
+    const u = (mul[3] || '').toLowerCase();
+    return { value: v, unit: u === 'g' ? 'g' : u === 'ml' ? 'ml' : 'count' };
+  }
+
+  const m = s.match(/^(\d[\d.]*)\s*(g|ml)?/i);
+  if (!m) return { value: 1, unit: 'other' };
+
+  const val = parseFloat(m[1]);
+  const u = (m[2] || '').toLowerCase();
+  if (u === 'g') return { value: val, unit: 'g' };
+  if (u === 'ml') return { value: val, unit: 'ml' };
+  const rest = s.slice(m[0].length).trim().toLowerCase();
+  // cs/cc → other (condiments, gérés à part)
+  if (rest === 'cs' || rest === 'cc' || rest === 'pincée' || rest === 'branche' || rest === 'tige') {
+    return { value: val, unit: 'other' };
+  }
+  return { value: val, unit: 'count' };
+}
+
+function toShopQty(name: string, total: number, unit: QtyUnit): string {
+  const n = name.toLowerCase();
+
+  if (unit === 'count') {
+    const cnt = Math.ceil(total);
+    if (n.includes('banane'))                           return `${cnt} banane${cnt > 1 ? 's' : ''}`;
+    if (n.includes('kiwi'))                             return `${cnt} kiwi${cnt > 1 ? 's' : ''}`;
+    if (n.includes('orange'))                           return `${cnt} orange${cnt > 1 ? 's' : ''}`;
+    if (n.includes('citron'))                           return `${cnt} citron${cnt > 1 ? 's' : ''}`;
+    if (n.includes('carotte'))                          return `${cnt} carotte${cnt > 1 ? 's' : ''}`;
+    if (n.includes('courgette'))                        return `${cnt} courgette${cnt > 1 ? 's' : ''}`;
+    if (n.includes('avocat'))                           return `${cnt} avocat${cnt > 1 ? 's' : ''}`;
+    if (n.includes('poivron'))                          return `${cnt} poivron${cnt > 1 ? 's' : ''}`;
+    if (n.includes('tomate') && !n.includes('cerises')) return `${cnt} tomate${cnt > 1 ? 's' : ''}`;
+    if (n.includes('œuf') || n.includes('oeuf'))        return `${cnt} œuf${cnt > 1 ? 's' : ''}`;
+    if (n.includes('galette'))                          return `${cnt} galettes de riz`;
+    if (n.includes('pain de riz'))                      return '1 pain de riz';
+    if (n.includes('poireau'))                          return `${cnt} poireau${cnt > 1 ? 'x' : ''} (vert uniquement)`;
+    if (n.includes('gingembre'))                        return `1 morceau (~${Math.ceil(total * 2)} cm)`;
+    if (n.includes('sardines'))                         return `${cnt} boîte${cnt > 1 ? 's' : ''} sardines`;
+    if (n.includes('thon'))                             return `${cnt} boîte${cnt > 1 ? 's' : ''} thon`;
+    return `${cnt}`;
+  }
+
+  if (unit === 'g') {
+    const rounded = Math.ceil(total / 10) * 10;
+    if (n.includes('tomates cerises')) {
+      const barq = Math.ceil(total / 200);
+      return `${barq} barquette${barq > 1 ? 's' : ''} 250g`;
+    }
+    if (n.includes('fraises') || n.includes('myrtilles')) {
+      const barq = Math.ceil(total / 250);
+      return `${barq} barquette${barq > 1 ? 's' : ''} 250g`;
+    }
+    if (n.includes('épinards'))  return total <= 120 ? '1 sac 200g' : '1 sac 400g';
+    if (n.includes('salade'))    return '1 sachet salade';
+    if (n.includes('sardines'))  return `${Math.ceil(total / 90)} boîte${Math.ceil(total / 90) > 1 ? 's' : ''} 90g`;
+    if (n.includes('thon'))      return `${Math.ceil(total / 140)} boîte${Math.ceil(total / 140) > 1 ? 's' : ''} 140g`;
+    if (rounded >= 1000)         return `${(rounded / 1000).toFixed(1).replace('.0', '')} kg`;
+    return `${rounded} g`;
+  }
+
+  if (unit === 'ml') {
+    const rounded = Math.ceil(total / 100) * 100;
+    if (rounded <= 500)  return `${rounded} ml`;
+    if (rounded <= 1200) return '1 brique 1 L';
+    return `${Math.ceil(total / 1000)} L`;
+  }
+
+  // condiments, épices → juste indiquer "au besoin"
+  return 'au besoin';
+}
+
 export interface ShoppingItem {
   name: string;
   cat: ShopCat;
-  occurrences: number; // nombre de repas qui l'utilisent dans la semaine
+  shopQty: string;
 }
 
 export function getWeekShoppingList(dayPlans: DayNutrition[]): Record<ShopCat, ShoppingItem[]> {
-  const counts: Record<string, ShoppingItem> = {};
+  interface Accum { name: string; cat: ShopCat; value: number; unit: QtyUnit; }
+  const map: Record<string, Accum> = {};
 
   function addIngredients(meal: MealOption | null) {
     if (!meal) return;
     for (const ing of meal.ingredients) {
       const key = ing.name.toLowerCase();
-      if (counts[key]) {
-        counts[key].occurrences += 1;
+      const parsed = parseIngQty(ing.qty);
+      if (map[key]) {
+        map[key].value += parsed.value;
       } else {
-        counts[key] = { name: ing.name, cat: ing.cat, occurrences: 1 };
+        map[key] = { name: ing.name, cat: ing.cat, value: parsed.value, unit: parsed.unit };
       }
     }
   }
@@ -521,12 +610,16 @@ export function getWeekShoppingList(dayPlans: DayNutrition[]): Record<ShopCat, S
     'Frais': [], 'Épicerie sèche': [],
   };
 
-  for (const item of Object.values(counts)) {
-    result[item.cat].push(item);
+  for (const accum of Object.values(map)) {
+    result[accum.cat].push({
+      name: accum.name,
+      cat: accum.cat,
+      shopQty: toShopQty(accum.name, accum.value, accum.unit),
+    });
   }
 
   for (const cat of SHOP_ORDER) {
-    result[cat].sort((a, b) => b.occurrences - a.occurrences || a.name.localeCompare(b.name));
+    result[cat].sort((a, b) => a.name.localeCompare(b.name));
   }
 
   return result;

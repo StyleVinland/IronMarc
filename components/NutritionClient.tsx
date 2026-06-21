@@ -300,9 +300,7 @@ export default function NutritionClient() {
                         <label key={key} className={`nutri-shop-item${checked ? ' done' : ''}`}>
                           <input type="checkbox" checked={checked} onChange={() => toggleCheck(key)} />
                           <span className="nutri-shop-name">{item.name}</span>
-                          {item.occurrences > 1 && (
-                            <span className="nutri-shop-occ">×{item.occurrences} repas</span>
-                          )}
+                          <span className="nutri-shop-occ">{item.shopQty}</span>
                         </label>
                       );
                     })}
