@@ -276,6 +276,10 @@ export function getSessionCompletion(date: string): SessionCompletion | undefine
   return { date: r.date as string, session_id: r.session_id as string, xp: Number(r.xp), pain_aine: Number(r.pain_aine), pain_tibia: Number(r.pain_tibia), validated_at: r.validated_at as string };
 }
 
+export function deleteSessionCompletion(date: string) {
+  openDb().prepare('DELETE FROM session_completions WHERE date = ?').run(date);
+}
+
 export function getAllSessionCompletions(): SessionCompletion[] {
   return openDb().prepare('SELECT * FROM session_completions ORDER BY date DESC').all().map(r => ({
     date: r.date as string, session_id: r.session_id as string, xp: Number(r.xp),

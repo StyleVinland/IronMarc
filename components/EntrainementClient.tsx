@@ -167,6 +167,20 @@ export default function EntrainementClient() {
 
   const painHigh = pain.aine > 4 || pain.tibia > 4;
 
+  async function handleInvalidateSession() {
+    try {
+      const res = await fetch(`/api/sessions/complete?date=${selectedDate}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      setSessionDone(null);
+      setShowExercises(false);
+      setRefreshKey(k => k + 1);
+      refreshXp();
+      window.dispatchEvent(new Event('session-validated'));
+    } catch (e) {
+      console.error('Invalidation échouée :', e);
+    }
+  }
+
   async function handleValidateSession() {
     setValidating(true);
     const xp = ({ swim: 60, run: 55, bike: 50, brick: 75, renfo: 40 } as Record<string, number>)[selSession.type] ?? 50;
@@ -323,9 +337,14 @@ export default function EntrainementClient() {
                 <span className="prog-session-done-xp">+{sessionDone.xp} XP</span>
               </div>
               <div className="prog-session-done-phrase">« {getDailyPhrase(selectedDate)} »</div>
-              <button className="prog-session-done-toggle" onClick={() => setShowExercises(true)}>
-                Voir les exercices ▼
-              </button>
+              <div className="prog-session-done-actions">
+                <button className="prog-session-done-toggle" onClick={() => setShowExercises(true)}>
+                  Voir les exercices ▼
+                </button>
+                <button className="prog-session-invalidate" onClick={handleInvalidateSession}>
+                  Invalider
+                </button>
+              </div>
             </div>
           ) : (
             <div className="prog-session-card" style={{ '--session-color': selSession.color } as React.CSSProperties}>
