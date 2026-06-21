@@ -552,67 +552,82 @@ canvas.chart-mood   { width: 100%; height: 88px; display: block; }
 
 /* ── LIGHTBOX ────────────────────────────────────────────────────── */
 .lb-overlay {
-  position: fixed; inset: 0; z-index: 9000;
-  background: rgba(0,0,0,.88); backdrop-filter: blur(22px) saturate(.5);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  animation: lb-in .18s ease;
+  position: fixed; inset: 0; z-index: 10000;
+  background: rgba(0,0,0,.92); backdrop-filter: blur(28px) saturate(.4);
+  display: flex; align-items: center; justify-content: center;
+  animation: lb-in .2s ease;
 }
-@keyframes lb-in { from { opacity: 0; transform: scale(.97) } to { opacity: 1; transform: scale(1) } }
+@keyframes lb-in { from { opacity: 0 } to { opacity: 1 } }
 
-/* Croix fermeture — toujours visible coin haut-droit */
+/* Croix — position absolue dans l'overlay, toujours visible */
 .lb-close {
-  position: fixed; top: 16px; right: 18px; z-index: 9010;
-  background: rgba(255,255,255,.18); border: 1.5px solid rgba(255,255,255,.25);
-  border-radius: 50%; width: 38px; height: 38px; color: #fff; font-size: 18px;
+  position: absolute; top: 18px; right: 18px; z-index: 1;
+  background: rgba(255,255,255,.16); border: 1.5px solid rgba(255,255,255,.28);
+  border-radius: 50%; width: 40px; height: 40px; color: #fff;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
-  backdrop-filter: blur(10px); transition: background .15s;
+  transition: background .15s;
 }
-.lb-close:hover { background: rgba(255,255,255,.32); }
+.lb-close:hover { background: rgba(255,255,255,.3); }
 
-/* Ligne principale : flèche — photo — flèche */
-.lb-layout {
-  display: flex; align-items: center; gap: 0;
-  width: 100%; max-width: min(95vw, 1100px); padding: 0 8px;
+/* Grille 3 colonnes : [flèche] [image+info] [flèche] */
+.lb-grid {
+  display: grid;
+  grid-template-columns: 64px 1fr 64px;
+  align-items: center;
+  width: 100%;
+  max-width: min(96vw, 1200px);
+  gap: 0;
 }
+
+/* Flèches Apple-style */
 .lb-arrow {
-  flex-shrink: 0; width: 52px; height: 52px;
-  background: rgba(255,255,255,.14); border: 1.5px solid rgba(255,255,255,.2);
-  border-radius: 50%; color: #fff; font-size: 32px; line-height: 1;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: background .15s; user-select: none; margin: 0 8px;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: rgba(255,255,255,.14); border: 1.5px solid rgba(255,255,255,.22);
+  color: #fff; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, opacity .15s;
+  justify-self: center;
 }
 .lb-arrow:hover { background: rgba(255,255,255,.28); }
-.lb-arrow-hidden { visibility: hidden; pointer-events: none; }
 
-/* Zone image + infos */
-.lb-center { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 14px; min-width: 0; }
-.lb-media  { display: flex; align-items: center; justify-content: center; max-height: 72vh; width: 100%; }
-.lb-img    {
-  max-width: 100%; max-height: 72vh; object-fit: contain;
-  border-radius: 10px; box-shadow: 0 8px 48px rgba(0,0,0,.6);
+/* Image + infos */
+.lb-center {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 16px; padding: 52px 0 20px; min-width: 0;
+}
+.lb-media { display: flex; align-items: center; justify-content: center; width: 100%; }
+.lb-img   {
+  max-width: 100%;
+  max-height: calc(100vh - 160px);
+  object-fit: contain; border-radius: 10px;
+  box-shadow: 0 12px 60px rgba(0,0,0,.7);
 }
 
 /* Infos sous la photo */
 .lb-info {
   display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  justify-content: center; padding: 0 12px;
+  justify-content: center; padding: 0 8px;
+  color: rgba(255,255,255,.9);
 }
-.lb-date    { font-size: 13px; color: rgba(255,255,255,.65); }
+.lb-date    { font-size: 13px; color: rgba(255,255,255,.62); }
 .lb-note    { font-size: 14px; color: #fff; font-weight: 600; }
-.lb-counter { font-size: 12px; color: rgba(255,255,255,.38); }
-.lb-actions { display: flex; gap: 8px; margin-left: 6px; }
+.lb-counter { font-size: 12px; color: rgba(255,255,255,.36); }
+.lb-actions { display: flex; gap: 8px; }
 .lb-dl, .lb-del {
-  font-size: 12px; padding: 4px 10px; border-radius: 8px; cursor: pointer;
-  background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.2);
-  color: #fff; text-decoration: none; transition: background .15s;
+  font-size: 12px; padding: 5px 12px; border-radius: 8px; cursor: pointer;
+  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+  color: #fff; text-decoration: none; display: inline-flex; align-items: center;
+  transition: background .15s;
 }
-.lb-dl:hover  { background: rgba(255,255,255,.25); }
-.lb-del       { color: rgba(255,120,120,1); border-color: rgba(255,80,80,.3); }
+.lb-dl:hover  { background: rgba(255,255,255,.24); }
+.lb-del       { color: rgba(255,120,120,.95); border-color: rgba(255,80,80,.3); }
 .lb-del:hover { background: rgba(255,59,48,.35); }
 
 @media (max-width: 600px) {
-  .lb-arrow { width: 40px; height: 40px; font-size: 24px; margin: 0 4px; }
-  .lb-close { top: 10px; right: 10px; width: 34px; height: 34px; font-size: 16px; }
+  .lb-grid  { grid-template-columns: 50px 1fr 50px; }
+  .lb-arrow { width: 38px; height: 38px; }
+  .lb-center { padding-top: 56px; }
+  .lb-close { top: 12px; right: 12px; width: 36px; height: 36px; }
 }
 
 /* ── GALLERY ─────────────────────────────────────────────────────── */

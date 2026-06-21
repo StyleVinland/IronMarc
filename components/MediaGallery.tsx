@@ -8,6 +8,17 @@ function fmtDate(d: string) {
   return new Date(d + 'T00:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
+const ChevronLeft = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="15 18 9 12 15 6" />
+  </svg>
+);
+const ChevronRight = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="9 18 15 12 9 6" />
+  </svg>
+);
+
 function Lightbox({ items, idx, onClose, onNav, onRemove }: {
   items: MediaItem[]; idx: number;
   onClose: () => void; onNav: (delta: number) => void;
@@ -15,6 +26,7 @@ function Lightbox({ items, idx, onClose, onNav, onRemove }: {
 }) {
   const item = items[idx];
   const touchStartX = useRef<number | null>(null);
+  const canNav = items.length > 1;
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -39,20 +51,22 @@ function Lightbox({ items, idx, onClose, onNav, onRemove }: {
   const isVideo = item.mimeType.startsWith('video/');
 
   return (
-    <div className="lb-overlay" onClick={onClose}>
-      {/* Croix fermer — toujours visible, coin supérieur droit */}
-      <button className="lb-close" onClick={onClose} aria-label="Fermer">✕</button>
+    <div className="lb-overlay" onClick={onClose} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+      {/* Croix fermeture — coin haut-droit */}
+      <button className="lb-close" onClick={onClose} aria-label="Fermer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
 
-      <div className="lb-layout" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-        {/* Flèche gauche */}
-        <button
-          className={`lb-arrow lb-prev${items.length < 2 ? ' lb-arrow-hidden' : ''}`}
-          onClick={e => { e.stopPropagation(); onNav(-1); }}
-          aria-label="Précédent"
-        >‹</button>
+      {/* Grille : flèche | image+info | flèche */}
+      <div className="lb-grid" onClick={e => e.stopPropagation()}>
+        <button className="lb-arrow lb-prev" onClick={() => canNav && onNav(-1)}
+          style={{ opacity: canNav ? 1 : 0.22 }} aria-label="Précédent">
+          <ChevronLeft />
+        </button>
 
-        {/* Média + infos */}
-        <div className="lb-center" onClick={e => e.stopPropagation()}>
+        <div className="lb-center">
           <div className="lb-media">
             {isVideo
               ? <video src={src} controls autoPlay className="lb-img" />
@@ -64,18 +78,20 @@ function Lightbox({ items, idx, onClose, onNav, onRemove }: {
             {item.note && <span className="lb-note">{item.note}</span>}
             {items.length > 1 && <span className="lb-counter">{idx + 1} / {items.length}</span>}
             <div className="lb-actions">
-              <a className="lb-dl" href={src} download={item.originalName}>Télécharger</a>
-              <button className="lb-del" onClick={() => onRemove(item.id)}>Supprimer</button>
+              <a className="lb-dl" href={src} download={item.originalName} onClick={e => e.stopPropagation()}>
+                Télécharger
+              </a>
+              <button className="lb-del" onClick={e => { e.stopPropagation(); onRemove(item.id); }}>
+                Supprimer
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Flèche droite */}
-        <button
-          className={`lb-arrow lb-next${items.length < 2 ? ' lb-arrow-hidden' : ''}`}
-          onClick={e => { e.stopPropagation(); onNav(1); }}
-          aria-label="Suivant"
-        >›</button>
+        <button className="lb-arrow lb-next" onClick={() => canNav && onNav(1)}
+          style={{ opacity: canNav ? 1 : 0.22 }} aria-label="Suivant">
+          <ChevronRight />
+        </button>
       </div>
     </div>
   );
