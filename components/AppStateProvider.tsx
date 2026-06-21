@@ -8,6 +8,7 @@ interface AppCtx {
   state: AppState;
   today: string;
   addCig: () => void;
+  removeCig: () => void;
   toggleMission: (id: string, done: boolean) => void;
   toggleQuest: (id: string, done: boolean) => void;
   updateMind: (field: keyof MindData, val: MindData[keyof MindData]) => void;
@@ -41,6 +42,15 @@ export function AppStateProvider({ children, initial }: { children: ReactNode; i
 
   const addCig = useCallback(() => {
     const next = (stateRef.current.days[today]?.cigs ?? 0) + 1;
+    setState(prev => {
+      const s = ensureDay(prev, today);
+      return { ...s, days: { ...s.days, [today]: { ...s.days[today], cigs: next } } };
+    });
+    patchDay({ cigs: next });
+  }, [today, patchDay]);
+
+  const removeCig = useCallback(() => {
+    const next = Math.max(0, (stateRef.current.days[today]?.cigs ?? 0) - 1);
     setState(prev => {
       const s = ensureDay(prev, today);
       return { ...s, days: { ...s.days, [today]: { ...s.days[today], cigs: next } } };
@@ -94,7 +104,7 @@ export function AppStateProvider({ children, initial }: { children: ReactNode; i
   }, []);
 
   return (
-    <Ctx.Provider value={{ state, today, addCig, toggleMission, toggleQuest, updateMind, nextAff }}>
+    <Ctx.Provider value={{ state, today, addCig, removeCig, toggleMission, toggleQuest, updateMind, nextAff }}>
       {children}
     </Ctx.Provider>
   );

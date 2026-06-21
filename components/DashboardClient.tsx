@@ -1,34 +1,146 @@
 'use client';
+import { useState } from 'react';
 import { useAppState } from './AppStateProvider';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { computeXP, computeLevel, computeLevelTitle, computeStreak, computeCheckpointPct } from '@/lib/compute';
+import { DAILY, QUESTS } from '@/lib/constants';
 import Hero from './Hero';
-import StatsStrip from './StatsStrip';
 import Affirmation from './Affirmation';
 import ProgressCharts from './ProgressCharts';
 import MissionList from './MissionList';
 import QuestList from './QuestList';
 
+function ChevronIcon({ open }: { open: boolean }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none"
+      stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
+      style={{ transition: 'transform .3s var(--ease-apple)', transform: open ? 'rotate(180deg)' : 'none' }}>
+      <polyline points="5 8 10 13 15 8" />
+    </svg>
+  );
+}
+
+interface AccordProps {
+  icon: string; title: string; badge: string;
+  open: boolean; onToggle: () => void; children: React.ReactNode;
+}
+
+function Accord({ icon, title, badge, open, onToggle, children }: AccordProps) {
+  return (
+    <div className={`accord${open ? ' open' : ''}`}>
+      <button className="accord-head" onClick={onToggle}>
+        <span className="accord-icon">{icon}</span>
+        <span className="accord-title">{title}</span>
+        <span className="accord-badge">{badge}</span>
+        <span className="accord-chevron"><ChevronIcon open={open} /></span>
+      </button>
+      {/* Smooth height via CSS grid trick — toujours rendu, jamais conditionnel */}
+      <div className="accord-anim">
+        <div className="accord-body">{children}</div>
+      </div>
+    </div>
+  );
+}
+
 export default function DashboardClient() {
+  useScrollReveal();
+
   const { state, today, toggleMission, toggleQuest, nextAff } = useAppState();
   const todayData = state.days[today] ?? { date: today, cigs: 0, mind: { mood: null, journal: '', grat: ['', '', ''] }, missions: {} };
 
-  const xp = computeXP(state);
-  const level = computeLevel(xp);
+  const xp         = computeXP(state);
+  const level      = computeLevel(xp);
   const levelTitle = computeLevelTitle(level);
-  const streak = computeStreak(state);
+  const streak     = computeStreak(state);
+  const phasePct   = computeCheckpointPct(state);
+  const mDone      = DAILY.filter(t => !!todayData.missions[t.id]).length;
+  const mTotal     = DAILY.length;
+  const qDone      = QUESTS.filter(q => !!state.quests[q.id]).length;
+  const qTotal     = QUESTS.length;
+  const todayLabel = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  const [missionsOpen, setMissionsOpen] = useState(true);
+  const [questsOpen,   setQuestsOpen]   = useState(false);
 
   return (
-    <div className="dash-grid">
-      <div className="dash-main">
-        <Hero checkpointPct={computeCheckpointPct(state)} />
-        <StatsStrip xp={xp} level={level} levelTitle={levelTitle} freeStreak={streak} />
-        <MissionList missions={todayData.missions} onToggle={toggleMission} date={today} />
-        <QuestList quests={state.quests} onToggle={toggleQuest} />
+    <div className="bento">
+
+      {/* En-tête — apparaît avec la page */}
+      <div className="bento-header">
+        <div className="bento-title">Aujourd&apos;hui</div>
+        <div className="bento-date">{todayLabel}</div>
       </div>
-      <div className="dash-aside">
+
+      {/* Hero — animation d'entrée propre via CSS */}
+      <Hero checkpointPct={phasePct} />
+
+      {/* 4 widgets — stagger cascade Apple */}
+      <div className="metrics-grid">
+        <div className="widget reveal">
+          <div className="widget-cat" style={{ color: '#34C759' }}>🔥 Sans clope</div>
+          <div className="widget-val">{streak}</div>
+          <div className="widget-unit">jours consécutifs</div>
+        </div>
+        <div className="widget reveal reveal-d1">
+          <div className="widget-cat" style={{ color: '#007AFF' }}>⚡ Niveau</div>
+          <div className="widget-val">{level}</div>
+          <div className="widget-unit">{levelTitle}</div>
+          <div className="widget-sub">{xp} XP totale</div>
+        </div>
+        <div className="widget reveal reveal-d2">
+          <div className="widget-cat" style={{ color: '#FF9500' }}>📋 Missions</div>
+          <div className="widget-val">
+            {mDone}<span className="widget-val-of">/{mTotal}</span>
+          </div>
+          <div className="widget-unit">aujourd&apos;hui</div>
+          <div className="widget-bar">
+            <div className="widget-bar-fill" style={{ width: `${(mDone / mTotal) * 100}%`, background: '#FF9500' }} />
+          </div>
+        </div>
+        <div className="widget reveal reveal-d3">
+          <div className="widget-cat" style={{ color: '#AF52DE' }}>🏁 Phase 1</div>
+          <div className="widget-val">
+            {phasePct}<span className="widget-val-of">%</span>
+          </div>
+          <div className="widget-unit">checkpoint atteint</div>
+          <div className="widget-bar">
+            <div className="widget-bar-fill" style={{ width: `${phasePct}%`, background: '#AF52DE' }} />
+          </div>
+        </div>
+      </div>
+
+      <div className="reveal">
         <Affirmation affIdx={state.affIdx} onNext={nextAff} />
+      </div>
+
+      <div className="reveal">
+        <Accord
+          icon="📋"
+          title="Missions du jour"
+          badge={`${mDone}/${mTotal}`}
+          open={missionsOpen}
+          onToggle={() => setMissionsOpen(o => !o)}
+        >
+          <MissionList missions={todayData.missions} onToggle={toggleMission} date={today} />
+        </Accord>
+      </div>
+
+      <div className="reveal reveal-d1">
+        <Accord
+          icon="🏅"
+          title="Quêtes secondaires"
+          badge={`${qDone}/${qTotal}`}
+          open={questsOpen}
+          onToggle={() => setQuestsOpen(o => !o)}
+        >
+          <QuestList quests={state.quests} onToggle={toggleQuest} />
+        </Accord>
+      </div>
+
+      <div className="reveal">
         <ProgressCharts days={state.days} />
       </div>
+
     </div>
   );
 }

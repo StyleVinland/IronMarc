@@ -6,8 +6,13 @@ interface Props {
   days: Record<string, DayData>;
 }
 
-const C_TEXT = '#7A7975';
-const C_GRID = 'rgba(45,44,41,0.5)';
+function themeColors() {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  return {
+    C_TEXT: dark ? '#636366' : '#8E8E93',
+    C_GRID: dark ? 'rgba(255,255,255,0.08)' : 'rgba(60,60,67,0.12)',
+  };
+}
 
 function todayStr() {
   return new Date().toLocaleDateString('fr-CA');
@@ -47,6 +52,7 @@ function drawBars(
   const r = prepCtx(canvas, H);
   if (!r) return;
   const { ctx, W } = r;
+  const { C_TEXT, C_GRID } = themeColors();
   const pad = { t: 12, r: 8, b: 26, l: 30 };
   const iW = W - pad.l - pad.r, iH = H - pad.t - pad.b;
   const n = vals.length;
@@ -54,7 +60,7 @@ function drawBars(
 
   ctx.clearRect(0, 0, W, H);
   ctx.strokeStyle = C_GRID; ctx.lineWidth = 1;
-  ctx.font = '10px Barlow, sans-serif'; ctx.fillStyle = C_TEXT; ctx.textAlign = 'right';
+  ctx.font = '10px Inter, -apple-system, sans-serif'; ctx.fillStyle = C_TEXT; ctx.textAlign = 'right';
   [0, 0.5, 1].forEach(p => {
     const y = pad.t + iH * (1 - p);
     ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
@@ -76,7 +82,7 @@ function drawBars(
       ctx.closePath(); ctx.fill();
     }
     if (n <= 8 || i % 2 === 0 || i === n - 1) {
-      ctx.fillStyle = C_TEXT; ctx.font = '9px Barlow, sans-serif'; ctx.textAlign = 'center';
+      ctx.fillStyle = C_TEXT; ctx.font = '9px Inter, -apple-system, sans-serif'; ctx.textAlign = 'center';
       ctx.fillText(labels[i], x + bW / 2, H - 4);
     }
   });
@@ -99,31 +105,40 @@ export default function ProgressCharts({ days }: Props) {
   const sesRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const dt0 = new Date();
-    const cigL: string[] = [], cigV: number[] = [];
-    for (let i = 13; i >= 0; i--) {
-      const d = new Date(dt0); d.setDate(d.getDate() - i);
-      const k = d.toLocaleDateString('fr-CA');
-      cigL.push(`${d.getDate()}/${d.getMonth() + 1}`);
-      cigV.push(days[k]?.cigs ?? 0);
-    }
-    if (cigRef.current) drawBars(cigRef.current, cigL, cigV, '#BD5A48', '#CF8E4288', Math.max(...cigV, 5), 150);
-
-    const sesL: string[] = [], sesV: number[] = [];
-    const now = new Date();
-    const dow = (now.getDay() + 6) % 7;
-    const ws0 = new Date(now); ws0.setDate(ws0.getDate() - dow);
-    for (let w = 5; w >= 0; w--) {
-      const ws = new Date(ws0); ws.setDate(ws.getDate() - w * 7);
-      let s = 0;
-      for (let d = 0; d < 7; d++) {
-        const wd = new Date(ws); wd.setDate(wd.getDate() + d);
-        if (wd > now) break;
-        if (days[wd.toLocaleDateString('fr-CA')]?.missions?.move) s++;
+    function draw() {
+      const dt0 = new Date();
+      const cigL: string[] = [], cigV: number[] = [];
+      for (let i = 13; i >= 0; i--) {
+        const d = new Date(dt0); d.setDate(d.getDate() - i);
+        const k = d.toLocaleDateString('fr-CA');
+        cigL.push(`${d.getDate()}/${d.getMonth() + 1}`);
+        cigV.push(days[k]?.cigs ?? 0);
       }
-      sesL.push(`S${6 - w}`); sesV.push(s);
+      if (cigRef.current) drawBars(cigRef.current, cigL, cigV, '#FF3B30', '#FF950088', Math.max(...cigV, 5), 150);
+
+      const sesL: string[] = [], sesV: number[] = [];
+      const now = new Date();
+      const dow = (now.getDay() + 6) % 7;
+      const ws0 = new Date(now); ws0.setDate(ws0.getDate() - dow);
+      for (let w = 5; w >= 0; w--) {
+        const ws = new Date(ws0); ws.setDate(ws.getDate() - w * 7);
+        let s = 0;
+        for (let d = 0; d < 7; d++) {
+          const wd = new Date(ws); wd.setDate(wd.getDate() + d);
+          if (wd > now) break;
+          if (days[wd.toLocaleDateString('fr-CA')]?.missions?.move) s++;
+        }
+        sesL.push(`S${6 - w}`); sesV.push(s);
+      }
+      if (sesRef.current) drawBars(sesRef.current, sesL, sesV, '#34C759', null, 7, 150);
     }
-    if (sesRef.current) drawBars(sesRef.current, sesL, sesV, '#E8E5DC', null, 7, 150);
+
+    draw();
+
+    // Redessine quand le thème bascule
+    const obs = new MutationObserver(draw);
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => obs.disconnect();
   }, [days]);
 
   return (
@@ -133,15 +148,15 @@ export default function ProgressCharts({ days }: Props) {
         <div className="chart-card">
           <div className="chart-title">Cigarettes / jour</div>
           <div className="chart-legend">
-            <span className="legend-item"><span className="legend-dot" style={{ background: '#BD5A48' }} />cigarettes</span>
-            <span className="legend-item"><span className="legend-dot" style={{ background: '#CF8E42', opacity: .7 }} />tendance</span>
+            <span className="legend-item"><span className="legend-dot" style={{ background: '#FF3B30' }} />cigarettes</span>
+            <span className="legend-item"><span className="legend-dot" style={{ background: '#FF9500', opacity: .7 }} />tendance</span>
           </div>
           <canvas className="chart-canvas" ref={cigRef} aria-label="Graphique cigarettes par jour" />
         </div>
         <div className="chart-card">
           <div className="chart-title">Séances / semaine</div>
           <div className="chart-legend">
-            <span className="legend-item"><span className="legend-dot" style={{ background: '#E8E5DC' }} />jours actifs</span>
+            <span className="legend-item"><span className="legend-dot" style={{ background: '#34C759' }} />jours actifs</span>
           </div>
           <canvas className="chart-canvas" ref={sesRef} aria-label="Graphique séances par semaine" />
         </div>

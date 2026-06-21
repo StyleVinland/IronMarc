@@ -1,5 +1,6 @@
 'use client';
 import { useState, useMemo } from 'react';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 import {
   getDayNutrition, getWeekShoppingList, LOAD_TARGETS, FODMAP_TIPS, PANTRY_BASICS,
   SHOP_ORDER, type DayNutrition, type MealOption,
@@ -104,6 +105,7 @@ function MealSlot({ icon, label, meal }: { icon: string; label: string; meal: Me
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function NutritionClient() {
+  useScrollReveal();
   const [weekOffset, setWeekOffset] = useState(0);
   const [selectedDay, setSelectedDay] = useState(() => {
     const dow = new Date().getDay();
@@ -174,13 +176,13 @@ export default function NutritionClient() {
 
   return (
     <>
-      <div className="page-title-block">
+      <div className="page-title-block reveal">
         <h1>Nutrition</h1>
         <p>Repas datés · adaptés à la charge d'entraînement · bas-FODMAP · sans lactose</p>
       </div>
 
       {/* ── CALENDRIER SEMAINE ──────────────────────────────────────── */}
-      <section>
+      <section className="reveal reveal-d1">
         <div className="nutri-week-nav">
           <button className="nutri-week-btn" onClick={() => setWeekOffset(o => o - 1)}>←</button>
           <div className="nutri-week-label">
@@ -217,7 +219,7 @@ export default function NutritionClient() {
       </section>
 
       {/* ── PLAN DU JOUR ────────────────────────────────────────────── */}
-      <section>
+      <section className="reveal">
         <div className="nutri-day-header">
           <div className="nutri-day-meta">
             <span className="nutri-day-date">{fmtDay(selectedDate)}</span>
@@ -257,7 +259,7 @@ export default function NutritionClient() {
       </section>
 
       {/* ── LISTE DE COURSES ─────────────────────────────────────────── */}
-      <section>
+      <section className="reveal reveal-d1">
         <div className="shead">
           <h2>Liste de courses</h2>
           <button className="btn-ghost" style={{ fontSize: 12 }} onClick={() => setShowShop(s => !s)}>
@@ -313,7 +315,7 @@ export default function NutritionClient() {
       </section>
 
       {/* ── CONSEILS BAS-FODMAP ───────────────────────────────────────── */}
-      <section>
+      <section className="reveal">
         <div className="shead">
           <h2>Règles bas-FODMAP</h2>
           <button className="btn-ghost" style={{ fontSize: 12 }} onClick={() => setShowTips(p => !p)}>

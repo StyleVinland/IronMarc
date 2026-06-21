@@ -173,7 +173,7 @@ export default function Dashboard({ initialState }: { initialState: AppState }) 
       <SmokeCalendar days={state.days} />
       <MissionList missions={todayData.missions} onToggle={handleMission} date={today} />
       <QuestList quests={state.quests} onToggle={handleQuest} />
-      <CigCounter todayCigs={todayData.cigs} freeStreak={streak} onAddCig={handleAddCig} />
+      <CigCounter todayCigs={todayData.cigs} freeStreak={streak} onAddCig={handleAddCig} onRemoveCig={() => {}} />
       <MediaGallery />
       <MentalSpace mind={todayData.mind} days={state.days} onChange={handleMindWithFlush} />
 

@@ -50,7 +50,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   renfo_a: {
     id: 'renfo_a', label: 'Renfo A — Pubalgie', short: 'Renfo A',
-    type: 'renfo', color: '#CF8E42', duration: '25 min',
+    type: 'renfo', color: '#FF9500', duration: '25 min',
     desc: 'Adducteurs + gainage — protocole Copenhagen progressif',
     painCheck: true,
     exercises: [
@@ -66,7 +66,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   renfo_b: {
     id: 'renfo_b', label: 'Renfo B — Tibias & Hanches', short: 'Renfo B',
-    type: 'renfo', color: '#CF8E42', duration: '25 min',
+    type: 'renfo', color: '#FF9500', duration: '25 min',
     desc: 'Mollets + tibias + fessiers — protocole MTSS anti-périostites',
     painCheck: true,
     exercises: [
@@ -83,7 +83,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   renfo_core: {
     id: 'renfo_core', label: 'Renfo Core — Maintien tri', short: 'Renfo C',
-    type: 'renfo', color: '#CF8E42', duration: '20 min',
+    type: 'renfo', color: '#FF9500', duration: '20 min',
     desc: 'Gainage triathlon + protection blessures — version maintien Phase 2+',
     exercises: [
       { name: 'Copenhagen pied (niveau 3-4)', detail: 'Jambe tendue sur l\'appui, plus difficile que le genou. Maintenir l\'alignement.', sets: '3 × 8-12 / côté' },
@@ -98,7 +98,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   swim_debutant: {
     id: 'swim_debutant', label: 'Natation — Débutant', short: 'Nage',
-    type: 'swim', color: '#6EC6D8', duration: '25-35 min',
+    type: 'swim', color: '#007AFF', duration: '25-35 min',
     desc: 'S1-8 : technique + respiration. 25 → 200 m. Chaque longueur compte.',
     exercises: [
       { name: 'Flottaison ventrale', detail: 'Bras tendus, souffler lentement dans l\'eau, sentir le corps horizontaliser', sets: '4 × 15 m' },
@@ -110,7 +110,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   swim_initiation: {
     id: 'swim_initiation', label: 'Natation — Initiation', short: 'Nage',
-    type: 'swim', color: '#6EC6D8', duration: '35-45 min',
+    type: 'swim', color: '#007AFF', duration: '35-45 min',
     desc: 'S9-16 : construire 200-400 m continus. Technique bras + respiration bilatérale.',
     exercises: [
       { name: 'Échauffement', detail: '100 m dos crawl ou 4 × 25 m crawl technique lent', required: true },
@@ -122,7 +122,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   swim_base: {
     id: 'swim_base', label: 'Natation — Base', short: 'Nage',
-    type: 'swim', color: '#6EC6D8', duration: '40-55 min',
+    type: 'swim', color: '#007AFF', duration: '40-55 min',
     desc: 'S17-40 : 400-900 m. Endurance aérobie + technique régularité.',
     exercises: [
       { name: 'Échauffement', detail: '200 m mixte (crawl + dos)', required: true },
@@ -134,7 +134,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   swim_endurance: {
     id: 'swim_endurance', label: 'Natation — Endurance', short: 'Nage',
-    type: 'swim', color: '#6EC6D8', duration: '50-70 min',
+    type: 'swim', color: '#007AFF', duration: '50-70 min',
     desc: 'S41-56 : 900-1 500 m. Allure course + travail de vitesse.',
     exercises: [
       { name: 'Échauffement', detail: '300 m (200 crawl + 100 dos)', required: true },
@@ -146,7 +146,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   swim_avance: {
     id: 'swim_avance', label: 'Natation — Avancé', short: 'Nage',
-    type: 'swim', color: '#6EC6D8', duration: '60-80 min',
+    type: 'swim', color: '#007AFF', duration: '60-80 min',
     desc: 'S57-88 : 1 500-2 800 m. Séances qualité + volume.',
     exercises: [
       { name: 'Échauffement', detail: '400 m (300 crawl + 100 dos/brasse)', required: true },
@@ -158,7 +158,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   swim_ironman: {
     id: 'swim_ironman', label: 'Natation — Ironman', short: 'Nage',
-    type: 'swim', color: '#6EC6D8', duration: '75-100 min',
+    type: 'swim', color: '#007AFF', duration: '75-100 min',
     desc: 'S89-104 : 2 800-3 800 m. Préparation distance Ironman (3,8 km).',
     exercises: [
       { name: 'Échauffement', detail: '500 m mixte progressif', required: true },
@@ -172,7 +172,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   bike_stationnaire: {
     id: 'bike_stationnaire', label: 'Vélo appartement', short: 'Vélo',
-    type: 'bike', color: '#88C49A', duration: '25-45 min',
+    type: 'bike', color: '#34C759', duration: '25-45 min',
     desc: 'S1-16 : cardio sans impact. Ménage le pubis et les tibias.',
     exercises: [
       { name: 'Échauffement', detail: 'Résistance nulle, 70 rpm, 5 min', required: true },
@@ -184,7 +184,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   bike_court: {
     id: 'bike_court', label: 'Vélo route — Court', short: 'Vélo',
-    type: 'bike', color: '#88C49A', duration: '45-90 min',
+    type: 'bike', color: '#34C759', duration: '45-90 min',
     desc: 'S17-40 : premiers tours de roue en extérieur. Cadence + zones cardio.',
     exercises: [
       { name: 'Échauffement', detail: '10 min à cadence libre, résistance nulle / pente nulle', required: true },
@@ -196,7 +196,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   bike_moyen: {
     id: 'bike_moyen', label: 'Vélo route — Moyen', short: 'Vélo',
-    type: 'bike', color: '#88C49A', duration: '90-120 min',
+    type: 'bike', color: '#34C759', duration: '90-120 min',
     desc: 'S41-56 : vraies sorties d\'endurance. Gestion du cardio + ravitaillement.',
     exercises: [
       { name: 'Échauffement', detail: '15 min progressif Zone 1-2', required: true },
@@ -209,7 +209,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   bike_tri: {
     id: 'bike_tri', label: 'Vélo route — Triathlon', short: 'Vélo',
-    type: 'bike', color: '#88C49A', duration: '2h-3h',
+    type: 'bike', color: '#34C759', duration: '2h-3h',
     desc: 'S57-88 : sorties 2-3h. Travail en position aéro + gestion de l\'énergie.',
     exercises: [
       { name: 'Échauffement', detail: '20 min progressif', required: true },
@@ -222,7 +222,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   bike_long: {
     id: 'bike_long', label: 'Longue sortie vélo', short: 'Long Vélo',
-    type: 'bike', color: '#88C49A', duration: '2h30-4h',
+    type: 'bike', color: '#34C759', duration: '2h30-4h',
     desc: 'Sortie longue du week-end. Volume pur, Zone 2. Construction progressive.',
     exercises: [
       { name: 'Règle de la longue', detail: 'Aucune sortie longue ne peut dépasser la précédente de +15%. Progression lente = progression sûre.', warning: true },
@@ -233,7 +233,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   bike_ironman: {
     id: 'bike_ironman', label: 'Vélo Ironman', short: 'Vélo IM',
-    type: 'bike', color: '#88C49A', duration: '4h-6h',
+    type: 'bike', color: '#34C759', duration: '4h-6h',
     desc: 'S89-104 : sorties Ironman. 180 km = 5-6h de vélo. Stratégie de course.',
     exercises: [
       { name: 'Volume', detail: 'S89-94 : 4h · S95-100 : 4h30-5h · S101-104 : 1 sortie 5h-6h (simulation parcours)', sets: 'Zone 2 impérative — ne pas dépasser Z3 en course' },
@@ -246,7 +246,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   marche: {
     id: 'marche', label: 'Marche active', short: 'Marche',
-    type: 'run', color: '#8A9870', duration: '25-35 min',
+    type: 'run', color: '#8E8E93', duration: '25-35 min',
     desc: 'S5-8 : reprendre contact avec l\'impact, tibias silencieux requis.',
     painCheck: true,
     exercises: [
@@ -258,7 +258,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   marche_course: {
     id: 'marche_course', label: 'Marche / Course', short: 'M/C',
-    type: 'run', color: '#C26060', duration: '25-35 min',
+    type: 'run', color: '#FF3B30', duration: '25-35 min',
     desc: 'S9-26 : intervalles progressifs. Règle des 10% — jamais plus que la semaine d\'avant.',
     painCheck: true,
     exercises: [
@@ -272,7 +272,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   course_debutant: {
     id: 'course_debutant', label: 'Course — Débutant', short: 'Course',
-    type: 'run', color: '#C26060', duration: '25-35 min',
+    type: 'run', color: '#FF3B30', duration: '25-35 min',
     desc: 'S27-40 : premiers 10-20 min continus. Allure très lente = progrès réels.',
     painCheck: true,
     exercises: [
@@ -285,7 +285,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   course_base: {
     id: 'course_base', label: 'Course — Base', short: 'Course',
-    type: 'run', color: '#C26060', duration: '35-50 min',
+    type: 'run', color: '#FF3B30', duration: '35-50 min',
     desc: 'S41-56 : 25-40 min continus. Commencer à gérer l\'allure et la foulée.',
     painCheck: true,
     exercises: [
@@ -298,7 +298,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   course_intermediaire: {
     id: 'course_intermediaire', label: 'Course — Intermédiaire', short: 'Course',
-    type: 'run', color: '#C26060', duration: '50-70 min',
+    type: 'run', color: '#FF3B30', duration: '50-70 min',
     desc: 'S57-72 : 40-55 min. Séances qualité + volume. Objectif 5 km sous 35 min.',
     exercises: [
       { name: 'Échauffement', detail: '10 min progressif (marche → allure douce)', required: true },
@@ -310,7 +310,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   course_long: {
     id: 'course_long', label: 'Sortie longue course', short: 'Long Run',
-    type: 'run', color: '#C26060', duration: '60-80 min',
+    type: 'run', color: '#FF3B30', duration: '60-80 min',
     desc: 'Sortie longue du week-end S53-72. Base marathon. Pas de performance.',
     exercises: [
       { name: 'Règle de la longue', detail: '+10% max par rapport à la semaine précédente. Jamais deux longues difficiles consécutives.', warning: true },
@@ -321,7 +321,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   course_avance: {
     id: 'course_avance', label: 'Course — Avancé', short: 'Course',
-    type: 'run', color: '#C26060', duration: '60-80 min',
+    type: 'run', color: '#FF3B30', duration: '60-80 min',
     desc: 'S73-88 : 55-75 min. Séances structurées. Objectif 10 km sous 55 min.',
     exercises: [
       { name: 'Échauffement', detail: '12 min progressif', required: true },
@@ -333,7 +333,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   course_long_avance: {
     id: 'course_long_avance', label: 'Long Run — Ironman', short: 'Long Run',
-    type: 'run', color: '#C26060', duration: '90 min-2h',
+    type: 'run', color: '#FF3B30', duration: '90 min-2h',
     desc: 'Sortie longue du dimanche S73-104. Fondation marathon Ironman.',
     exercises: [
       { name: 'Volume', detail: 'S73-80 : 85-100 min · S81-88 : 100-110 min · S89-96 : 110-130 min · S97-104 : 120-150 min (dont 1 sortie 2h10 simulant la course du jour J)', sets: 'Zone 2 exclusive — marathon Ironman se court très lentement' },
@@ -346,7 +346,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   brick_initiation: {
     id: 'brick_initiation', label: 'Enchaînement — Initiation', short: 'Brick',
-    type: 'brick', color: '#A07058', duration: '55-70 min',
+    type: 'brick', color: '#AF52DE', duration: '55-70 min',
     desc: 'S41-56 : premier enchaînement vélo + course. Apprendre les jambes de brique.',
     painCheck: true,
     exercises: [
@@ -359,7 +359,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   brick_sprint: {
     id: 'brick_sprint', label: 'Enchaînement — Sprint', short: 'Brick',
-    type: 'brick', color: '#A07058', duration: '90-110 min',
+    type: 'brick', color: '#AF52DE', duration: '90-110 min',
     desc: 'S57-72 : bricks format triathlon Sprint (20 km vélo + 5 km course).',
     exercises: [
       { name: 'Vélo', detail: 'S57-62 : 50-60 min · S63-72 : 65-75 min. Zone 2-3, rester assis, cadence 85+ rpm.', required: true },
@@ -370,7 +370,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   brick_olympique: {
     id: 'brick_olympique', label: 'Enchaînement — Olympique', short: 'Brick',
-    type: 'brick', color: '#A07058', duration: '2h-2h30',
+    type: 'brick', color: '#AF52DE', duration: '2h-2h30',
     desc: 'S73-88 : bricks format triathlon Olympique (40 km vélo + 10 km course).',
     exercises: [
       { name: 'Vélo', detail: 'S73-78 : 80-90 min · S79-88 : 90-105 min. Zone 2-3. Position aéro le maximum.', required: true },
@@ -382,7 +382,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   brick_ironman: {
     id: 'brick_ironman', label: 'Enchaînement — Ironman', short: 'Brick IM',
-    type: 'brick', color: '#A07058', duration: '3h30-5h',
+    type: 'brick', color: '#AF52DE', duration: '3h30-5h',
     desc: 'S89-104 : bricks longues. Simuler les conditions de course.',
     exercises: [
       { name: 'Vélo', detail: 'S89-94 : 2h30-3h · S95-100 : 3h-3h30 · S101-104 : 1 sortie 4h (simulation 1/2 vélo Ironman)', required: true },
@@ -396,7 +396,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   taper_light: {
     id: 'taper_light', label: 'Taper — Volume réduit', short: 'Taper',
-    type: 'rest', color: '#7A7870', duration: '20-30 min max',
+    type: 'rest', color: '#8E8E93', duration: '20-30 min max',
     desc: 'Semaine de taper : volume coupé de 40-50%, intensité conservée sur de courtes durées. Le corps se recharge.',
     exercises: [
       { name: 'Principe taper', detail: 'Choisir UNE activité (nage OU vélo OU course). Durée max 25-30 min. Allure normale, juste très court.', required: true },
@@ -408,7 +408,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   pre_race: {
     id: 'pre_race', label: 'Veille de course', short: 'J-1',
-    type: 'rest', color: '#CF8E42', duration: '15-20 min',
+    type: 'rest', color: '#FF9500', duration: '15-20 min',
     desc: 'Repos actif + préparation matériel. Économiser chaque gramme d\'énergie pour demain.',
     exercises: [
       { name: 'Activité légère', detail: '15 min de nage très légère OU 20 min de marche. Juste débloquer les jambes — surtout pas transpirer.', required: true },
@@ -420,7 +420,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   race_day: {
     id: 'race_day', label: 'Jour de course', short: 'COURSE',
-    type: 'brick', color: '#CF8E42', duration: 'Toute la journée',
+    type: 'brick', color: '#FF9500', duration: 'Toute la journée',
     desc: 'Ce n\'est pas une séance — c\'est la récolte de tout ce travail. Profite.',
     exercises: [
       { name: 'Réveil', detail: '3h avant le départ. Petit déjeuner identique à l\'entraînement (jamais de nouveau). 500 mL eau sur le trajet.', required: true },
@@ -434,7 +434,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   post_race: {
     id: 'post_race', label: 'Récupération post-course', short: 'Récup',
-    type: 'rest', color: '#6EC6D8', duration: '20-30 min',
+    type: 'rest', color: '#007AFF', duration: '20-30 min',
     desc: 'Semaine après compétition. Corps épuisé = laisser récupérer sans culpabilité.',
     exercises: [
       { name: 'Activité autorisée', detail: 'Nage douce 20-25 min OU marche 30 min. Pas de vélo intense ni de course si les jambes font mal.', required: true },
@@ -448,7 +448,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 
   rest: {
     id: 'rest', label: 'Repos', short: 'Repos',
-    type: 'rest', color: '#4A4845', duration: '',
+    type: 'rest', color: '#8E8E93', duration: '',
     desc: 'Le corps se reconstruit pendant le repos, pas pendant l\'effort. C\'est une séance à part entière.',
     exercises: [],
   },

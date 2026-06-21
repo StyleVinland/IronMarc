@@ -3,8 +3,7 @@ import { useState, useMemo } from 'react';
 import { useAppState } from './AppStateProvider';
 import { SESSIONS, PHASES, RACES, WEEK_DAYS, WEEK_DAY_LABELS, getCurrentWeek, getCurrentPhase, PROGRAM_START, DATE_OVERRIDES, computeRaceOverrides, RACE_COLORS, RACE_LABELS } from '@/lib/program';
 import type { WeekDay, ProgramPhase } from '@/lib/program';
-import MissionList from './MissionList';
-import QuestList from './QuestList';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 import DebriefPanel from './DebriefPanel';
 
 const MONTHS_FR = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
@@ -90,17 +89,12 @@ const PHASE_MILESTONES: Record<string, { label: string; color: string }> = {
 };
 
 export default function EntrainementClient() {
-  const { state, today, toggleMission, toggleQuest } = useAppState();
+  useScrollReveal();
+  const { state, today } = useAppState();
   const [weekOffset, setWeekOffset] = useState(0);
   const [selectedDate, setSelectedDate] = useState<string>(() => today);
   const [pain, setPain] = useState({ aine: 0, tibia: 0 });
   const [openPhaseId, setOpenPhaseId] = useState<string | null>(null);
-
-  const todayData = state.days[today] ?? {
-    date: today, cigs: 0,
-    mind: { mood: null, journal: '', grat: ['', '', ''] },
-    missions: {},
-  };
 
   const currentWeek = getCurrentWeek();
   const currentPhase = getCurrentPhase(currentWeek);
@@ -137,13 +131,13 @@ export default function EntrainementClient() {
 
   return (
     <>
-      <div className="page-title-block">
+      <div className="page-title-block reveal">
         <h1>Entraînement</h1>
         <p>Programme complet pubalgie + périostites → Ironman en 2 ans</p>
       </div>
 
       {/* ── PHASE ACTUELLE ── */}
-      <div className="prog-phase-banner">
+      <div className="prog-phase-banner reveal reveal-d1">
         <div className="prog-phase-left">
           <div className="prog-phase-week">Semaine {currentWeek}</div>
           <div className="prog-phase-label">{currentPhase.label}</div>
@@ -154,8 +148,8 @@ export default function EntrainementClient() {
         </div>
       </div>
 
-      {/* ── CALENDRIER PAR DATES ── */}
-      <section className="prog-week-section">
+      {/* ── CALENDRIER — pleine largeur ── */}
+      <section className="prog-week-section reveal reveal-d1">
         <div className="prog-week-nav">
           <button className="btn-ghost prog-nav-btn" onClick={() => handleWeekChange(-1)}>
             <span className="prog-nav-label-full">← Précédente</span>
@@ -199,113 +193,112 @@ export default function EntrainementClient() {
         </div>
       </section>
 
-      {/* ── SÉANCE DU JOUR SÉLECTIONNÉ ── */}
-      <section>
-        <div className="shead">
-          <h2>{isSelToday ? "Aujourd'hui" : fmtDayLong(selDateObj)}</h2>
-          <span className="hint" style={{ color: selSession.color }}>{selSession.label}</span>
-        </div>
+      {/* ── SÉANCE (3/4) + COURSES (1/4) ── */}
+      <div className="prog-session-races reveal">
 
-        {isSelToday && painHigh && (
-          <div className="prog-pain-alert">
-            Douleur &gt; 4/10 — repose-toi aujourd&apos;hui. Ce n&apos;est pas un échec, c&apos;est de l&apos;intelligence.
+        {/* Séance sélectionnée */}
+        <section className="prog-detail-col">
+          <div className="shead">
+            <h2>{isSelToday ? "Aujourd'hui" : fmtDayLong(selDateObj)}</h2>
+            <span className="hint" style={{ color: selSession.color }}>{selSession.label}</span>
           </div>
-        )}
 
-        {isSelToday && selSession.painCheck && !painHigh && (
-          <div className="prog-pain-check">
-            <div className="prog-pain-title">Check douleur avant de commencer</div>
-            {(['aine', 'tibia'] as const).map(zone => (
-              <div key={zone} className="prog-pain-row">
-                <label className="prog-pain-label">{zone === 'aine' ? 'Aine / pubis' : 'Tibia'}</label>
-                <div className="prog-pain-scale">
-                  {[0,1,2,3,4,5,6,7,8,9,10].map(v => (
-                    <button key={v}
-                      className={`prog-pain-btn${pain[zone] === v ? ' sel' : ''}${v > 4 ? ' danger' : ''}`}
-                      onClick={() => setPain(p => ({ ...p, [zone]: v }))}>{v}</button>
-                  ))}
-                </div>
-              </div>
-            ))}
-            <div className="prog-pain-rule">≤ 4/10 = vert → faire la séance · &gt; 4/10 = stop · Courbatures légères = normales</div>
-          </div>
-        )}
-
-        <div className="prog-session-card" style={{ '--session-color': selSession.color } as React.CSSProperties}>
-          <div className="prog-session-header">
-            <div>
-              <div className="prog-session-label">{selSession.label}</div>
-              <div className="prog-session-desc">{selSession.desc}</div>
-            </div>
-            {selSession.duration && <div className="prog-session-dur">{selSession.duration}</div>}
-          </div>
-          {selSession.exercises.length > 0 && (
-            <div className="prog-exercise-list">
-              {selSession.exercises.map((ex, i) => (
-                <div key={i} className={`prog-exercise${ex.required ? ' required' : ''}${ex.warning ? ' warning' : ''}`}>
-                  <div className="prog-ex-name">{ex.name}</div>
-                  <div className="prog-ex-detail">{ex.detail}</div>
-                  {ex.sets && <div className="prog-ex-sets">{ex.sets}</div>}
-                </div>
-              ))}
+          {isSelToday && painHigh && (
+            <div className="prog-pain-alert">
+              Douleur &gt; 4/10 — repose-toi aujourd&apos;hui. Ce n&apos;est pas un échec, c&apos;est de l&apos;intelligence.
             </div>
           )}
-        </div>
 
-        {displayedPhase.notes.length > 0 && (
-          <div className="prog-notes">
-            {displayedPhase.notes.map((n, i) => <div key={i} className="prog-note">— {n}</div>)}
-          </div>
-        )}
-
-        {selSessionId !== 'rest' && (
-          <DebriefPanel
-            date={selectedDate}
-            sessionId={selSessionId}
-            sessionLabel={selSession.label}
-          />
-        )}
-      </section>
-
-      {/* ── COMPÉTITIONS ── */}
-      <section>
-        <div className="shead">
-          <h2>Compétitions prévues</h2>
-          <span className="hint">dates provisoires — à ajuster</span>
-        </div>
-        <div className="races-note">
-          Ces dates sont des objectifs, pas des obligations. Si le corps dit non → on décale sans hésiter.
-          Cherche les événements réels de ta région (fftri.fr, triathlons-annuaire.com).
-        </div>
-        <div className="races-list">
-          {RACES.map(race => {
-            const cd = countdown(race.date);
-            const isPast = cd === 'Passée';
-            const color = RACE_COLORS[race.type];
-            return (
-              <div key={race.date} className={`race-card${isPast ? ' past' : ''}`} style={{ '--race-color': color } as React.CSSProperties}>
-                <div className="race-card-top">
-                  <span className="race-type-badge" style={{ background: color + '22', color, borderColor: color + '55' }}>
-                    {RACE_LABELS[race.type]}
-                  </span>
-                  <span className={`race-countdown${isPast ? ' past' : cd.startsWith('Dans') && parseInt(cd.split(' ')[1]) < 30 ? ' soon' : ''}`}>
-                    {cd}
-                  </span>
-                  {race.optional && <span className="race-optional">facultatif</span>}
+          {isSelToday && selSession.painCheck && !painHigh && (
+            <div className="prog-pain-check">
+              <div className="prog-pain-title">Check douleur avant de commencer</div>
+              {(['aine', 'tibia'] as const).map(zone => (
+                <div key={zone} className="prog-pain-row">
+                  <label className="prog-pain-label">{zone === 'aine' ? 'Aine / pubis' : 'Tibia'}</label>
+                  <div className="prog-pain-scale">
+                    {[0,1,2,3,4,5,6,7,8,9,10].map(v => (
+                      <button key={v}
+                        className={`prog-pain-btn${pain[zone] === v ? ' sel' : ''}${v > 4 ? ' danger' : ''}`}
+                        onClick={() => setPain(p => ({ ...p, [zone]: v }))}>{v}</button>
+                    ))}
+                  </div>
                 </div>
-                <div className="race-card-name">{race.label}</div>
-                <div className="race-card-date">{fmtRaceDate(race.date)}</div>
-                <div className="race-distances">{race.distances}</div>
-                <div className="race-location">📍 {race.location}</div>
-                <div className="race-note">{race.note}</div>
+              ))}
+              <div className="prog-pain-rule">≤ 4/10 = vert → faire la séance · &gt; 4/10 = stop · Courbatures légères = normales</div>
+            </div>
+          )}
+
+          <div className="prog-session-card" style={{ '--session-color': selSession.color } as React.CSSProperties}>
+            <div className="prog-session-header">
+              <div>
+                <div className="prog-session-label">{selSession.label}</div>
+                <div className="prog-session-desc">{selSession.desc}</div>
               </div>
-            );
-          })}
-        </div>
-      </section>
+              {selSession.duration && <div className="prog-session-dur">{selSession.duration}</div>}
+            </div>
+            {selSession.exercises.length > 0 && (
+              <div className="prog-exercise-grid">
+                {selSession.exercises.map((ex, i) => (
+                  <div key={i} className={`prog-ex-card${ex.required ? ' required' : ''}${ex.warning ? ' warning' : ''}`}>
+                    <div className="prog-ex-name">{ex.name}</div>
+                    {ex.sets && <div className="prog-ex-sets">{ex.sets}</div>}
+                    <div className="prog-ex-detail">{ex.detail}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {displayedPhase.notes.length > 0 && (
+            <div className="prog-notes">
+              {displayedPhase.notes.map((n, i) => <div key={i} className="prog-note">— {n}</div>)}
+            </div>
+          )}
+
+          {selSessionId !== 'rest' && (
+            <DebriefPanel
+              date={selectedDate}
+              sessionId={selSessionId}
+              sessionLabel={selSession.label}
+            />
+          )}
+        </section>
+
+        {/* Courses prévues */}
+        <aside className="prog-races-col">
+          <div className="shead">
+            <h2>Compétitions</h2>
+            <span className="hint">dates provisoires</span>
+          </div>
+          <div className="prog-races-list">
+            {RACES.map(race => {
+              const cd = countdown(race.date);
+              const isPast = cd === 'Passée';
+              const color = RACE_COLORS[race.type];
+              return (
+                <div key={race.date} className={`prog-race-item${isPast ? ' past' : ''}`} style={{ '--race-color': color } as React.CSSProperties}>
+                  <div className="prog-race-item-top">
+                    <span className="race-type-badge" style={{ background: color + '18', color, borderColor: color + '40' }}>
+                      {RACE_LABELS[race.type]}
+                    </span>
+                    {race.optional && <span className="race-optional">opt.</span>}
+                  </div>
+                  <div className="prog-race-item-name">{race.label}</div>
+                  <div className="prog-race-item-row">
+                    <span className="prog-race-item-date">{fmtRaceDate(race.date)}</span>
+                    <span className={`race-countdown${isPast ? ' past' : ''}`}>{cd}</span>
+                  </div>
+                  <div className="prog-race-item-dist">{race.distances}</div>
+                </div>
+              );
+            })}
+          </div>
+        </aside>
+
+      </div>{/* fin prog-session-races */}
 
       {/* ── FEUILLE DE ROUTE ── */}
-      <section>
+      <section className="reveal reveal-d1">
         <div className="shead"><h2>Feuille de route 3 ans</h2><span className="hint">11 phases</span></div>
         <div className="prog-roadmap">
           {PHASES.map(p => {
@@ -370,11 +363,6 @@ export default function EntrainementClient() {
         </div>
       </section>
 
-      {/* ── MISSIONS + QUÊTES ── */}
-      <div className="two-col" style={{ marginTop: 4 }}>
-        <MissionList missions={todayData.missions} onToggle={toggleMission} date={today} />
-        <QuestList quests={state.quests} onToggle={toggleQuest} />
-      </div>
     </>
   );
 }

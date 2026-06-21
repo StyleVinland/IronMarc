@@ -26,10 +26,10 @@ export const SESSION_LOAD: Record<string, NutritionLoad> = {
 };
 
 export const LOAD_TARGETS: Record<NutritionLoad, { kcal: number; protein: number; label: string; color: string }> = {
-  repos:   { kcal: 1950, protein: 100, label: 'Repos',   color: '#4A4845' },
-  leger:   { kcal: 2200, protein: 120, label: 'Léger',   color: '#88C49A' },
-  moyen:   { kcal: 2500, protein: 140, label: 'Moyen',   color: '#CF8E42' },
-  intense: { kcal: 2900, protein: 160, label: 'Intense', color: '#C26060' },
+  repos:   { kcal: 1950, protein: 100, label: 'Repos',   color: '#8E8E93' },
+  leger:   { kcal: 2200, protein: 120, label: 'Léger',   color: '#34C759' },
+  moyen:   { kcal: 2500, protein: 140, label: 'Moyen',   color: '#FF9500' },
+  intense: { kcal: 2900, protein: 160, label: 'Intense', color: '#FF3B30' },
 };
 
 // ─────────────────────────────────────────────────────────────────────────────

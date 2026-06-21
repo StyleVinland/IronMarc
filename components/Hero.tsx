@@ -5,17 +5,24 @@ interface Props {
 export default function Hero({ checkpointPct }: Props) {
   return (
     <header className="hero">
-      <div className="eyebrow">Journal de bord · objectif de vie</div>
-      <div className="hero-goal">Ironman</div>
-      <div className="hero-sub">Phase 1 — poser les fondations</div>
-      <p className="hero-why">
-        Je ne me reconstruis pas pour être repris. Je me reconstruis pour redevenir entier. Le reste suivra.
-      </p>
-      <div className="water" aria-label={`Progression Phase 1 : ${checkpointPct}%`}>
-        <div className="water-fill" style={{ width: `${checkpointPct}%` }} />
-        <div className="water-cap">
-          <span>Checkpoint Phase 1</span>
-          <span>{checkpointPct}%</span>
+      <div className="hero-text">
+        <div className="hero-eyebrow">Objectif de vie · Ironman 2026</div>
+        <div className="hero-goal">Ironman</div>
+        <p className="hero-why">
+          Je ne me reconstruis pas pour être repris — je me reconstruis pour redevenir entier.
+        </p>
+      </div>
+      <div className="hero-progress-wrap">
+        <div className="hero-progress-label">Phase 1 — fondations</div>
+        <div className="water" aria-label={`Phase 1 : ${checkpointPct}%`}>
+          <div className="water-fill" style={{ width: `${checkpointPct}%` }} />
+          <div className="water-cap">
+            <span>Checkpoint atteint</span>
+            <span>{checkpointPct}%</span>
+          </div>
+        </div>
+        <div className="hero-progress-sub">
+          Ironman 70.3 Nice · Juin 2026
         </div>
       </div>
     </header>

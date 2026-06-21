@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import Nav from '@/components/Nav';
 import { AppStateProvider } from '@/components/AppStateProvider';
 import { AuthProvider } from '@/components/AuthProvider';
+import ThemeProvider from '@/components/ThemeProvider';
 import { getFullState } from '@/lib/db';
 import './globals.css';
 
@@ -12,7 +13,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: '#0F0F0E',
+  themeColor: '#F2F2F7',
 };
 
 export const metadata: Metadata = {
@@ -35,12 +36,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap"
-          rel="stylesheet"
-        />
       </head>
       <body>
+        <ThemeProvider />
         <AuthProvider>
           <AppStateProvider initial={initialState}>
             <div className="app-root">

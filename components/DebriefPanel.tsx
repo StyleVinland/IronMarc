@@ -9,10 +9,10 @@ interface Props {
 }
 
 const STATUSES = [
-  { id: 'done',     label: '✓ Faite',       color: '#88C49A' },
-  { id: 'modified', label: '~ Adaptée',     color: '#CF8E42' },
-  { id: 'skipped',  label: '→ Reportée',    color: '#6EC6D8' },
-  { id: 'injury',   label: '✗ Blessure',    color: '#C26060' },
+  { id: 'done',     label: '✓ Faite',       color: '#34C759' },
+  { id: 'modified', label: '~ Adaptée',     color: '#FF9500' },
+  { id: 'skipped',  label: '→ Reportée',    color: '#007AFF' },
+  { id: 'injury',   label: '✗ Blessure',    color: '#FF3B30' },
 ] as const;
 
 const MONTHS_FR = ['jan','fév','mar','avr','mai','jun','jul','aoû','sep','oct','nov','déc'];

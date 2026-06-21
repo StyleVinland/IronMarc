@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 interface GearItem {
   name: string;
@@ -166,6 +167,7 @@ const CHECK = (
 );
 
 export default function MaterielClient() {
+  useScrollReveal();
   const [bought, setBought] = useState<Record<number, boolean>>({});
   const toggle = (i: number) => setBought(p => ({ ...p, [i]: !p[i] }));
 
@@ -174,13 +176,13 @@ export default function MaterielClient() {
 
   return (
     <>
-      <div className="page-title-block">
+      <div className="page-title-block reveal">
         <h1>Matériel</h1>
         <p>Dans l'ordre d'importance — 1 achat par mois</p>
       </div>
 
       {/* Déjà en stock */}
-      <section>
+      <section className="reveal reveal-d1">
         <div className="shead">
           <h2>Déjà en stock</h2>
           <span className="hint">{OWNED.length + boughtItems.length} items</span>
@@ -217,7 +219,7 @@ export default function MaterielClient() {
       </section>
 
       {/* Liste prioritaire */}
-      <section>
+      <section className="reveal">
         <div className="shead">
           <h2>À acheter dans l'ordre</h2>
           <span className="hint">{boughtItems.length}/{GEAR.length} achetés</span>
