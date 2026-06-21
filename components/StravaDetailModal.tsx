@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { decodePolyline } from '@/lib/polyline';
 
 interface DetailActivity {
@@ -163,7 +164,7 @@ export default function StravaDetailModal({
   const typeIcon  = activity ? (TYPE_ICON[activity.type] ?? '🏅') : '';
   const gearIcon  = activity ? (GEAR_ICON[activity.type] ?? '⚙️') : '';
 
-  return (
+  const modal = (
     <div className="sdm-overlay" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="sdm-panel">
 
@@ -255,4 +256,6 @@ export default function StravaDetailModal({
       </div>
     </div>
   );
+
+  return createPortal(modal, document.body);
 }
