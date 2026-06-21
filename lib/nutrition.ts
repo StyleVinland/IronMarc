@@ -1,323 +1,562 @@
-// Plan nutritionnel pour Marc
-// Contraintes : SII (bas-FODMAP) + intolérance au lactose + sous-mange (~62 kg / 172 cm)
-// Objectif : ~2400-2600 kcal/jour. Nourrir, pas restreindre.
+// Plan nutritionnel Marc — SII bas-FODMAP · sans lactose · budget serré · varié + international
+// Calorie ciblées selon la charge d'entraînement du jour
 
-export interface Meal {
+export type NutritionLoad = 'repos' | 'leger' | 'moyen' | 'intense';
+export type ShopCat = 'Fruits & légumes' | 'Protéines' | 'Féculents & céréales' | 'Épicerie sèche' | 'Frais';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CHARGE PAR TYPE DE SÉANCE
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const SESSION_LOAD: Record<string, NutritionLoad> = {
+  rest: 'repos', post_race: 'repos',
+  renfo_a: 'leger', renfo_b: 'leger', renfo_core: 'leger',
+  swim_debutant: 'leger', swim_initiation: 'leger',
+  bike_stationnaire: 'leger', marche: 'leger',
+  marche_course: 'leger', taper_light: 'leger', pre_race: 'leger',
+  swim_base: 'moyen', swim_endurance: 'moyen',
+  bike_court: 'moyen',
+  course_debutant: 'moyen', course_base: 'moyen', course_intermediaire: 'moyen',
+  swim_avance: 'intense', swim_ironman: 'intense',
+  bike_moyen: 'intense', bike_tri: 'intense', bike_long: 'intense', bike_ironman: 'intense',
+  course_avance: 'intense', course_long: 'intense',
+  course_long_avance: 'intense', course_marathon: 'intense',
+  brick_initiation: 'intense', brick_sprint: 'intense',
+  brick_olympique: 'intense', brick_ironman: 'intense', race_day: 'intense',
+};
+
+export const LOAD_TARGETS: Record<NutritionLoad, { kcal: number; protein: number; label: string; color: string }> = {
+  repos:   { kcal: 1950, protein: 100, label: 'Repos',   color: '#4A4845' },
+  leger:   { kcal: 2200, protein: 120, label: 'Léger',   color: '#88C49A' },
+  moyen:   { kcal: 2500, protein: 140, label: 'Moyen',   color: '#CF8E42' },
+  intense: { kcal: 2900, protein: 160, label: 'Intense', color: '#C26060' },
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STRUCTURE
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface Ingredient {
+  name: string;
+  qty: string;
+  cat: ShopCat;
+}
+
+export interface MealOption {
+  id: string;
   label: string;
   desc: string;
   kcal: number;
-  protein: number; // grammes
-  tip?: string;
-}
-
-export interface DayPlan {
-  day: string;
-  breakfast: Meal;
-  snack1: Meal;
-  lunch: Meal;
-  snack2: Meal;
-  dinner: Meal;
-  total: number;
-}
-
-export interface Recipe {
-  id: string;
-  name: string;
-  category: 'petit-dej' | 'plat' | 'snack' | 'batch';
-  time: string;
-  kcal: number;
   protein: number;
-  portions: number;
-  ingredients: string[];
-  steps: string[];
+  ingredients: Ingredient[];
   tip?: string;
+  preTraining?: boolean;
+  postTraining?: boolean;
 }
 
-// ── PLAN HEBDOMADAIRE ─────────────────────────────────────────────
+export interface DayNutrition {
+  load: NutritionLoad;
+  targetKcal: number;
+  targetProtein: number;
+  breakfast: MealOption;
+  snackAM: MealOption;
+  lunch: MealOption;
+  preTrainingSnack: MealOption | null;
+  postTrainingSnack: MealOption | null;
+  snackPM: MealOption;
+  dinner: MealOption;
+}
 
-export const WEEK_PLAN: DayPlan[] = [
+// ─────────────────────────────────────────────────────────────────────────────
+// PETIT-DÉJEUNERS (6 options — rotation)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const BREAKFASTS: MealOption[] = [
   {
-    day: 'Lundi',
-    breakfast: { label: 'Flocons d\'avoine + lait amande + banane + 2 œufs', desc: 'Flocons d\'avoine 60g, lait d\'amande 200 ml, 1 banane mûre, 2 œufs brouillés huile d\'olive', kcal: 620, protein: 28, tip: 'Les flocons d\'avoine sont OK bas-FODMAP en petite quantité (60g max).' },
-    snack1:    { label: 'Riz soufflé + beurre d\'amande + kiwi', desc: '3 galettes de riz, 2 cs beurre d\'amande, 1 kiwi', kcal: 280, protein: 8 },
-    lunch:     { label: 'Poulet riz courgettes', desc: '150g blanc de poulet poêlé, 80g riz basmati cuit, 1 courgette sautée huile d\'olive, herbes fraîches', kcal: 580, protein: 42 },
-    snack2:    { label: 'Poignée noix + raisins', desc: '30g noix, 1 petite grappe de raisin frais', kcal: 250, protein: 6 },
-    dinner:    { label: 'Saumon en papillote + quinoa + épinards', desc: '150g filet saumon, 80g quinoa cuit, poignée épinards frais sautés, citron, huile d\'olive', kcal: 620, protein: 38 },
-    total: 2350,
+    id: 'b1', label: 'Porridge avoine-banane + 2 œufs', kcal: 620, protein: 28,
+    desc: '60g flocons avoine + 250ml lait avoine + 1 banane + miel + 2 œufs brouillés',
+    tip: 'Cuire les œufs en même temps que l\'avoine chauffe — 5 min top chrono.',
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: '60 g', cat: 'Féculents & céréales' },
+      { name: 'Lait d\'avoine', qty: '250 ml', cat: 'Frais' },
+      { name: 'Banane', qty: '1', cat: 'Fruits & légumes' },
+      { name: 'Miel', qty: '1 cs', cat: 'Épicerie sèche' },
+      { name: 'Œufs', qty: '2', cat: 'Frais' },
+      { name: 'Huile d\'olive', qty: 'un peu', cat: 'Épicerie sèche' },
+    ],
   },
   {
-    day: 'Mardi',
-    breakfast: { label: 'Smoothie banane-amande + pain de riz + avocat', desc: '1 banane, 200 ml lait amande, 1 cs beurre amande, 2 tranches pain de riz, ½ avocat', kcal: 590, protein: 14, tip: 'L\'avocat est riche en bonnes graisses et très digeste pour le SII.' },
-    snack1:    { label: 'Compote pommes maison + 2 œufs durs', desc: 'Compote de pommes sans sucre ajouté, 2 œufs durs', kcal: 260, protein: 14 },
-    lunch:     { label: 'Riz thaï crevettes légumes', desc: '130g crevettes, 80g riz thaï, poivron rouge, carottes, sauce tamari (sans gluten), huile sésame', kcal: 560, protein: 34 },
-    snack2:    { label: 'Galettes riz + purée noisette', desc: '3 galettes de riz, 2 cs purée de noisette (100% noisette)', kcal: 280, protein: 7 },
-    dinner:    { label: 'Dinde haché + patate douce + haricots verts', desc: '150g haché dinde, 200g patate douce rôtie, 100g haricots verts vapeur, huile olive', kcal: 640, protein: 40 },
-    total: 2330,
+    id: 'b2', label: 'Smoothie banane-amande + galettes riz + avocat', kcal: 590, protein: 14,
+    desc: 'Smoothie : 1 banane + 200ml lait amande + 1cs beurre amande · 3 galettes de riz + ½ avocat',
+    tip: 'Rapide le matin — smoothie dans le blender pendant que les galettes attendent.',
+    ingredients: [
+      { name: 'Banane', qty: '1', cat: 'Fruits & légumes' },
+      { name: 'Lait d\'amande', qty: '200 ml', cat: 'Frais' },
+      { name: 'Beurre d\'amande', qty: '1 cs', cat: 'Épicerie sèche' },
+      { name: 'Galettes de riz', qty: '3', cat: 'Féculents & céréales' },
+      { name: 'Avocat', qty: '½', cat: 'Fruits & légumes' },
+    ],
   },
   {
-    day: 'Mercredi',
-    breakfast: { label: 'Oeufs cocotte tomate + pain de riz grillé', desc: '3 œufs cocotte au four (tomates, huile d\'olive, herbes de Provence), 2 tranches pain de riz grillé', kcal: 520, protein: 22 },
-    snack1:    { label: 'Fraises + noix de macadamia', desc: '200g fraises fraîches, 25g noix de macadamia', kcal: 240, protein: 4 },
-    lunch:     { label: 'Thon riz épinards', desc: '1 boite thon au naturel (140g égoutté), 80g riz basmati, poignée épinards crus, tomates cerises, huile olive citron', kcal: 530, protein: 44 },
-    snack2:    { label: 'Pain de riz + avocat + jus citron', desc: '2 tranches pain de riz, ½ avocat écrasé, jus de citron, sel', kcal: 280, protein: 5 },
-    dinner:    { label: 'Poulet rôti + riz + carottes', desc: '160g cuisse poulet rôtie (sans peau), 80g riz complet cuit, 150g carottes vapeur, huile olive', kcal: 590, protein: 36 },
-    total: 2160,
+    id: 'b3', label: 'Bowl patate douce + 3 œufs brouillés', kcal: 580, protein: 26,
+    desc: '150g patate douce rôtie dès dés + 3 œufs brouillés + tomates cerises + huile olive',
+    tip: 'Rôtir la patate douce la veille en batch — elle se réchauffe en 2 min au micro-ondes.',
+    ingredients: [
+      { name: 'Patate douce', qty: '150 g', cat: 'Fruits & légumes' },
+      { name: 'Œufs', qty: '3', cat: 'Frais' },
+      { name: 'Tomates cerises', qty: '6', cat: 'Fruits & légumes' },
+      { name: 'Huile d\'olive', qty: '1 cs', cat: 'Épicerie sèche' },
+    ],
   },
   {
-    day: 'Jeudi',
-    breakfast: { label: 'Porridge amande-banane-graines', desc: '60g flocons d\'avoine, 250ml lait amande chaud, 1 banane, 1 cs graines de courge, 1 cs sirop d\'érable', kcal: 580, protein: 16, tip: 'Préparer la veille au soir (overnight oats) pour gagner du temps le matin.' },
-    snack1:    { label: '2 œufs brouillés + tomates cerises', desc: '2 œufs brouillés dans un peu d\'huile olive, poignée tomates cerises', kcal: 220, protein: 14 },
-    lunch:     { label: 'Sardines + quinoa + poivron rôti', desc: '2 boites sardines huile d\'olive (120g), 80g quinoa cuit, 1 poivron rouge rôti, jus citron', kcal: 600, protein: 36 },
-    snack2:    { label: 'Smoothie banane-fraise-amande', desc: '1 banane, 100g fraises, 150ml lait amande, 1 cs beurre amande', kcal: 310, protein: 8 },
-    dinner:    { label: 'Pavé de cabillaud + pommes de terre + épinards', desc: '160g filet cabillaud, 200g pommes de terre vapeur, épinards sautés, citron, huile olive', kcal: 530, protein: 38 },
-    total: 2240,
+    id: 'b4', label: 'Pancakes avoine-banane + fraises', kcal: 560, protein: 20,
+    desc: '60g avoine mixé + 1 banane + 2 œufs + 50ml lait amande · fraises fraîches + sirop érable',
+    tip: 'Week-end ou batch : faire une double dose et congeler le surplus.',
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: '60 g', cat: 'Féculents & céréales' },
+      { name: 'Banane', qty: '1', cat: 'Fruits & légumes' },
+      { name: 'Œufs', qty: '2', cat: 'Frais' },
+      { name: 'Lait d\'amande', qty: '50 ml', cat: 'Frais' },
+      { name: 'Fraises', qty: '150 g', cat: 'Fruits & légumes' },
+      { name: 'Sirop d\'érable', qty: '1 cs', cat: 'Épicerie sèche' },
+    ],
   },
   {
-    day: 'Vendredi',
-    breakfast: { label: 'Pain de riz + beurre amande + 2 œufs + orange', desc: '3 tranches pain de riz, 2 cs beurre amande, 2 œufs à la coque, 1 orange', kcal: 560, protein: 22 },
-    snack1:    { label: 'Noix + raisins + galette de riz', desc: '30g noix, petite grappe raisin, 2 galettes de riz', kcal: 300, protein: 7 },
-    lunch:     { label: 'Poulet pesto basilic + pâtes riz', desc: '150g blanc de poulet, 80g pâtes de riz cuites, pesto maison (basilic, huile olive, pignons, sel — sans parmesan)', kcal: 620, protein: 40 },
-    snack2:    { label: 'Compote pomme-cannelle + amandes', desc: 'Compote pomme-cannelle maison (sans sucre), 20g amandes entières', kcal: 230, protein: 6 },
-    dinner:    { label: 'Bol riz haricots rouges (petite portion) + légumes', desc: '80g riz, 60g haricots rouges égouttés rincés (petite portion = moins de FODMAP), courgette, tomate, huile olive, cumin', kcal: 490, protein: 18, tip: 'Rincer abondamment les légumineuses réduit les FODMAP. Rester sur 60g max.' },
-    total: 2200,
+    id: 'b5', label: 'Pain de riz + beurre amande + 2 œufs à la coque', kcal: 550, protein: 22,
+    desc: '3 tranches pain de riz grillé + 2cs beurre amande + 2 œufs à la coque + 1 orange',
+    tip: 'Le plus rapide — 8 min chrono avec les œufs.',
+    ingredients: [
+      { name: 'Pain de riz', qty: '3 tranches', cat: 'Féculents & céréales' },
+      { name: 'Beurre d\'amande', qty: '2 cs', cat: 'Épicerie sèche' },
+      { name: 'Œufs', qty: '2', cat: 'Frais' },
+      { name: 'Orange', qty: '1', cat: 'Fruits & légumes' },
+    ],
   },
   {
-    day: 'Samedi',
-    breakfast: { label: 'Pancakes avoine-banane (sans lactose)', desc: '60g flocons d\'avoine mixés, 1 banane écrasée, 2 œufs, lait amande — cuire à l\'huile de coco', kcal: 560, protein: 20, tip: 'Recette en détail dans les fiches recettes.' },
-    snack1:    { label: 'Kiwi + 2 œufs durs + graines courge', desc: '2 kiwis, 2 œufs durs, 15g graines de courge', kcal: 270, protein: 16 },
-    lunch:     { label: 'Steak haché + patate douce + salade', desc: '150g steak haché boeuf, 200g patate douce rôtie, salade verte + tomates cerises + huile olive', kcal: 640, protein: 38 },
-    snack2:    { label: 'Pain de riz + purée amande + banane', desc: '2 tranches pain de riz, 2 cs purée d\'amande, ½ banane', kcal: 300, protein: 8 },
-    dinner:    { label: 'Crevettes sautées + riz + poivron', desc: '150g crevettes, 80g riz basmati, 1 poivron rouge, sauce tamari, huile sésame, gingembre frais', kcal: 520, protein: 36 },
-    total: 2290,
-  },
-  {
-    day: 'Dimanche',
-    breakfast: { label: 'Oeufs cocotte + avocat + pain de riz', desc: 'Grand brunch dominical : 3 œufs pochés ou cocotte, 1 avocat entier, 3 tranches pain de riz grillé, tomates cerises', kcal: 680, protein: 26 },
-    snack1:    { label: 'Fraises + noix + sirop érable', desc: '200g fraises, 30g noix, filet sirop d\'érable', kcal: 290, protein: 6 },
-    lunch:     { label: 'Rôti poulet dominical + légumes du four', desc: '200g cuisse poulet rôtie, carottes/courgettes/poivron rôtis, pomme de terre, huile olive, romarin', kcal: 680, protein: 42 },
-    snack2:    { label: 'Smoothie banane-amande', desc: '1 banane, 200ml lait amande, 1 cs beurre amande, quelques glaçons', kcal: 280, protein: 8 },
-    dinner:    { label: 'Soupe légumes + riz + œuf poché', desc: 'Soupe de légumes (carottes, courgettes, poireau vert seulement, tomate), 50g riz, 1 œuf poché, huile olive', kcal: 420, protein: 18, tip: 'Le poireau : utiliser uniquement le vert (le blanc est riche en FODMAP).' },
-    total: 2350,
+    id: 'b6', label: 'Bowl riz soufflé + 3 œufs brouillés + myrtilles', kcal: 540, protein: 24,
+    desc: '40g riz soufflé + 200ml lait avoine + 3 œufs brouillés + 80g myrtilles + cannelle',
+    tip: 'Myrtilles : excellentes antioxydantes, anti-inflammatoires. Idéales après une séance.',
+    ingredients: [
+      { name: 'Riz soufflé', qty: '40 g', cat: 'Féculents & céréales' },
+      { name: 'Lait d\'avoine', qty: '200 ml', cat: 'Frais' },
+      { name: 'Œufs', qty: '3', cat: 'Frais' },
+      { name: 'Myrtilles', qty: '80 g', cat: 'Fruits & légumes' },
+      { name: 'Cannelle', qty: '1 pincée', cat: 'Épicerie sèche' },
+    ],
   },
 ];
 
-// ── RECETTES ──────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// DÉJEUNERS (8 options)
+// ─────────────────────────────────────────────────────────────────────────────
 
-export const RECIPES: Recipe[] = [
+export const LUNCHES: MealOption[] = [
   {
-    id: 'pancakes_avoine',
-    name: 'Pancakes avoine-banane (sans lactose)',
-    category: 'petit-dej',
-    time: '15 min',
-    kcal: 560,
-    protein: 20,
-    portions: 1,
+    id: 'l1', label: 'Poulet riz courgettes sauté', kcal: 580, protein: 42,
+    desc: '150g blanc poulet + 80g riz basmati + 1 courgette + herbes + citron',
+    tip: 'Base du batch cooking. Cuire 600g de poulet le dimanche = 4 déjeuners.',
     ingredients: [
-      '60 g de flocons d\'avoine (mixés en farine)',
-      '1 banane bien mûre',
-      '2 œufs',
-      '50 ml de lait d\'amande non sucré',
-      '1 pincée de bicarbonate',
-      'Huile de coco pour la cuisson',
+      { name: 'Blanc de poulet', qty: '150 g', cat: 'Protéines' },
+      { name: 'Riz basmati', qty: '80 g', cat: 'Féculents & céréales' },
+      { name: 'Courgette', qty: '1', cat: 'Fruits & légumes' },
+      { name: 'Citron', qty: '½', cat: 'Fruits & légumes' },
+      { name: 'Herbes de Provence', qty: '1 cc', cat: 'Épicerie sèche' },
     ],
-    steps: [
-      'Mixer les flocons d\'avoine en farine grossière.',
-      'Écraser la banane en purée à la fourchette.',
-      'Mélanger farine avoine, banane, œufs, lait d\'amande et bicarbonate.',
-      'Chauffer une poêle avec un peu d\'huile de coco à feu moyen.',
-      'Verser des petits ronds de pâte (~4 cm). Cuire 2 min/face jusqu\'à dorure.',
-      'Servir avec des fraises et un filet de sirop d\'érable.',
-    ],
-    tip: 'Les flocons d\'avoine en petite quantité (60g) sont tolérés dans le SII. Si sensibilité, remplacer par farine de riz.',
   },
   {
-    id: 'porridge_amande',
-    name: 'Porridge amande overnight',
-    category: 'petit-dej',
-    time: '5 min (préparer la veille)',
-    kcal: 520,
-    protein: 16,
-    portions: 1,
+    id: 'l2', label: 'Bowl thaï crevettes-gingembre', kcal: 560, protein: 34,
+    desc: '130g crevettes + 80g riz jasmin + carotte + sauce tamari-sésame-gingembre',
+    tip: 'Le tamari (sans gluten) remplace la sauce soja. Parfait IBS.',
     ingredients: [
-      '60 g de flocons d\'avoine',
-      '200 ml de lait d\'amande',
-      '1 cs de graines de chia',
-      '1 cs de beurre d\'amande',
-      '1 banane pour le lendemain',
+      { name: 'Crevettes décortiquées', qty: '130 g', cat: 'Protéines' },
+      { name: 'Riz jasmin', qty: '80 g', cat: 'Féculents & céréales' },
+      { name: 'Carotte', qty: '1 grande', cat: 'Fruits & légumes' },
+      { name: 'Gingembre frais', qty: '2 cm', cat: 'Fruits & légumes' },
+      { name: 'Sauce tamari (sans gluten)', qty: '2 cs', cat: 'Épicerie sèche' },
+      { name: 'Huile de sésame', qty: '1 cs', cat: 'Épicerie sèche' },
     ],
-    steps: [
-      'La veille au soir : mélanger dans un bocal les flocons, le lait, les graines de chia.',
-      'Fermer et réfrigérer toute la nuit.',
-      'Le matin : sortir le bocal, ajouter le beurre d\'amande et trancher la banane par-dessus.',
-      'Manger froid ou réchauffer 1 min au micro-ondes.',
-    ],
-    tip: 'Idéal les jours d\'entraînement matinal : préparé la veille, prêt en 0 seconde.',
   },
   {
-    id: 'poulet_riz_courgettes',
-    name: 'Poulet-riz-courgettes sauté',
-    category: 'plat',
-    time: '20 min',
-    kcal: 580,
-    protein: 42,
-    portions: 1,
+    id: 'l3', label: 'Sardines-quinoa-poivron rôti', kcal: 600, protein: 36,
+    desc: '2 boîtes sardines à l\'huile + 80g quinoa + 1 poivron rouge rôti + citron',
+    tip: 'Option la moins chère et la plus riche en oméga-3. Excellent pour l\'inflammation.',
     ingredients: [
-      '150 g de blanc de poulet',
-      '80 g de riz basmati cru (160g cuit)',
-      '1 courgette moyenne',
-      '2 cs d\'huile d\'olive',
-      'Herbes de Provence, sel, poivre',
-      'Jus d\'un demi-citron',
+      { name: 'Sardines à l\'huile (boîte)', qty: '2 × 90 g', cat: 'Protéines' },
+      { name: 'Quinoa', qty: '80 g', cat: 'Féculents & céréales' },
+      { name: 'Poivron rouge', qty: '1', cat: 'Fruits & légumes' },
+      { name: 'Citron', qty: '½', cat: 'Fruits & légumes' },
     ],
-    steps: [
-      'Cuire le riz dans deux fois son volume d\'eau salée.',
-      'Couper le poulet en lamelles, assaisonner.',
-      'Faire revenir le poulet dans 1 cs d\'huile olive à feu vif, 3-4 min/face.',
-      'Retirer le poulet. Dans la même poêle, sauter la courgette en rondelles 5 min.',
-      'Remettre le poulet, ajouter les herbes et le jus de citron.',
-      'Servir avec le riz, arroser d\'un filet d\'huile olive.',
-    ],
-    tip: 'Peut se préparer en batch le dimanche pour la semaine (se conserve 3 jours au frigo).',
   },
   {
-    id: 'saumon_quinoa',
-    name: 'Saumon papillote + quinoa + épinards',
-    category: 'plat',
-    time: '25 min',
-    kcal: 620,
-    protein: 38,
-    portions: 1,
+    id: 'l4', label: 'Thon riz épinards (ultra-rapide)', kcal: 530, protein: 44,
+    desc: '1 boîte thon naturel + 80g riz + épinards frais + tomates cerises + huile olive',
+    tip: 'Repas assemblé en 3 min si le riz est cuit à l\'avance.',
     ingredients: [
-      '150 g de filet de saumon',
-      '80 g de quinoa cru',
-      'Grande poignée d\'épinards frais',
-      '1 cs d\'huile d\'olive',
-      'Jus d\'un demi-citron',
-      'Herbes fraîches (aneth, thym)',
-      'Sel, poivre',
+      { name: 'Thon au naturel (boîte)', qty: '140 g égoutté', cat: 'Protéines' },
+      { name: 'Riz basmati', qty: '80 g', cat: 'Féculents & céréales' },
+      { name: 'Épinards frais', qty: 'poignée', cat: 'Fruits & légumes' },
+      { name: 'Tomates cerises', qty: '8', cat: 'Fruits & légumes' },
+      { name: 'Huile d\'olive', qty: '1 cs', cat: 'Épicerie sèche' },
     ],
-    steps: [
-      'Préchauffer le four à 200°C.',
-      'Rincer le quinoa, cuire 15 min dans 160 ml d\'eau salée.',
-      'Poser le saumon sur une feuille de papier aluminium.',
-      'Arroser d\'huile olive et citron, ajouter les herbes, refermer la papillote.',
-      'Cuire au four 12-15 min selon épaisseur.',
-      'Pendant ce temps, faire sauter les épinards 2 min dans un peu d\'huile olive.',
-      'Servir : quinoa, épinards, saumon ouvert par-dessus.',
-    ],
-    tip: 'Le saumon est riche en omega-3, excellents pour l\'inflammation articulaire (pubalgie, périostites).',
   },
   {
-    id: 'riz_crevettes',
-    name: 'Riz sauté crevettes-gingembre',
-    category: 'plat',
-    time: '15 min',
-    kcal: 520,
-    protein: 36,
-    portions: 1,
+    id: 'l5', label: 'Bowl coréen bœuf sauté (bibimbap simplifié)', kcal: 610, protein: 38,
+    desc: '130g bœuf haché + riz + épinards sautés + carotte râpée + œuf frit + tamari-sésame',
+    tip: 'Le bibimbap est naturellement sans lactose et très rassasiant. Économique avec du haché.',
     ingredients: [
-      '150 g de crevettes décortiquées',
-      '80 g de riz basmati cuit (du riz de veille, idéal)',
-      '1 poivron rouge',
-      '1 cm de gingembre frais râpé',
-      '2 cs de sauce tamari (sans gluten)',
-      '1 cs d\'huile de sésame',
-      'Graines de sésame',
+      { name: 'Bœuf haché 5%', qty: '130 g', cat: 'Protéines' },
+      { name: 'Riz', qty: '80 g', cat: 'Féculents & céréales' },
+      { name: 'Épinards', qty: 'poignée', cat: 'Fruits & légumes' },
+      { name: 'Carotte', qty: '1', cat: 'Fruits & légumes' },
+      { name: 'Œuf', qty: '1', cat: 'Frais' },
+      { name: 'Sauce tamari', qty: '1 cs', cat: 'Épicerie sèche' },
+      { name: 'Huile de sésame', qty: '1 cc', cat: 'Épicerie sèche' },
     ],
-    steps: [
-      'Si le riz est frais, cuire et laisser refroidir 10 min.',
-      'Faire revenir le gingembre 1 min dans l\'huile sésame à feu vif.',
-      'Ajouter les crevettes, cuire 2-3 min jusqu\'à rosé.',
-      'Ajouter le poivron en lanières, cuire 3 min.',
-      'Ajouter le riz, tamari, mélanger vivement 2 min.',
-      'Servir avec des graines de sésame.',
-    ],
-    tip: 'Le gingembre est anti-inflammatoire et aide la digestion. Le tamari (sans gluten) remplace la sauce soja classique.',
   },
   {
-    id: 'batch_poulet',
-    name: 'Batch cooking poulet du dimanche',
-    category: 'batch',
-    time: '45 min',
-    kcal: 200,
-    protein: 30,
-    portions: 4,
+    id: 'l6', label: 'Pâtes de riz saumon fumé épinards', kcal: 570, protein: 32,
+    desc: '80g pâtes riz + 80g saumon fumé + épinards + tomates cerises + huile olive + citron',
+    tip: 'Saumon fumé = protéines rapides, oméga-3 sans cuisson.',
     ingredients: [
-      '600 g de hauts de cuisses de poulet (ou blanc)',
-      '3 cs d\'huile d\'olive',
-      'Romarin, thym, sel, poivre',
-      'Jus d\'un citron',
+      { name: 'Pâtes de riz', qty: '80 g', cat: 'Féculents & céréales' },
+      { name: 'Saumon fumé', qty: '80 g', cat: 'Protéines' },
+      { name: 'Épinards frais', qty: 'poignée', cat: 'Fruits & légumes' },
+      { name: 'Tomates cerises', qty: '8', cat: 'Fruits & légumes' },
+      { name: 'Citron', qty: '½', cat: 'Fruits & légumes' },
     ],
-    steps: [
-      'Préchauffer le four à 190°C.',
-      'Déposer le poulet dans un plat, arroser d\'huile olive, citron, herbes.',
-      'Cuire 35-40 min jusqu\'à dorure (les cuisses doivent être à 75°C à cœur).',
-      'Laisser refroidir, effiler la viande à la fourchette ou couper en morceaux.',
-      'Conserver dans un bocal hermétique au frigo jusqu\'à 4 jours.',
-    ],
-    tip: 'Ce poulet effilé peut aller partout : riz, salade, wrap de riz, soupe. C\'est la base du batch cooking anti-FODMAP.',
   },
   {
-    id: 'smoothie_banane',
-    name: 'Smoothie banane-amande récupération',
-    category: 'snack',
-    time: '3 min',
-    kcal: 320,
-    protein: 10,
-    portions: 1,
+    id: 'l7', label: 'Wrap riz-poulet-avocat', kcal: 590, protein: 36,
+    desc: '2 galettes de riz grande taille + 130g poulet effilé + ½ avocat + salade + tomate',
+    tip: 'Idéal à emporter. Garder le poulet et l\'avocat séparés jusqu\'au moment de manger.',
     ingredients: [
-      '1 banane mûre',
-      '200 ml de lait d\'amande',
-      '1 cs de beurre d\'amande',
-      '1 cs de graines de chia',
-      'Quelques glaçons',
+      { name: 'Galettes de riz (grandes)', qty: '2', cat: 'Féculents & céréales' },
+      { name: 'Blanc de poulet cuit', qty: '130 g', cat: 'Protéines' },
+      { name: 'Avocat', qty: '½', cat: 'Fruits & légumes' },
+      { name: 'Salade verte', qty: 'poignée', cat: 'Fruits & légumes' },
+      { name: 'Tomate', qty: '1', cat: 'Fruits & légumes' },
     ],
-    steps: [
-      'Tout mettre dans le blender.',
-      'Mixer 30 secondes jusqu\'à consistance lisse.',
-      'Boire immédiatement (les graines de chia épaississent rapidement).',
-    ],
-    tip: 'À boire dans les 30 min après l\'entraînement. La banane recharge le glycogène, l\'amande apporte protéines + bonnes graisses.',
   },
   {
-    id: 'soupe_legumes',
-    name: 'Soupe légumes facile (digestion douce)',
-    category: 'plat',
-    time: '25 min',
-    kcal: 350,
-    protein: 12,
-    portions: 2,
+    id: 'l8', label: 'Soupe miso-gingembre + riz + thon', kcal: 500, protein: 34,
+    desc: 'Bouillon tamari-gingembre + carottes + courgette + 1 boîte thon + 60g riz',
+    tip: 'Jour léger ou ventre sensible — très digeste, chaud et réconfortant.',
     ingredients: [
-      '2 carottes',
-      '2 courgettes',
-      'Les feuilles vertes d\'un poireau (pas le blanc)',
-      '2 tomates',
-      '2 cs d\'huile d\'olive',
-      '1 L de bouillon de légumes (sans oignon/ail dans la liste)',
-      'Sel, poivre, cumin',
+      { name: 'Thon au naturel (boîte)', qty: '120 g', cat: 'Protéines' },
+      { name: 'Riz', qty: '60 g', cat: 'Féculents & céréales' },
+      { name: 'Carotte', qty: '1', cat: 'Fruits & légumes' },
+      { name: 'Courgette', qty: '½', cat: 'Fruits & légumes' },
+      { name: 'Gingembre frais', qty: '2 cm', cat: 'Fruits & légumes' },
+      { name: 'Sauce tamari', qty: '2 cs', cat: 'Épicerie sèche' },
     ],
-    steps: [
-      'Couper tous les légumes en morceaux grossiers.',
-      'Faire revenir 3 min dans l\'huile olive dans une casserole.',
-      'Ajouter le bouillon, porter à ébullition.',
-      'Cuire 15 min à feu moyen jusqu\'à ce que les légumes soient tendres.',
-      'Mixer partiellement (laisser des morceaux pour la texture) ou servir tel quel.',
-      'Ajouter une cc de cumin et un filet d\'huile olive au service.',
-    ],
-    tip: 'Le vert du poireau est bas-FODMAP. Éviter le blanc qui est riche en fructanes. Un œuf poché posé dessus ajoute 6g de protéines facilement.',
   },
 ];
 
-// ── CONSTANTES ───────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// DÎNERS (8 options)
+// ─────────────────────────────────────────────────────────────────────────────
 
-export const CALORIC_TARGET = 2500;
-export const PROTEIN_TARGET = 130; // g/jour : ~2.1g/kg pour reconstruction musculaire
+export const DINNERS: MealOption[] = [
+  {
+    id: 'd1', label: 'Saumon papillote + quinoa + épinards', kcal: 620, protein: 38,
+    desc: '150g saumon + 80g quinoa + épinards sautés + citron + herbes',
+    tip: 'Oméga-3 anti-inflammatoires — à manger 2× par semaine si possible.',
+    ingredients: [
+      { name: 'Filet de saumon', qty: '150 g', cat: 'Protéines' },
+      { name: 'Quinoa', qty: '80 g', cat: 'Féculents & céréales' },
+      { name: 'Épinards frais', qty: 'poignée', cat: 'Fruits & légumes' },
+      { name: 'Citron', qty: '½', cat: 'Fruits & légumes' },
+    ],
+  },
+  {
+    id: 'd2', label: 'Dinde hachée + patate douce + haricots verts', kcal: 640, protein: 40,
+    desc: '150g haché dinde + 200g patate douce rôtie + 100g haricots verts vapeur',
+    tip: 'La dinde est la protéine la moins chère au kilo. Riche en tryptophane = bon sommeil.',
+    ingredients: [
+      { name: 'Dinde hachée', qty: '150 g', cat: 'Protéines' },
+      { name: 'Patate douce', qty: '200 g', cat: 'Fruits & légumes' },
+      { name: 'Haricots verts', qty: '100 g', cat: 'Fruits & légumes' },
+      { name: 'Huile d\'olive', qty: '1 cs', cat: 'Épicerie sèche' },
+    ],
+  },
+  {
+    id: 'd3', label: 'Poulet rôti + pommes de terre + carottes', kcal: 650, protein: 42,
+    desc: '180g cuisse poulet rôtie + 200g pommes de terre + 150g carottes rôties au four',
+    tip: 'Faire un grand plat le dimanche — se réchauffe parfaitement les 2 jours suivants.',
+    ingredients: [
+      { name: 'Cuisses de poulet', qty: '180 g', cat: 'Protéines' },
+      { name: 'Pommes de terre', qty: '200 g', cat: 'Fruits & légumes' },
+      { name: 'Carottes', qty: '150 g', cat: 'Fruits & légumes' },
+      { name: 'Romarin', qty: '1 branche', cat: 'Épicerie sèche' },
+    ],
+  },
+  {
+    id: 'd4', label: 'Cabillaud vapeur + riz basmati + épinards', kcal: 530, protein: 40,
+    desc: '160g filet cabillaud vapeur + 80g riz + épinards sautés ail infusé + citron',
+    tip: 'Le poisson blanc le moins cher. Cuisson vapeur = 12 min sans surveillance.',
+    ingredients: [
+      { name: 'Filet de cabillaud', qty: '160 g', cat: 'Protéines' },
+      { name: 'Riz basmati', qty: '80 g', cat: 'Féculents & céréales' },
+      { name: 'Épinards frais', qty: 'poignée', cat: 'Fruits & légumes' },
+      { name: 'Citron', qty: '½', cat: 'Fruits & légumes' },
+    ],
+  },
+  {
+    id: 'd5', label: 'Steak haché bœuf + patate douce + salade', kcal: 640, protein: 38,
+    desc: '150g steak haché bœuf 5% + 200g patate douce rôtie + salade verte + tomates',
+    tip: 'Bien cuire le haché à cœur. La patate douce supporte l\'index glycémique de l\'effort.',
+    ingredients: [
+      { name: 'Steak haché bœuf 5%', qty: '150 g', cat: 'Protéines' },
+      { name: 'Patate douce', qty: '200 g', cat: 'Fruits & légumes' },
+      { name: 'Salade verte', qty: 'poignée', cat: 'Fruits & légumes' },
+      { name: 'Tomates cerises', qty: '6', cat: 'Fruits & légumes' },
+    ],
+  },
+  {
+    id: 'd6', label: 'Wok crevettes-poivron + nouilles de riz', kcal: 560, protein: 34,
+    desc: '150g crevettes + 80g nouilles riz + poivron rouge + gingembre + tamari + huile sésame',
+    tip: 'Le wok se fait en 8 min. Le secret : feu vif, wok très chaud, ne pas remuer trop vite.',
+    ingredients: [
+      { name: 'Crevettes décortiquées', qty: '150 g', cat: 'Protéines' },
+      { name: 'Nouilles de riz', qty: '80 g', cat: 'Féculents & céréales' },
+      { name: 'Poivron rouge', qty: '1', cat: 'Fruits & légumes' },
+      { name: 'Gingembre frais', qty: '2 cm', cat: 'Fruits & légumes' },
+      { name: 'Sauce tamari', qty: '2 cs', cat: 'Épicerie sèche' },
+      { name: 'Huile de sésame', qty: '1 cs', cat: 'Épicerie sèche' },
+    ],
+  },
+  {
+    id: 'd7', label: 'Filet de porc + quinoa + courgettes rôties', kcal: 590, protein: 40,
+    desc: '150g filet de porc + 80g quinoa + 1 courgette rôtie au four + herbes de Provence',
+    tip: 'Le porc est très économique. Le filet est la coupe la plus maigre.',
+    ingredients: [
+      { name: 'Filet de porc', qty: '150 g', cat: 'Protéines' },
+      { name: 'Quinoa', qty: '80 g', cat: 'Féculents & céréales' },
+      { name: 'Courgette', qty: '1', cat: 'Fruits & légumes' },
+      { name: 'Herbes de Provence', qty: '1 cc', cat: 'Épicerie sèche' },
+    ],
+  },
+  {
+    id: 'd8', label: 'Soupe légumes douce + riz + œuf poché', kcal: 450, protein: 20,
+    desc: 'Carottes + courgettes + vert poireau + tomates · 60g riz · 1 œuf poché',
+    tip: 'Idéal les soirs de repos ou ventre sensible. Très digeste, hydratant.',
+    ingredients: [
+      { name: 'Carotte', qty: '2', cat: 'Fruits & légumes' },
+      { name: 'Courgette', qty: '1', cat: 'Fruits & légumes' },
+      { name: 'Vert de poireau', qty: '1 tige', cat: 'Fruits & légumes' },
+      { name: 'Tomates', qty: '2', cat: 'Fruits & légumes' },
+      { name: 'Riz', qty: '60 g', cat: 'Féculents & céréales' },
+      { name: 'Œuf', qty: '1', cat: 'Frais' },
+    ],
+  },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// COLLATIONS (rotation)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const SNACKS_AM: MealOption[] = [
+  {
+    id: 'sam1', label: '2 œufs durs + 2 kiwis', kcal: 220, protein: 14,
+    desc: '2 œufs durs (à préparer la veille) + 2 kiwis frais',
+    ingredients: [
+      { name: 'Œufs', qty: '2', cat: 'Frais' },
+      { name: 'Kiwi', qty: '2', cat: 'Fruits & légumes' },
+    ],
+  },
+  {
+    id: 'sam2', label: 'Galettes riz + beurre amande + banane', kcal: 280, protein: 8,
+    desc: '3 galettes de riz + 2cs beurre d\'amande + ½ banane',
+    ingredients: [
+      { name: 'Galettes de riz', qty: '3', cat: 'Féculents & céréales' },
+      { name: 'Beurre d\'amande', qty: '2 cs', cat: 'Épicerie sèche' },
+      { name: 'Banane', qty: '½', cat: 'Fruits & légumes' },
+    ],
+  },
+  {
+    id: 'sam3', label: 'Fruits rouges + 20g noix', kcal: 200, protein: 5,
+    desc: '150g fraises ou myrtilles + 20g noix ou amandes',
+    ingredients: [
+      { name: 'Fraises ou myrtilles', qty: '150 g', cat: 'Fruits & légumes' },
+      { name: 'Noix ou amandes', qty: '20 g', cat: 'Épicerie sèche' },
+    ],
+  },
+];
+
+export const SNACKS_PM: MealOption[] = [
+  {
+    id: 'spm1', label: 'Smoothie banane-amande récupération', kcal: 310, protein: 9,
+    desc: '1 banane + 200ml lait amande + 1cs beurre amande + 1cs graines chia',
+    tip: 'À boire dans les 30 min post-séance si entraînement l\'après-midi.',
+    ingredients: [
+      { name: 'Banane', qty: '1', cat: 'Fruits & légumes' },
+      { name: 'Lait d\'amande', qty: '200 ml', cat: 'Frais' },
+      { name: 'Beurre d\'amande', qty: '1 cs', cat: 'Épicerie sèche' },
+      { name: 'Graines de chia', qty: '1 cs', cat: 'Épicerie sèche' },
+    ],
+  },
+  {
+    id: 'spm2', label: 'Pain de riz + avocat + sel', kcal: 260, protein: 5,
+    desc: '2 tranches pain de riz + ½ avocat écrasé + sel + jus citron',
+    ingredients: [
+      { name: 'Pain de riz', qty: '2 tranches', cat: 'Féculents & céréales' },
+      { name: 'Avocat', qty: '½', cat: 'Fruits & légumes' },
+    ],
+  },
+  {
+    id: 'spm3', label: 'Compote pomme maison + 20g amandes', kcal: 230, protein: 5,
+    desc: 'Compote de pommes sans sucre (maison ou pot) + 20g amandes entières',
+    tip: 'Compote maison : 2 pommes + 3 cs eau + cannelle, 10 min à la casserole. Faire en batch.',
+    ingredients: [
+      { name: 'Compote de pommes', qty: '1 pot', cat: 'Épicerie sèche' },
+      { name: 'Amandes', qty: '20 g', cat: 'Épicerie sèche' },
+    ],
+  },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SNACKS PRÉ / POST ENTRAÎNEMENT
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const PRE_TRAINING: MealOption = {
+  id: 'pre', label: 'Pré-entraînement (30 min avant)', kcal: 180, protein: 3,
+  desc: '1 banane mûre + 2 galettes de riz. Glucides rapides, digestion facile.',
+  tip: 'Ne rien manger si l\'estomac est capricieux — mieux vaut y aller léger.',
+  preTraining: true,
+  ingredients: [
+    { name: 'Banane', qty: '1', cat: 'Fruits & légumes' },
+    { name: 'Galettes de riz', qty: '2', cat: 'Féculents & céréales' },
+  ],
+};
+
+export const POST_TRAINING: MealOption = {
+  id: 'post', label: 'Post-entraînement (dans les 30 min)', kcal: 300, protein: 10,
+  desc: 'Smoothie banane + lait amande + beurre amande. Recharge glycogène + protéines réparatrices.',
+  tip: 'La fenêtre anabolique dure ~30 min. Si pas faim, au moins la banane + un verre de lait amande.',
+  postTraining: true,
+  ingredients: [
+    { name: 'Banane', qty: '1', cat: 'Fruits & légumes' },
+    { name: 'Lait d\'amande', qty: '200 ml', cat: 'Frais' },
+    { name: 'Beurre d\'amande', qty: '1 cs', cat: 'Épicerie sèche' },
+  ],
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FONCTION PRINCIPALE — plan du jour
+// ─────────────────────────────────────────────────────────────────────────────
+
+export function getDayNutrition(
+  weekNum: number,
+  dayIndex: number, // 0=lun … 6=dim
+  sessionId: string
+): DayNutrition {
+  const load: NutritionLoad = SESSION_LOAD[sessionId] ?? 'leger';
+  const targets = LOAD_TARGETS[load];
+
+  // Rotation déterministe : chaque semaine tourne, chaque jour est différent
+  const breakfast = BREAKFASTS[(weekNum + dayIndex) % BREAKFASTS.length];
+  const snackAM   = SNACKS_AM[dayIndex % SNACKS_AM.length];
+  const lunch     = LUNCHES[(weekNum * 3 + dayIndex) % LUNCHES.length];
+  const snackPM   = SNACKS_PM[(weekNum + dayIndex * 2) % SNACKS_PM.length];
+  const dinner    = DINNERS[(weekNum * 2 + dayIndex) % DINNERS.length];
+
+  const needsPre  = load === 'moyen' || load === 'intense';
+  const needsPost = load === 'moyen' || load === 'intense';
+
+  return {
+    load,
+    targetKcal: targets.kcal,
+    targetProtein: targets.protein,
+    breakfast,
+    snackAM,
+    lunch,
+    preTrainingSnack: needsPre ? PRE_TRAINING : null,
+    postTrainingSnack: needsPost ? POST_TRAINING : null,
+    snackPM,
+    dinner,
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LISTE DE COURSES — agrégation par catégorie
+// ─────────────────────────────────────────────────────────────────────────────
+
+const SHOP_ORDER: ShopCat[] = [
+  'Fruits & légumes', 'Protéines', 'Féculents & céréales', 'Frais', 'Épicerie sèche',
+];
+
+export interface ShoppingItem {
+  name: string;
+  cat: ShopCat;
+  occurrences: number; // nombre de repas qui l'utilisent dans la semaine
+}
+
+export function getWeekShoppingList(dayPlans: DayNutrition[]): Record<ShopCat, ShoppingItem[]> {
+  const counts: Record<string, ShoppingItem> = {};
+
+  function addIngredients(meal: MealOption | null) {
+    if (!meal) return;
+    for (const ing of meal.ingredients) {
+      const key = ing.name.toLowerCase();
+      if (counts[key]) {
+        counts[key].occurrences += 1;
+      } else {
+        counts[key] = { name: ing.name, cat: ing.cat, occurrences: 1 };
+      }
+    }
+  }
+
+  for (const plan of dayPlans) {
+    addIngredients(plan.breakfast);
+    addIngredients(plan.snackAM);
+    addIngredients(plan.lunch);
+    addIngredients(plan.snackPM);
+    addIngredients(plan.dinner);
+    addIngredients(plan.preTrainingSnack);
+    addIngredients(plan.postTrainingSnack);
+  }
+
+  const result: Record<ShopCat, ShoppingItem[]> = {
+    'Fruits & légumes': [], 'Protéines': [], 'Féculents & céréales': [],
+    'Frais': [], 'Épicerie sèche': [],
+  };
+
+  for (const item of Object.values(counts)) {
+    result[item.cat].push(item);
+  }
+
+  for (const cat of SHOP_ORDER) {
+    result[cat].sort((a, b) => b.occurrences - a.occurrences || a.name.localeCompare(b.name));
+  }
+
+  return result;
+}
+
+export { SHOP_ORDER };
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONSTANTES AFFICHAGE
+// ─────────────────────────────────────────────────────────────────────────────
+
 export const FODMAP_TIPS = [
-  'Oignon et ail : utiliser l\'huile infusée (retirer l\'oignon avant de manger) pour le goût sans les FODMAP.',
-  'Lactose : remplacer tout produit laitier par alternatives amande / riz / coco.',
-  'Légumineuses : rincer abondamment, petites portions (60g max égouttées).',
-  'Fruits : banane mûre, fraises, orange, kiwi, raisin = OK. Éviter pomme crue, poire, mangue, pastèque.',
-  'Cuire les légumes les rend plus digestibles (vapeur ou sauté).',
-  'Avoine : 60g max par repas, sinon risque de ballonnements.',
-  'Gingembre frais : aide la digestion, ajouter aux plats sautés.',
+  'Ail & oignon : utiliser l\'huile infusée (retirer l\'oignon avant de manger) pour le goût sans les FODMAP.',
+  'Lactose : remplacer tout produit laitier par lait d\'avoine, lait d\'amande ou lait de riz.',
+  'Légumineuses : rincer très abondamment, petites portions (60g égouttées max par repas).',
+  'Fruits OK : banane mûre, fraises, orange, kiwi, myrtilles, raisin. Éviter pomme crue, poire, mangue.',
+  'Cuire les légumes les rend bien plus digestibles — vapeur, sauté ou rôti au four.',
+  'Avoine : 60g max par repas sinon ballonnements — bien toléré en petite quantité.',
+  'Gingembre frais : anti-inflammatoire naturel + aide la digestion. Ajouter à tous les plats sautés.',
+  'Poireau : le vert uniquement (bas-FODMAP). Le blanc est riche en fructanes — à éviter.',
+];
+
+export const PANTRY_BASICS = [
+  'Huile d\'olive (bouteille)',
+  'Huile de sésame (petite bouteille)',
+  'Sauce tamari sans gluten',
+  'Riz basmati (kg)',
+  'Sel, poivre',
+  'Herbes de Provence',
+  'Cannelle moulue',
+  'Cumin moulu',
+  'Sirop d\'érable',
 ];

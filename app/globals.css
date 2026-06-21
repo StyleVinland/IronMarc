@@ -1476,3 +1476,241 @@ body { padding: 0; }
   .db-field-row { grid-template-columns: 1fr; }
   .db-scale-btn { width: 24px; height: 24px; font-size: 11px; }
 }
+
+/* ================================================================
+   NUTRITION — CALENDRIER DATÉ (nouveau)
+   ================================================================ */
+
+/* Navigation semaine */
+.nutri-week-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.nutri-week-btn {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--foam);
+  font-size: 16px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: border-color .12s, background .12s;
+  flex-shrink: 0;
+}
+.nutri-week-btn:hover { border-color: var(--tide); background: rgba(110,198,216,.06); }
+.nutri-week-label { flex: 1; text-align: center; }
+.nutri-week-title {
+  display: block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; font-size: 18px;
+  color: var(--foam); letter-spacing: .04em;
+}
+.nutri-week-dates { font-size: 12px; color: var(--muted); }
+
+/* Grille 7 jours */
+.nutri-week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 18px;
+}
+@media (max-width: 560px) {
+  .nutri-week-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.nutri-wd {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 9px 5px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .12s, background .12s;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+}
+.nutri-wd:hover { border-color: #3a6e7c; }
+.nutri-wd.sel { border-color: var(--tide); background: rgba(110,198,216,.07); }
+.nutri-wd.today { border-color: var(--dawn); }
+.nutri-wd-top { display: flex; flex-direction: column; align-items: center; }
+.nutri-wd-dayname { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.nutri-wd-datenum { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 700; color: var(--foam); line-height: 1; }
+.nutri-wd.today .nutri-wd-datenum { color: var(--dawn); }
+.nutri-wd-sess { font-size: 10px; color: var(--muted); letter-spacing: .03em; max-width: 90%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.2; }
+.nutri-wd-load { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .04em; }
+.nutri-wd-kcal { font-size: 10px; color: var(--muted); font-family: 'Barlow Condensed', sans-serif; }
+
+/* Header jour sélectionné */
+.nutri-day-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+.nutri-day-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.nutri-day-date {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; font-size: 20px;
+  color: var(--foam); letter-spacing: .04em; text-transform: uppercase;
+}
+.nutri-sess-badge {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: .04em;
+  padding: 3px 10px; border-radius: 999px;
+}
+.nutri-day-targets {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 14px;
+}
+.nutri-target-block { display: flex; align-items: baseline; gap: 4px; }
+.nutri-target-val {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; font-size: 22px; line-height: 1;
+}
+.nutri-target-lbl { font-size: 11px; color: var(--muted); }
+.nutri-load-pill {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 999px;
+}
+
+/* Slots repas */
+.nutri-slots {
+  display: flex; flex-direction: column; gap: 6px;
+  margin-bottom: 12px;
+}
+
+.nutri-slot {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.nutri-slot-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background .1s;
+}
+.nutri-slot-head:hover { background: rgba(45,44,41,.4); }
+
+.nutri-slot-icon { font-size: 18px; flex-shrink: 0; }
+
+.nutri-slot-info { flex: 1; min-width: 0; }
+.nutri-slot-label { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-family: 'Barlow Condensed', sans-serif; }
+.nutri-slot-name { font-size: 14px; font-weight: 600; color: var(--foam); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.nutri-slot-macros {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
+  flex-shrink: 0;
+}
+.nutri-slot-macros span { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; color: var(--tide); font-weight: 600; white-space: nowrap; }
+
+.nutri-slot-arrow { color: var(--muted); font-size: 11px; flex-shrink: 0; }
+
+.nutri-slot-body {
+  padding: 10px 14px 13px;
+  border-top: 1px solid var(--line);
+  background: var(--card);
+  animation: rise .2s ease;
+}
+.nutri-slot-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin: 0 0 8px; }
+.nutri-slot-ings {
+  list-style: none; padding: 0; margin: 0 0 8px;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.nutri-slot-ings li { font-size: 12.5px; color: var(--foam); }
+.nutri-slot-ings strong { color: var(--dawn); }
+.nutri-slot-tip {
+  font-size: 12px; color: var(--dawn);
+  background: rgba(207,142,66,.08);
+  border-radius: 7px; padding: 6px 10px; line-height: 1.45;
+}
+
+/* Hydratation */
+.nutri-hydra {
+  font-size: 12.5px; color: var(--muted);
+  background: rgba(110,198,216,.05);
+  border: 1px solid rgba(110,198,216,.15);
+  border-radius: 10px;
+  padding: 9px 14px; line-height: 1.5;
+  margin-bottom: 4px;
+}
+
+/* ─── LISTE DE COURSES ─────────────────────────────────────────── */
+
+.nutri-shop {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.nutri-shop-nav {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+.nutri-shop-nav-lbl { font-size: 13px; color: var(--muted); }
+.nutri-shop-range {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px; font-weight: 700; color: var(--foam); letter-spacing: .03em;
+}
+
+.nutri-shop-pantry {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(207,142,66,.04);
+}
+.nutri-shop-pantry-title { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--dawn); font-family: 'Barlow Condensed', sans-serif; margin-bottom: 7px; }
+.nutri-shop-pantry-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.nutri-pantry-tag {
+  font-size: 11.5px; color: var(--foam);
+  background: rgba(45,44,41,.8); border: 1px solid var(--line);
+  border-radius: 999px; padding: 2px 9px;
+}
+
+.nutri-shop-cats { display: grid; grid-template-columns: 1fr 1fr; }
+@media (max-width: 560px) { .nutri-shop-cats { grid-template-columns: 1fr; } }
+
+.nutri-shop-cat {
+  padding: 12px 16px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.nutri-shop-cat:nth-child(even) { border-right: none; }
+
+.nutri-shop-cat-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--tide); margin-bottom: 8px;
+}
+
+.nutri-shop-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 4px 0;
+  cursor: pointer;
+  transition: opacity .12s;
+}
+.nutri-shop-item input[type=checkbox] { accent-color: var(--dawn); cursor: pointer; flex-shrink: 0; }
+.nutri-shop-item.done { opacity: .45; }
+.nutri-shop-item.done .nutri-shop-name { text-decoration: line-through; }
+.nutri-shop-name { font-size: 13px; color: var(--foam); flex: 1; }
+.nutri-shop-occ { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: var(--muted); flex-shrink: 0; }
