@@ -8,6 +8,13 @@ import { useAppState } from './AppStateProvider';
 // XP total atteignable sur 3 ans : ~300 séances × 55 XP + missions quotidiennes + quêtes
 export const XP_PLAN_TARGET = 50000;
 
+export function fmtPct(xp: number): string {
+  const raw = xp / XP_PLAN_TARGET * 100;
+  if (raw <= 0) return '0%';
+  if (raw < 1) return '<1%';
+  return `${Math.min(100, Math.round(raw))}%`;
+}
+
 // ── Icons pour la bottom nav mobile ─────────────────────────────────
 const IconDashboard = () => (
   <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
@@ -84,7 +91,7 @@ export default function Nav() {
   const streak   = computeStreak(state);
   const level    = computeLevel(totalXp);
   const title    = computeLevelTitle(level);
-  const planPct  = Math.min(100, Math.round(totalXp / XP_PLAN_TARGET * 100));
+  const planPct  = fmtPct(totalXp);
 
   return (
     <>
@@ -121,7 +128,7 @@ export default function Nav() {
 
         {/* Barre de progression plan 3 ans */}
         <div className="topnav-progress-bar">
-          <div className="topnav-progress-fill" style={{ width: `${planPct}%` }} />
+          <div className="topnav-progress-fill" style={{ width: `${Math.min(100, totalXp / XP_PLAN_TARGET * 100)}%` }} />
         </div>
       </header>
 

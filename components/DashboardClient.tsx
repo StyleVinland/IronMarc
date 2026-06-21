@@ -4,7 +4,7 @@ import { useAppState } from './AppStateProvider';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { computeXP, computeLevel, computeLevelTitle, computeStreak, computeCheckpointPct } from '@/lib/compute';
 import { DAILY, QUESTS, XP_PER_LEVEL } from '@/lib/constants';
-import { XP_PLAN_TARGET } from './Nav';
+import { XP_PLAN_TARGET, fmtPct } from './Nav';
 import Hero from './Hero';
 import Affirmation from './Affirmation';
 import ProgressCharts from './ProgressCharts';
@@ -65,7 +65,8 @@ export default function DashboardClient() {
   const levelTitle = computeLevelTitle(level);
   const streak     = computeStreak(state);
   const phasePct   = computeCheckpointPct(state);
-  const planPct    = Math.min(100, Math.round(xp / XP_PLAN_TARGET * 100));
+  const planPct    = fmtPct(xp);
+  const planWidth  = Math.min(100, xp / XP_PLAN_TARGET * 100);
   const xpInLevel  = xp % XP_PER_LEVEL;
   const xpPct      = Math.round((xpInLevel / XP_PER_LEVEL) * 100);
   const mDone      = DAILY.filter(t => !!todayData.missions[t.id]).length;
@@ -117,12 +118,10 @@ export default function DashboardClient() {
         </div>
         <div className="widget reveal reveal-d3">
           <div className="widget-cat" style={{ color: '#AF52DE' }}>🏁 Plan 3 ans</div>
-          <div className="widget-val">
-            {planPct}<span className="widget-val-of">%</span>
-          </div>
+          <div className="widget-val">{planPct}</div>
           <div className="widget-unit">vers l&apos;Ironman</div>
           <div className="widget-bar">
-            <div className="widget-bar-fill" style={{ width: `${planPct}%`, background: '#AF52DE' }} />
+            <div className="widget-bar-fill" style={{ width: `${planWidth}%`, background: '#AF52DE' }} />
           </div>
         </div>
       </div>

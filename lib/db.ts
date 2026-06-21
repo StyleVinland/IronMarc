@@ -22,12 +22,9 @@ interface NodeSqliteDb {
   close(): void;
 }
 
-declare global {
-  // eslint-disable-next-line no-var
-  var _db: NodeSqliteDb | undefined;
-  // eslint-disable-next-line no-var
-  var _dbMigrated: boolean | undefined;
-}
+// Variable de module (pas global) — réinitialisée à chaque hot-reload,
+// ce qui garantit que les migrations tournent sur chaque nouvelle connexion.
+let _db: NodeSqliteDb | undefined;
 
 function migrate(db: NodeSqliteDb) {
   db.exec(`
@@ -87,7 +84,7 @@ function migrate(db: NodeSqliteDb) {
 }
 
 function openDb(): NodeSqliteDb {
-  if (!global._db) {
+  if (!_db) {
     const dir = path.join(process.cwd(), 'storage');
     const mediaDir = path.join(dir, 'media');
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
@@ -95,16 +92,10 @@ function openDb(): NodeSqliteDb {
 
     const db = new DatabaseSync(path.join(dir, 'tracker.db'));
     db.exec('PRAGMA journal_mode = WAL;');
-    global._db = db;
+    migrate(db);
+    _db = db;
   }
-
-  // Migrations run once per process, even après un hot-reload qui garde _db en cache
-  if (!global._dbMigrated) {
-    migrate(global._db);
-    global._dbMigrated = true;
-  }
-
-  return global._db;
+  return _db;
 }
 
 export function getFullState(): AppState {

@@ -170,17 +170,24 @@ export default function EntrainementClient() {
   async function handleValidateSession() {
     setValidating(true);
     const xp = ({ swim: 60, run: 55, bike: 50, brick: 75, renfo: 40 } as Record<string, number>)[selSession.type] ?? 50;
-    await fetch('/api/sessions/complete', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ date: selectedDate, session_id: selSessionId, xp, pain_aine: pain.aine, pain_tibia: pain.tibia }),
-    });
-    setSessionDone({ xp });
-    setShowExercises(false);
-    setValidating(false);
-    setRefreshKey(k => k + 1);
-    refreshXp();
-    window.dispatchEvent(new Event('session-validated'));
+    try {
+      const res = await fetch('/api/sessions/complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ date: selectedDate, session_id: selSessionId, xp, pain_aine: pain.aine, pain_tibia: pain.tibia }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      setSessionDone({ xp });
+      setShowExercises(false);
+      setRefreshKey(k => k + 1);
+      refreshXp();
+      window.dispatchEvent(new Event('session-validated'));
+    } catch (e) {
+      console.error('Validation échouée :', e);
+      alert('Erreur lors de la validation — réessaie.');
+    } finally {
+      setValidating(false);
+    }
   }
 
   function handleWeekChange(delta: number) {
