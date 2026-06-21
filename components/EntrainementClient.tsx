@@ -5,6 +5,7 @@ import { SESSIONS, PHASES, RACES, WEEK_DAYS, WEEK_DAY_LABELS, getCurrentWeek, ge
 import type { WeekDay, ProgramPhase } from '@/lib/program';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import DebriefPanel from './DebriefPanel';
+import StravaPanel from './StravaPanel';
 
 const MONTHS_FR = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
   'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
@@ -296,6 +297,11 @@ export default function EntrainementClient() {
         </aside>
 
       </div>{/* fin prog-session-races */}
+
+      {/* ── STRAVA ── */}
+      <div className="reveal">
+        <StravaPanel />
+      </div>
 
       {/* ── FEUILLE DE ROUTE ── */}
       <section className="reveal reveal-d1">

@@ -832,6 +832,7 @@ body { padding: 0; }
   grid-template-columns: 3fr 1fr;
   gap: clamp(16px, 2vw, 24px);
   align-items: start;
+  margin-top: clamp(24px, 3vw, 40px);
 }
 .prog-detail-col { margin-top: 0 !important; }
 /* Sur tablette portrait et mobile : 1 colonne */
@@ -1005,6 +1006,95 @@ body { padding: 0; }
 
 .prog-roadmap-notes { display: flex; flex-direction: column; gap: 4px; }
 .prog-roadmap-note  { font-size: 12px; color: var(--label2); font-style: italic; line-height: 1.5; }
+
+/* ================================================================
+   STRAVA PANEL
+   ================================================================ */
+.strava-panel {
+  background: var(--surface); border-radius: 20px;
+  box-shadow: var(--shadow-sm); border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+/* État chargement */
+.strava-panel.loading { padding: 24px; }
+.strava-skeleton {
+  height: 72px; border-radius: 12px;
+  background: linear-gradient(90deg, var(--line) 25%, var(--bg) 50%, var(--line) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+/* État déconnecté */
+.strava-connect-inner {
+  display: flex; align-items: center; gap: 18px; padding: 22px 24px; flex-wrap: wrap;
+}
+.strava-logo-wrap {
+  width: 48px; height: 48px; border-radius: 14px;
+  background: #FC4C02; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.strava-icon { width: 26px; height: 26px; color: #fff; }
+.strava-connect-text { flex: 1; min-width: 180px; }
+.strava-connect-title { font-size: 16px; font-weight: 700; color: var(--label); letter-spacing: -.01em; }
+.strava-connect-sub   { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+.strava-connect-btn {
+  background: #FC4C02; color: #fff; border: none; border-radius: 12px;
+  font-size: 14px; font-weight: 700; padding: 11px 22px; cursor: pointer;
+  text-decoration: none; display: inline-block; font-family: inherit;
+  transition: background .15s, transform .12s; white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(252,76,2,.3);
+}
+.strava-connect-btn:hover { background: #e04400; transform: translateY(-1px); }
+
+/* État connecté */
+.strava-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 18px 20px; border-bottom: .5px solid var(--line);
+}
+.strava-head-left  { display: flex; align-items: center; gap: 12px; }
+.strava-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+.strava-head-name  { font-size: 15px; font-weight: 700; color: var(--label); }
+.strava-head-sub   { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); margin-top: 2px; }
+.strava-icon-sm    { width: 12px; height: 12px; color: #FC4C02; }
+.strava-disconnect {
+  background: none; border: 1px solid var(--line); border-radius: 10px;
+  font-size: 12px; font-weight: 600; color: var(--muted); padding: 6px 13px;
+  cursor: pointer; font-family: inherit; transition: border-color .15s, color .15s;
+}
+.strava-disconnect:hover { border-color: var(--warn); color: var(--warn); }
+
+/* Liste activités */
+.strava-activities { display: flex; flex-direction: column; }
+.strava-empty { padding: 24px; text-align: center; font-size: 14px; color: var(--muted); }
+.strava-activity {
+  display: flex; align-items: center; gap: 14px;
+  padding: 13px 20px; border-bottom: .5px solid var(--line);
+  transition: background .15s;
+}
+.strava-activity:last-child { border-bottom: none; }
+.strava-activity:hover { background: rgba(252,76,2,.03); }
+.strava-act-icon { font-size: 22px; width: 32px; text-align: center; flex-shrink: 0; }
+.strava-act-body { flex: 1; min-width: 0; }
+.strava-act-name { font-size: 14px; font-weight: 600; color: var(--label); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.strava-act-date { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.strava-act-stats { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: flex-end; }
+.strava-stat {
+  font-size: 12px; font-weight: 700; color: var(--label2);
+  background: var(--bg); border-radius: 8px; padding: 3px 9px;
+  white-space: nowrap;
+}
+.strava-hr { color: #ff453a; }
+
+@media (max-width: 480px) {
+  .strava-connect-inner { gap: 12px; padding: 16px; }
+  .strava-activity { padding: 11px 14px; gap: 10px; }
+  .strava-act-stats { gap: 5px; }
+  .strava-stat { font-size: 11px; padding: 2px 7px; }
+}
+
+/* ================================================================ */
 
 @media (max-width: 580px) {
   .prog-roadmap-header { padding: 10px 12px; gap: 8px; }

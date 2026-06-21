@@ -266,4 +266,51 @@ export function resetAll() {
   db.exec('DELETE FROM days; DELETE FROM missions; DELETE FROM quests; DELETE FROM settings;');
 }
 
+/* ── STRAVA TOKENS ────────────────────────────────────────────────── */
+export interface StravaTokens {
+  accessToken: string;
+  refreshToken: string;
+  expiresAt: number;   // unix timestamp seconds
+  athleteId: number;
+  athleteName: string;
+  athleteAvatar: string;
+}
+
+export function getStravaTokens(): StravaTokens | null {
+  const db = openDb();
+  const get = (k: string) => (db.prepare("SELECT value FROM settings WHERE key = ?").get(k) as { value: string } | undefined)?.value;
+  const accessToken = get('strava_access_token');
+  const refreshToken = get('strava_refresh_token');
+  const expiresAt = get('strava_expires_at');
+  const athleteId = get('strava_athlete_id');
+  const athleteName = get('strava_athlete_name');
+  const athleteAvatar = get('strava_athlete_avatar');
+  if (!accessToken || !refreshToken || !expiresAt || !athleteId) return null;
+  return {
+    accessToken,
+    refreshToken,
+    expiresAt: Number(expiresAt),
+    athleteId: Number(athleteId),
+    athleteName: athleteName ?? '',
+    athleteAvatar: athleteAvatar ?? '',
+  };
+}
+
+export function saveStravaTokens(t: StravaTokens) {
+  const set = (k: string, v: string) => setSetting(k, v);
+  set('strava_access_token',  t.accessToken);
+  set('strava_refresh_token', t.refreshToken);
+  set('strava_expires_at',    String(t.expiresAt));
+  set('strava_athlete_id',    String(t.athleteId));
+  set('strava_athlete_name',  t.athleteName);
+  set('strava_athlete_avatar', t.athleteAvatar);
+}
+
+export function clearStravaTokens() {
+  const db = openDb();
+  const keys = ['strava_access_token','strava_refresh_token','strava_expires_at','strava_athlete_id','strava_athlete_name','strava_athlete_avatar'];
+  const del = db.prepare("DELETE FROM settings WHERE key = ?");
+  for (const k of keys) del.run(k);
+}
+
 export default openDb;
