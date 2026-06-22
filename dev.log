@@ -217,3 +217,5 @@
  GET /api/xp 200 in 14ms
  GET /api/xp 200 in 20ms
  GET /api/xp 200 in 20ms
+ ✓ Compiled in 705ms (1399 modules)
+ ✓ Compiled in 271ms (1399 modules)

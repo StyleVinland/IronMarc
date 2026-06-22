@@ -93,35 +93,35 @@ export default function DashboardClient() {
       {/* 4 widgets — stagger cascade Apple */}
       <div className="metrics-grid">
         <div className="widget reveal">
-          <div className="widget-cat" style={{ color: '#34C759' }}>🔥 Sans clope</div>
+          <div className="widget-cat" style={{ color: 'var(--tide)' }}>🔥 Sans clope</div>
           <div className="widget-val">{streak}</div>
           <div className="widget-unit">jours consécutifs</div>
         </div>
         <div className="widget reveal reveal-d1">
-          <div className="widget-cat" style={{ color: '#007AFF' }}>⚡ Niveau</div>
+          <div className="widget-cat" style={{ color: 'var(--dawn)' }}>⚡ Niveau</div>
           <div className="widget-val">{level}</div>
           <div className="widget-unit">{levelTitle}</div>
           <div className="widget-sub">{xp} XP · Niv.{level + 1} dans {XP_PER_LEVEL - xpInLevel} XP</div>
           <div className="widget-bar">
-            <div className="widget-bar-fill" style={{ width: `${xpPct}%`, background: '#007AFF' }} />
+            <div className="widget-bar-fill" style={{ width: `${xpPct}%`, background: 'var(--dawn)' }} />
           </div>
         </div>
         <div className="widget reveal reveal-d2">
-          <div className="widget-cat" style={{ color: '#FF9500' }}>📋 Missions</div>
+          <div className="widget-cat" style={{ color: 'var(--dawn)' }}>📋 Missions</div>
           <div className="widget-val">
             {mDone}<span className="widget-val-of">/{mTotal}</span>
           </div>
           <div className="widget-unit">aujourd&apos;hui</div>
           <div className="widget-bar">
-            <div className="widget-bar-fill" style={{ width: `${(mDone / mTotal) * 100}%`, background: '#FF9500' }} />
+            <div className="widget-bar-fill" style={{ width: `${(mDone / mTotal) * 100}%`, background: 'var(--dawn)' }} />
           </div>
         </div>
         <div className="widget reveal reveal-d3">
-          <div className="widget-cat" style={{ color: '#AF52DE' }}>🏁 Plan 3 ans</div>
+          <div className="widget-cat" style={{ color: 'var(--dawn)' }}>🏁 Plan 3 ans</div>
           <div className="widget-val">{planPct}</div>
           <div className="widget-unit">vers l&apos;Ironman</div>
           <div className="widget-bar">
-            <div className="widget-bar-fill" style={{ width: `${planWidth}%`, background: '#AF52DE' }} />
+            <div className="widget-bar-fill" style={{ width: `${planWidth}%`, background: 'var(--dawn)' }} />
           </div>
         </div>
       </div>

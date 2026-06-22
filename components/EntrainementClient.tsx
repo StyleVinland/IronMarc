@@ -83,11 +83,11 @@ function fmtRaceDate(ds: string): string {
 }
 
 const PHASE_MILESTONES: Record<string, { label: string; color: string }> = {
-  p2b: { label: '🏊 Super Sprint — 16 mai 2027 · 400 m nage · 10 km vélo · 2,5 km course', color: '#6EC6D8' },
-  p3a: { label: '🚴 Sprint triathlon — 13 sept. 2027 · 750 m nage · 20 km vélo · 5 km course', color: '#88C49A' },
-  p3c: { label: '🏃 Triathlon Olympique — 15 juin 2028 · 1 500 m nage · 40 km vélo · 10 km course', color: '#CF8E42' },
-  p4a: { label: '💪 Half Ironman 70.3 — 21 sept. 2028 · 1 900 m nage · 90 km vélo · 21 km course', color: '#C26060' },
-  p4c: { label: '🏅 IRONMAN — 22 juin 2029 · 3 800 m nage · 180 km vélo · 42,2 km course', color: '#CF8E42' },
+  p2b: { label: '🏊 Super Sprint — 16 mai 2027 · 400 m nage · 10 km vélo · 2,5 km course', color: '#AF52DE' },
+  p3a: { label: '🚴 Sprint triathlon — 13 sept. 2027 · 750 m nage · 20 km vélo · 5 km course', color: '#AF52DE' },
+  p3c: { label: '🏃 Triathlon Olympique — 15 juin 2028 · 1 500 m nage · 40 km vélo · 10 km course', color: '#AF52DE' },
+  p4a: { label: '💪 Half Ironman 70.3 — 21 sept. 2028 · 1 900 m nage · 90 km vélo · 21 km course', color: '#AF52DE' },
+  p4c: { label: '🏅 IRONMAN — 22 juin 2029 · 3 800 m nage · 180 km vélo · 42,2 km course', color: '#AF52DE' },
 };
 
 const DAILY_PHRASES = [
