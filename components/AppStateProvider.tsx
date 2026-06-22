@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useContext, useRef, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useRef, useState, useCallback, useEffect, type ReactNode } from 'react';
 import { ensureDay, todayStr } from '@/lib/compute';
 import { AFF } from '@/lib/constants';
 import type { AppState, MindData } from '@/types';
@@ -90,6 +90,21 @@ export function AppStateProvider({ children, initial }: { children: ReactNode; i
     else if (field === 'journal') patchDay({ journal: val });
     else if (field === 'grat') patchDay({ grat: val });
   }, [today, patchDay]);
+
+  // Recharge l'état depuis le serveur quand l'onglet reprend le focus
+  // (sync entre téléphone et ordi sans rechargement manuel)
+  useEffect(() => {
+    const sync = () => {
+      fetch('/api/state')
+        .then(r => r.json())
+        .then((fresh: AppState) => {
+          setState(prev => ensureDay(fresh, todayStr()));
+        })
+        .catch(() => {});
+    };
+    window.addEventListener('focus', sync);
+    return () => window.removeEventListener('focus', sync);
+  }, []);
 
   const nextAff = useCallback(() => {
     setState(prev => {
