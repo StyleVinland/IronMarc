@@ -40,11 +40,37 @@
 
 /* ── BASE ───────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+  /* Aurora UI base — background-size 200%, boucle 10s (UI/UX Pro Max recommandation) */
+  background: linear-gradient(-45deg, #eeeef6, #eaecff, #eef0ff, #f0eef8);
+  background-size: 200% 200%;
+  animation: globalGrad 10s ease infinite;
+}
+html[data-theme="dark"] {
+  background: linear-gradient(-45deg, #080810, #0a0816, #080c1a, #09080e);
+  background-size: 200% 200%;
+}
+/* Orb 1 — indigo, top-left, très atténué */
+/* Les orbes sont gérés par BackgroundOrbs.tsx (Framer Motion) */
+@keyframes globalGrad {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+@keyframes gOrbA {
+  0%, 100% { transform: translate(0, 0); }
+  40%       { transform: translate(8vw, -6vw); }
+  70%       { transform: translate(-5vw, 4vw); }
+}
+@keyframes gOrbB {
+  0%, 100% { transform: translate(0, 0); }
+  35%       { transform: translate(-9vw, 6vw); }
+  65%       { transform: translate(5vw, -4vw); }
+}
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
-  background: var(--bg);
+  background: transparent; /* html fournit le fond animé */
   color: var(--label);
   min-height: 100dvh;
   line-height: 1.45;
@@ -202,6 +228,126 @@ section { margin-top: clamp(20px, 3vw, 32px); }
   text-transform: uppercase; color: var(--muted);
 }
 .shead .hint { font-size: 12px; color: var(--muted2); }
+
+/* ── HERO LANDING (dashboard) ────────────────────────────────────── */
+.hl {
+  position: relative;
+  margin: -8px calc(-1 * clamp(16px, 3vw, 40px)) 40px;
+  padding: 72px clamp(16px, 3vw, 40px) 60px;
+  background: transparent;
+}
+/* Contient le débordement horizontal des orbes sans couper le vertical */
+body { overflow-x: hidden; }
+/* ── BackgroundOrbs — Aurora UI (UI/UX Pro Max: hue-rotate + saturate) ── */
+.global-orb {
+  opacity: .18;
+  filter: blur(80px) saturate(1.2) hue-rotate(0deg);
+  animation: orbAurora 18s ease-in-out infinite;
+  will-change: transform, filter;
+}
+[data-theme="dark"] .global-orb { opacity: .40; }
+@keyframes orbAurora {
+  0%, 100% { filter: blur(80px) saturate(1.2) hue-rotate(0deg); }
+  33%       { filter: blur(88px) saturate(1.4) hue-rotate(18deg); }
+  66%       { filter: blur(76px) saturate(1.1) hue-rotate(-12deg); }
+}
+
+.hl-text { position: relative; margin-bottom: 48px; max-width: 640px; }
+.hl-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: #6366f1; margin-bottom: 14px;
+}
+.hl-title {
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: clamp(52px, 8vw, 88px); font-weight: 800;
+  letter-spacing: -.04em; line-height: .92; margin: 0 0 18px;
+  background: linear-gradient(135deg, #1c1c1e 40%, #6366f1);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+[data-theme="dark"] .hl-title {
+  background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hl-sub {
+  font-size: 15px; line-height: 1.55; color: var(--muted);
+  margin: 0 0 28px; max-width: 460px;
+}
+.hl-progress-row {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 28px;
+}
+.hl-progress-track {
+  width: 200px; height: 6px; border-radius: 99px; overflow: hidden;
+  background: rgba(0,0,0,.09);
+}
+[data-theme="dark"] .hl-progress-track { background: rgba(255,255,255,.1); }
+.hl-progress-fill {
+  height: 100%; border-radius: 99px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+}
+.hl-progress-label {
+  font-size: 13px; font-weight: 700; color: #6366f1;
+}
+.hl-stats { display: flex; align-items: center; gap: 20px; }
+.hl-stat { display: flex; flex-direction: column; gap: 2px; }
+.hl-stat-val {
+  font-size: 22px; font-weight: 800; letter-spacing: -.02em; color: var(--label);
+}
+.hl-stat-key {
+  font-size: 11px; color: var(--muted); text-transform: uppercase;
+  letter-spacing: .06em; font-weight: 600;
+}
+.hl-stat-sep {
+  width: 1px; height: 32px; border-radius: 99px; background: rgba(0,0,0,.1);
+}
+[data-theme="dark"] .hl-stat-sep { background: rgba(255,255,255,.12); }
+
+/* Feature grid */
+.hl-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.hl-card {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 20px; border-radius: 16px;
+  background: rgba(255,255,255,.72);
+  backdrop-filter: blur(14px) saturate(1.5);
+  -webkit-backdrop-filter: blur(14px) saturate(1.5);
+  border: 1px solid rgba(255,255,255,.85);
+  text-decoration: none; color: inherit; cursor: pointer;
+  min-height: 148px;
+  transition: box-shadow .25s var(--ease-apple);
+}
+.hl-card:hover {
+  box-shadow: 0 12px 36px rgba(0,0,0,.1), 0 0 0 1px rgba(99,102,241,.14);
+}
+[data-theme="dark"] .hl-card {
+  background: rgba(28,28,44,.65);
+  border-color: rgba(255,255,255,.07);
+}
+[data-theme="dark"] .hl-card:hover {
+  box-shadow: 0 12px 36px rgba(0,0,0,.45), 0 0 0 1px rgba(99,102,241,.25);
+}
+.hl-card-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.hl-card-label { font-size: 14px; font-weight: 700; color: var(--label); letter-spacing: -.01em; }
+.hl-card-desc  { font-size: 11.5px; color: var(--muted); line-height: 1.4; flex: 1; }
+.hl-card-cta   { font-size: 12px; font-weight: 700; padding-top: 6px; }
+.hl-card-arrow { display: inline-block; transition: transform .2s; }
+.hl-card:hover .hl-card-arrow { transform: translateX(4px); }
+
+@media (max-width: 700px) {
+  .hl-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .hl-stats { gap: 14px; }
+  .hl-stat-val { font-size: 18px; }
+}
+@media (max-width: 430px) {
+  .hl-card { padding: 14px; min-height: 120px; }
+  .hl-card-desc { display: none; }
+}
 
 /* ── HERO ────────────────────────────────────────────────────────── */
 .hero {
@@ -760,7 +906,8 @@ canvas.chart-mood   { width: 100%; height: 88px; display: block; }
    APP LAYOUT
    ================================================================ */
 body { padding: 0; }
-.app-root { display: block; min-height: 100dvh; }
+/* position:relative + z-index:1 place le contenu AU-DESSUS des BackgroundOrbs (z:0) */
+.app-root { display: block; min-height: 100dvh; position: relative; z-index: 1; }
 
 /* ================================================================
    TOP NAV — style Apple.com
@@ -1594,7 +1741,12 @@ body { padding: 0; }
    ================================================================ */
 .pin-screen { position: fixed; inset: 0; z-index: 9999; background: var(--bg); display: flex; align-items: center; justify-content: center; }
 .pin-box    { display: flex; flex-direction: column; align-items: center; padding: 40px 32px; width: 100%; max-width: 340px; }
-.pin-logo   { font-size: 32px; font-weight: 800; letter-spacing: -.02em; color: var(--dawn); margin-bottom: 4px; }
+.pin-logo   { font-size: 32px; font-weight: 800; letter-spacing: -.02em; margin-bottom: 4px;
+  background: linear-gradient(135deg, #1c1c1e 40%, #6366f1);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+[data-theme="dark"] .pin-logo {
+  background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .pin-tagline { font-size: 12px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; font-weight: 600; margin-bottom: 36px; }
 .pin-dots   { display: flex; gap: 16px; margin-bottom: 36px; }
 .pin-dots.error { animation: pin-shake .35s ease; }
@@ -1962,8 +2114,8 @@ body { padding: 0; }
   --shadow-md: none;
 }
 
-/* Fond global */
-[data-theme="dark"] body { background: var(--bg); color: var(--label); }
+/* Fond global — html[data-theme="dark"] fournit le gradient animé, body reste transparent */
+[data-theme="dark"] body { background: transparent; color: var(--label); }
 
 /* Cartes : border à la place de l'ombre */
 [data-theme="dark"] .hero,

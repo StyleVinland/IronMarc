@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import Nav from '@/components/Nav';
+import BackgroundOrbs from '@/components/BackgroundOrbs';
 import { AppStateProvider } from '@/components/AppStateProvider';
 import { AuthProvider } from '@/components/AuthProvider';
 import ThemeProvider from '@/components/ThemeProvider';
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body>
+        <BackgroundOrbs />
         <ThemeProvider />
         <AuthProvider>
           <AppStateProvider initial={initialState}>

@@ -5,7 +5,7 @@ import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { computeXP, computeLevel, computeLevelTitle, computeStreak, computeCheckpointPct } from '@/lib/compute';
 import { DAILY, QUESTS, XP_PER_LEVEL } from '@/lib/constants';
 import { XP_PLAN_TARGET, fmtPct } from './Nav';
-import Hero from './Hero';
+import HeroLanding from './HeroLanding';
 import Affirmation from './Affirmation';
 import ProgressCharts from './ProgressCharts';
 import MissionList from './MissionList';
@@ -79,16 +79,16 @@ export default function DashboardClient() {
   const [questsOpen,   setQuestsOpen]   = useState(false);
 
   return (
+    <>
+      <HeroLanding checkpointPct={phasePct} streak={streak} xp={xp} />
+
     <div className="bento">
 
-      {/* En-tête — apparaît avec la page */}
+      {/* En-tête journalier */}
       <div className="bento-header">
         <div className="bento-title">Aujourd&apos;hui</div>
         <div className="bento-date">{todayLabel}</div>
       </div>
-
-      {/* Hero — animation d'entrée propre via CSS */}
-      <Hero checkpointPct={phasePct} />
 
       {/* 4 widgets — stagger cascade Apple */}
       <div className="metrics-grid">
@@ -159,5 +159,6 @@ export default function DashboardClient() {
       </div>
 
     </div>
+    </>
   );
 }

@@ -1,5 +1,5 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import {
   getDayNutrition, getWeekShoppingList, LOAD_TARGETS, FODMAP_TIPS, PANTRY_BASICS,
@@ -111,6 +111,10 @@ export default function NutritionClient() {
     const dow = new Date().getDay();
     return dow === 0 ? 6 : dow - 1; // 0=lun
   });
+  const activeDayRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    activeDayRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }, []);
   const [showShop, setShowShop] = useState(false);
   const [shopOffset, setShopOffset] = useState(1);
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
@@ -202,6 +206,7 @@ export default function NutritionClient() {
             return (
               <button
                 key={ds}
+                ref={isToday ? activeDayRef : undefined}
                 className={`nutri-wd${selectedDay === i ? ' sel' : ''}${isToday ? ' today' : ''}`}
                 onClick={() => setSelectedDay(i)}
               >

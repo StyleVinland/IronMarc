@@ -1,0 +1,219 @@
+
+> ironmarc@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 2.2s
+ ○ Compiling /entrainement ...
+ ✓ Compiled /entrainement in 2.6s (574 modules)
+ ○ Compiling /api/xp ...
+ ✓ Compiled /api/xp in 1265ms (305 modules)
+ ✓ Compiled (311 modules)
+ GET /api/xp 200 in 1501ms
+ GET /api/xp 200 in 1501ms
+ GET /api/xp 200 in 1499ms
+ GET /api/debriefs/last?session_id=renfo_a&before=2026-06-22 200 in 1512ms
+ GET /api/strava/activities?page=1 401 in 1519ms
+ ✓ Compiled /api/sessions/complete in 138ms (313 modules)
+ GET /api/strava/activities?page=1 401 in 274ms
+ GET /api/xp 200 in 276ms
+ GET /api/debriefs/last?session_id=renfo_a&before=2026-06-22 200 in 276ms
+ GET /api/sessions/complete?date=2026-06-22 200 in 296ms
+ GET /api/sessions/complete?date=2026-06-22 200 in 14ms
+ GET /api/debriefs/2026-06-22 200 in 1878ms
+ GET /api/debriefs/2026-06-22 200 in 23ms
+ ✓ Compiled /tabac in 296ms (594 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 1726ms (1411 modules)
+ GET /api/xp 200 in 25ms
+ GET /api/xp 200 in 31ms
+ ✓ Compiled in 269ms (695 modules)
+ ✓ Compiled / in 223ms (668 modules)
+ GET / 200 in 374ms
+ ✓ Compiled /api/xp in 197ms (698 modules)
+ GET /api/xp 200 in 204ms
+ GET /api/xp 200 in 204ms
+ GET /api/xp 200 in 203ms
+ GET /api/xp 200 in 252ms
+ ✓ Compiled in 788ms (1393 modules)
+ ✓ Compiled in 533ms (1349 modules)
+ ✓ Compiled in 218ms (1349 modules)
+ ✓ Compiled in 166ms (1349 modules)
+ GET / 200 in 133ms
+ ✓ Compiled /api/xp in 84ms (698 modules)
+ GET /api/xp 200 in 141ms
+ GET /api/xp 200 in 83ms
+ GET /api/xp 200 in 84ms
+ GET /api/xp 200 in 85ms
+ ✓ Compiled /entrainement in 113ms (715 modules)
+ GET /api/xp 200 in 23ms
+ ✓ Compiled /api/debriefs/last in 136ms (717 modules)
+ ✓ Compiled (721 modules)
+ GET /api/xp 200 in 281ms
+ GET /api/xp 200 in 281ms
+ GET /api/xp 200 in 281ms
+ GET /api/debriefs/2026-06-22 200 in 299ms
+ GET /api/strava/activities?page=1 401 in 305ms
+ GET /api/debriefs/last?session_id=renfo_a&before=2026-06-22 200 in 287ms
+ ✓ Compiled /api/sessions/complete in 134ms (723 modules)
+ GET /api/debriefs/last?session_id=renfo_a&before=2026-06-22 200 in 260ms
+ GET /api/strava/activities?page=1 401 in 264ms
+ GET /api/sessions/complete?date=2026-06-22 200 in 299ms
+ GET /api/debriefs/2026-06-22 200 in 263ms
+ GET /api/sessions/complete?date=2026-06-22 200 in 9ms
+ ✓ Compiled /nutrition in 435ms (1413 modules)
+ ✓ Compiled /tabac in 155ms (736 modules)
+ GET /api/xp 200 in 36ms
+ GET /api/xp 200 in 42ms
+ ✓ Compiled in 403ms (1375 modules)
+ ✓ Compiled in 295ms (1375 modules)
+ ✓ Compiled in 205ms (1375 modules)
+ GET / 200 in 142ms
+ ✓ Compiled /api/xp in 87ms (721 modules)
+ GET /api/xp 200 in 140ms
+ GET /api/xp 200 in 73ms
+ GET /api/xp 200 in 76ms
+ GET /api/xp 200 in 76ms
+ ✓ Compiled in 562ms (1389 modules)
+ ✓ Compiled in 427ms (1375 modules)
+ GET /nutrition 200 in 71ms
+ ✓ Compiled /api/xp in 84ms (721 modules)
+ GET /api/xp 200 in 118ms
+ GET /api/xp 200 in 138ms
+ GET /api/xp 200 in 14ms
+ GET /api/xp 200 in 23ms
+ ✓ Compiled in 383ms (1389 modules)
+ ✓ Compiled in 297ms (1389 modules)
+ GET / 200 in 59ms
+ ✓ Compiled /api/xp in 95ms (721 modules)
+ GET /api/xp 200 in 151ms
+ GET /api/xp 200 in 75ms
+ GET /api/xp 200 in 80ms
+ GET /api/xp 200 in 80ms
+ ✓ Compiled in 242ms (691 modules)
+ ✓ Compiled in 424ms (1378 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET / 200 in 176ms
+ ✓ Compiled in 235ms (1392 modules)
+ ✓ Compiled in 241ms (1392 modules)
+ ✓ Compiled in 222ms (1392 modules)
+ ✓ Compiled in 203ms (1378 modules)
+ GET / 200 in 134ms
+ ✓ Compiled /api/xp in 323ms (723 modules)
+ GET /api/xp 200 in 311ms
+ GET /api/xp 200 in 311ms
+ GET /api/xp 200 in 310ms
+ GET /api/xp 200 in 382ms
+ ✓ Compiled /api/sessions/complete in 158ms (725 modules)
+ ✓ Compiled (731 modules)
+ GET /api/xp 200 in 315ms
+ GET /api/xp 200 in 316ms
+ GET /api/debriefs/last?session_id=renfo_a&before=2026-06-22 200 in 328ms
+ GET /api/debriefs/2026-06-22 200 in 340ms
+ GET /api/strava/activities?page=1 401 in 345ms
+ GET /api/sessions/complete?date=2026-06-22 200 in 344ms
+ GET /api/xp 200 in 14ms
+ GET /api/xp 200 in 27ms
+ GET /api/debriefs/last?session_id=renfo_a&before=2026-06-22 200 in 30ms
+ GET /api/strava/activities?page=1 401 in 32ms
+ GET /api/sessions/complete?date=2026-06-22 200 in 34ms
+ GET /api/debriefs/2026-06-22 200 in 35ms
+ ✓ Compiled /materiel in 341ms (1423 modules)
+ GET /api/xp 200 in 37ms
+ GET /api/xp 200 in 46ms
+ GET /api/debriefs/2026-06-22 200 in 37ms
+ GET /api/strava/activities?page=1 401 in 45ms
+ GET /api/debriefs/last?session_id=renfo_a&before=2026-06-22 200 in 49ms
+ GET /api/xp 200 in 62ms
+ GET /api/xp 200 in 58ms
+ GET /api/xp 200 in 57ms
+ GET /api/xp 200 in 42ms
+ GET /api/debriefs/last?session_id=renfo_a&before=2026-06-22 200 in 27ms
+ GET /api/sessions/complete?date=2026-06-22 200 in 35ms
+ GET /api/strava/activities?page=1 401 in 37ms
+ GET /api/debriefs/2026-06-22 200 in 66ms
+ GET /api/sessions/complete?date=2026-06-22 200 in 48ms
+ GET /api/xp 200 in 25ms
+ GET /api/xp 200 in 31ms
+ GET /api/debriefs/2026-06-22 200 in 26ms
+ GET /api/debriefs/last?session_id=renfo_a&before=2026-06-22 200 in 30ms
+ GET /api/strava/activities?page=1 401 in 30ms
+ GET /api/xp 200 in 42ms
+ GET /api/xp 200 in 42ms
+ GET /api/xp 200 in 40ms
+ GET /api/sessions/complete?date=2026-06-22 200 in 41ms
+ GET /api/xp 200 in 35ms
+ GET /api/debriefs/2026-06-22 200 in 43ms
+ GET /api/debriefs/last?session_id=renfo_a&before=2026-06-22 200 in 45ms
+ GET /api/strava/activities?page=1 401 in 46ms
+ GET /api/sessions/complete?date=2026-06-22 200 in 35ms
+ ✓ Compiled /tabac in 147ms (743 modules)
+ GET /api/xp 200 in 31ms
+ GET /api/xp 200 in 59ms
+ ✓ Compiled in 411ms (1380 modules)
+ ✓ Compiled in 292ms (1394 modules)
+ ✓ Compiled in 252ms (1394 modules)
+ GET / 200 in 127ms
+ ✓ Compiled /api/xp in 88ms (723 modules)
+ GET /api/xp 200 in 147ms
+ GET /api/xp 200 in 72ms
+ GET /api/xp 200 in 76ms
+ GET /api/xp 200 in 76ms
+ GET /api/xp 200 in 29ms
+ ✓ Compiled /api/debriefs/[date] in 218ms (725 modules)
+ ✓ Compiled (729 modules)
+ GET /api/xp 200 in 442ms
+ GET /api/xp 200 in 445ms
+ GET /api/debriefs/last?session_id=renfo_a&before=2026-06-22 200 in 452ms
+ GET /api/xp 200 in 426ms
+ GET /api/debriefs/2026-06-22 200 in 464ms
+ GET /api/strava/activities?page=1 401 in 477ms
+ ✓ Compiled /api/sessions/complete in 147ms (731 modules)
+ GET /api/debriefs/2026-06-22 200 in 277ms
+ GET /api/sessions/complete?date=2026-06-22 200 in 321ms
+ GET /api/debriefs/last?session_id=renfo_a&before=2026-06-22 200 in 291ms
+ GET /api/strava/activities?page=1 401 in 295ms
+ GET /api/sessions/complete?date=2026-06-22 200 in 8ms
+ ✓ Compiled in 379ms (1380 modules)
+ ✓ Compiled in 194ms (693 modules)
+ GET / 200 in 62ms
+ ✓ Compiled /api/xp in 89ms (723 modules)
+ GET /api/xp 200 in 142ms
+ GET /api/xp 200 in 72ms
+ GET /api/xp 200 in 72ms
+ GET /api/xp 200 in 71ms
+ GET /api/xp 200 in 27ms
+ ✓ Compiled /api/debriefs/last in 140ms (725 modules)
+ ✓ Compiled (729 modules)
+ GET /api/xp 200 in 338ms
+ GET /api/xp 200 in 339ms
+ GET /api/xp 200 in 347ms
+ GET /api/debriefs/2026-06-22 200 in 350ms
+ GET /api/strava/activities?page=1 401 in 358ms
+ GET /api/debriefs/last?session_id=renfo_a&before=2026-06-22 200 in 340ms
+ ✓ Compiled /api/sessions/complete in 112ms (731 modules)
+ GET /api/debriefs/2026-06-22 200 in 249ms
+ GET /api/strava/activities?page=1 401 in 259ms
+ GET /api/sessions/complete?date=2026-06-22 200 in 290ms
+ GET /api/debriefs/last?session_id=renfo_a&before=2026-06-22 200 in 267ms
+ GET /api/sessions/complete?date=2026-06-22 200 in 10ms
+ ✓ Compiled /tabac in 180ms (738 modules)
+ ✓ Compiled /mental in 442ms (1434 modules)
+ ✓ Compiled /materiel in 186ms (749 modules)
+ ✓ Compiled /galerie in 352ms (1446 modules)
+ ✓ Compiled /api/media in 209ms (758 modules)
+ GET /api/media 200 in 256ms
+ GET /api/media 200 in 6ms
+ GET /api/xp 200 in 15ms
+ GET /api/xp 200 in 24ms
+ ✓ Compiled in 268ms (1419 modules)
+ ✓ Compiled in 153ms (727 modules)
+ GET / 200 in 102ms
+ GET /api/xp 200 in 16ms
+ GET /api/xp 200 in 14ms
+ GET /api/xp 200 in 20ms
+ GET /api/xp 200 in 20ms
