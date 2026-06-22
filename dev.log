@@ -400,3 +400,4 @@
  PUT /api/quests/olympic 200 in 22ms
  PUT /api/quests/sprint 200 in 10ms
  ✓ Compiled in 303ms (1425 modules)
+ ✓ Compiled in 418ms (1395 modules)

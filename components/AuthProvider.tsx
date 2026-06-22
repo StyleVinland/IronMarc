@@ -1,12 +1,14 @@
 'use client';
 import { useState } from 'react';
+import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
+import SplashScreen from './SplashScreen';
 
 const PIN = '1404';
 const KEYS = ['1','2','3','4','5','6','7','8','9','⌫','0','→'];
 
 function PinScreen({ onSuccess }: { onSuccess: () => void }) {
   const [digits, setDigits] = useState<string[]>([]);
-  const [error, setError] = useState(false);
+  const [error, setError]   = useState(false);
 
   function press(k: string) {
     if (error) return;
@@ -29,14 +31,38 @@ function PinScreen({ onSuccess }: { onSuccess: () => void }) {
   return (
     <div className="pin-screen">
       <div className="pin-box">
-        <div className="pin-logo">IronMarc</div>
-        <div className="pin-tagline">Code PIN requis</div>
-        <div className={`pin-dots${error ? ' error' : ''}`}>
+
+        {/* layoutId identique à SplashScreen → le logo "vole" de sa position splash vers ici */}
+        <motion.div layoutId="ironmarc-logo" layout className="pin-logo">
+          IronMarc
+        </motion.div>
+
+        <motion.div
+          className="pin-tagline"
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.35 }}
+        >
+          Code PIN requis
+        </motion.div>
+
+        <motion.div
+          className={`pin-dots${error ? ' error' : ''}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.3 }}
+        >
           {[0,1,2,3].map(i => (
             <div key={i} className={`pin-dot${digits.length > i ? ' filled' : ''}${error ? ' err' : ''}`} />
           ))}
-        </div>
-        <div className="pin-pad">
+        </motion.div>
+
+        <motion.div
+          className="pin-pad"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.45, duration: 0.35 }}
+        >
           {KEYS.map(k => (
             <button
               key={k}
@@ -44,14 +70,27 @@ function PinScreen({ onSuccess }: { onSuccess: () => void }) {
               onClick={() => press(k)}
             >{k}</button>
           ))}
-        </div>
+        </motion.div>
+
       </div>
     </div>
   );
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [splash, setSplash] = useState(true);
   const [authed, setAuthed] = useState(false);
-  if (!authed) return <PinScreen onSuccess={() => setAuthed(true)} />;
-  return <>{children}</>;
+
+  if (authed) return <>{children}</>;
+
+  return (
+    <LayoutGroup>
+      <AnimatePresence>
+        {splash
+          ? <SplashScreen key="splash" onDone={() => setSplash(false)} />
+          : <PinScreen    key="pin"    onSuccess={() => setAuthed(true)} />
+        }
+      </AnimatePresence>
+    </LayoutGroup>
+  );
 }
