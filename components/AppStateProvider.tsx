@@ -12,6 +12,7 @@ interface AppCtx {
   toggleMission: (id: string, done: boolean) => void;
   toggleQuest: (id: string, done: boolean) => void;
   updateMind: (field: keyof MindData, val: MindData[keyof MindData]) => void;
+  validateMind: () => void;
   nextAff: () => void;
 }
 
@@ -91,6 +92,14 @@ export function AppStateProvider({ children, initial }: { children: ReactNode; i
     else if (field === 'grat') patchDay({ grat: val });
   }, [today, patchDay]);
 
+  const validateMind = useCallback(() => {
+    setState(prev => {
+      const s = ensureDay(prev, today);
+      return { ...s, days: { ...s.days, [today]: { ...s.days[today], mind: { ...s.days[today].mind, mindDone: true } } } };
+    });
+    patchDay({ mindDone: true });
+  }, [today, patchDay]);
+
   // Recharge l'état depuis le serveur quand l'onglet reprend le focus
   // (sync entre téléphone et ordi sans rechargement manuel)
   useEffect(() => {
@@ -119,7 +128,7 @@ export function AppStateProvider({ children, initial }: { children: ReactNode; i
   }, []);
 
   return (
-    <Ctx.Provider value={{ state, today, addCig, removeCig, toggleMission, toggleQuest, updateMind, nextAff }}>
+    <Ctx.Provider value={{ state, today, addCig, removeCig, toggleMission, toggleQuest, updateMind, validateMind, nextAff }}>
       {children}
     </Ctx.Provider>
   );

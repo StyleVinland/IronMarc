@@ -2,6 +2,7 @@ export interface MindData {
   mood: number | null;
   journal: string;
   grat: [string, string, string];
+  mindDone: boolean;
 }
 
 export interface DayData {

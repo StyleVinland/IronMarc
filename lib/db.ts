@@ -36,6 +36,7 @@ function migrate(db: NodeSqliteDb) {
       grat1      TEXT NOT NULL DEFAULT '',
       grat2      TEXT NOT NULL DEFAULT '',
       grat3      TEXT NOT NULL DEFAULT '',
+      mind_done  INTEGER NOT NULL DEFAULT 0,
       updated_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
     CREATE TABLE IF NOT EXISTS missions (
@@ -81,6 +82,8 @@ function migrate(db: NodeSqliteDb) {
       validated_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
   `);
+  // Ajout rétrocompatible de mind_done sur les DBs existantes
+  try { db.exec(`ALTER TABLE days ADD COLUMN mind_done INTEGER NOT NULL DEFAULT 0`); } catch {}
 }
 
 function openDb(): NodeSqliteDb {
@@ -115,6 +118,7 @@ export function getFullState(): AppState {
         mood: r.mood != null ? Number(r.mood) : null,
         journal: (r.journal as string) ?? '',
         grat: [(r.grat1 as string) ?? '', (r.grat2 as string) ?? '', (r.grat3 as string) ?? ''],
+        mindDone: Boolean(r.mind_done),
       },
       missions: {},
     };
@@ -122,7 +126,7 @@ export function getFullState(): AppState {
   for (const r of missionRows) {
     const date = r.date as string;
     if (!days[date]) {
-      days[date] = { date, cigs: 0, mind: { mood: null, journal: '', grat: ['', '', ''] }, missions: {} };
+      days[date] = { date, cigs: 0, mind: { mood: null, journal: '', grat: ['', '', ''], mindDone: false }, missions: {} };
     }
     days[date].missions[r.mission_id as string] = true;
   }
@@ -135,27 +139,29 @@ export function getFullState(): AppState {
 
 export function upsertDay(
   date: string,
-  fields: Partial<{ cigs: number; mood: number | null; journal: string; grat: [string, string, string] }>
+  fields: Partial<{ cigs: number; mood: number | null; journal: string; grat: [string, string, string]; mindDone: boolean }>
 ) {
   openDb().prepare(`
-    INSERT INTO days (date, cigs, mood, journal, grat1, grat2, grat3)
-    VALUES (@date, IFNULL(@cigs, 0), @mood, IFNULL(@journal, ''), IFNULL(@grat1, ''), IFNULL(@grat2, ''), IFNULL(@grat3, ''))
+    INSERT INTO days (date, cigs, mood, journal, grat1, grat2, grat3, mind_done)
+    VALUES (@date, IFNULL(@cigs, 0), @mood, IFNULL(@journal, ''), IFNULL(@grat1, ''), IFNULL(@grat2, ''), IFNULL(@grat3, ''), IFNULL(@mind_done, 0))
     ON CONFLICT(date) DO UPDATE SET
-      cigs       = CASE WHEN @cigs IS NOT NULL    THEN @cigs    ELSE cigs    END,
-      mood       = CASE WHEN @mood IS NOT NULL     THEN @mood    ELSE mood    END,
-      journal    = CASE WHEN @journal IS NOT NULL  THEN @journal ELSE journal END,
-      grat1      = CASE WHEN @grat1 IS NOT NULL    THEN @grat1   ELSE grat1   END,
-      grat2      = CASE WHEN @grat2 IS NOT NULL    THEN @grat2   ELSE grat2   END,
-      grat3      = CASE WHEN @grat3 IS NOT NULL    THEN @grat3   ELSE grat3   END,
+      cigs       = CASE WHEN @cigs IS NOT NULL      THEN @cigs      ELSE cigs      END,
+      mood       = CASE WHEN @mood IS NOT NULL       THEN @mood      ELSE mood      END,
+      journal    = CASE WHEN @journal IS NOT NULL    THEN @journal   ELSE journal   END,
+      grat1      = CASE WHEN @grat1 IS NOT NULL      THEN @grat1     ELSE grat1     END,
+      grat2      = CASE WHEN @grat2 IS NOT NULL      THEN @grat2     ELSE grat2     END,
+      grat3      = CASE WHEN @grat3 IS NOT NULL      THEN @grat3     ELSE grat3     END,
+      mind_done  = CASE WHEN @mind_done IS NOT NULL  THEN @mind_done ELSE mind_done END,
       updated_at = datetime('now')
   `).run({
     date,
-    cigs:    fields.cigs    != null ? fields.cigs    : null,
-    mood:    fields.mood    != null ? fields.mood    : null,
-    journal: fields.journal != null ? fields.journal : null,
-    grat1:   fields.grat?.[0] != null ? fields.grat[0] : null,
-    grat2:   fields.grat?.[1] != null ? fields.grat[1] : null,
-    grat3:   fields.grat?.[2] != null ? fields.grat[2] : null,
+    cigs:      fields.cigs      != null ? fields.cigs      : null,
+    mood:      fields.mood      != null ? fields.mood      : null,
+    journal:   fields.journal   != null ? fields.journal   : null,
+    grat1:     fields.grat?.[0] != null ? fields.grat[0]  : null,
+    grat2:     fields.grat?.[1] != null ? fields.grat[1]  : null,
+    grat3:     fields.grat?.[2] != null ? fields.grat[2]  : null,
+    mind_done: fields.mindDone  != null ? (fields.mindDone ? 1 : 0) : null,
   });
 }
 

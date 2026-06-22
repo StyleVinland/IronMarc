@@ -7,6 +7,7 @@ interface Props {
   mind: MindData;
   days: Record<string, DayData>;
   onChange: (field: keyof MindData, value: MindData[keyof MindData]) => void;
+  onValidate: () => void;
 }
 
 const C_TEXT = '#7A7975';
@@ -67,7 +68,7 @@ function drawMoodChart(canvas: HTMLCanvasElement, days: Record<string, DayData>)
   });
 }
 
-export default function MentalSpace({ mind, days, onChange }: Props) {
+export default function MentalSpace({ mind, days, onChange, onValidate }: Props) {
   const moodRef = useRef<HTMLCanvasElement>(null);
   const [breathing, setBreathing] = useState(false);
   const [phase, setPhase] = useState<'Inspire…' | 'Retiens…' | 'Expire…'>('Inspire…');
@@ -174,6 +175,23 @@ export default function MentalSpace({ mind, days, onChange }: Props) {
               <div className="bcircle" style={{ transform: `scale(${scale})`, transition: phase === 'Expire…' ? 'transform 6s ease' : 'transform 4s ease' }} />
               <div className="blabel">{phase}</div>
             </div>
+          )}
+        </div>
+
+        <div className="mblock" style={{ textAlign: 'center' }}>
+          {mind.mindDone ? (
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 20px', borderRadius: 10, background: 'rgba(72,156,72,0.12)', color: '#4CAF50', fontWeight: 600, fontSize: 15 }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Résumé validé pour aujourd&apos;hui
+            </div>
+          ) : (
+            <button
+              className="btn-breathe"
+              onClick={onValidate}
+              style={{ background: 'var(--accent)', color: '#fff', border: 'none', padding: '12px 28px', borderRadius: 10, fontWeight: 700, fontSize: 15, cursor: 'pointer' }}
+            >
+              Valider mon résumé mental
+            </button>
           )}
         </div>
 

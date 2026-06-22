@@ -5,8 +5,8 @@ import MentalSpace from './MentalSpace';
 
 export default function MentalClient() {
   useScrollReveal();
-  const { state, today, updateMind } = useAppState();
-  const todayData = state.days[today] ?? { date: today, cigs: 0, mind: { mood: null, journal: '', grat: ['', '', ''] }, missions: {} };
+  const { state, today, updateMind, validateMind } = useAppState();
+  const todayData = state.days[today] ?? { date: today, cigs: 0, mind: { mood: null, journal: '', grat: ['', '', ''], mindDone: false }, missions: {} };
 
   return (
     <>
@@ -15,7 +15,7 @@ export default function MentalClient() {
         <p>Ton espace pour faire le point — rien n&apos;est jugé, rien ne part ailleurs</p>
       </div>
       <div className="reveal reveal-d1">
-        <MentalSpace mind={todayData.mind} days={state.days} onChange={updateMind} />
+        <MentalSpace mind={todayData.mind} days={state.days} onChange={updateMind} onValidate={validateMind} />
       </div>
     </>
   );

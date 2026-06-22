@@ -48,7 +48,7 @@ export function ensureDay(state: AppState, date: string): AppState {
     ...state,
     days: {
       ...state.days,
-      [date]: { date, cigs: 0, mind: { mood: null, journal: '', grat: ['', '', ''] }, missions: {} },
+      [date]: { date, cigs: 0, mind: { mood: null, journal: '', grat: ['', '', ''], mindDone: false }, missions: {} },
     },
   };
 }
