@@ -326,3 +326,77 @@
  GET /api/sessions/complete?date=2026-06-22 200 in 9ms
  GET /api/xp 200 in 22ms
  GET /api/xp 200 in 26ms
+ ✓ Compiled in 1000ms (1395 modules)
+ GET / 200 in 186ms
+ ✓ Compiled /api/xp in 135ms (733 modules)
+ GET /api/xp 200 in 208ms
+ GET /api/xp 200 in 19ms
+ GET /api/xp 200 in 26ms
+ GET /api/xp 200 in 26ms
+ ✓ Compiled /api/days/[date]/missions/[id] in 206ms (735 modules)
+ PUT /api/days/2026-06-22/missions/move 200 in 1793ms
+ PUT /api/days/2026-06-22/missions/move 200 in 526ms
+ PUT /api/days/2026-06-22/missions/eat 200 in 18ms
+ ✓ Compiled in 390ms (1427 modules)
+ GET /api/xp 200 in 137ms
+ GET /api/xp 200 in 137ms
+ PUT /api/days/2026-06-22/missions/water 200 in 23ms
+ PUT /api/days/2026-06-22/missions/sleep 200 in 14ms
+ PUT /api/days/2026-06-22/missions/mob 200 in 28ms
+ PUT /api/days/2026-06-22/missions/breath 200 in 12ms
+ PUT /api/days/2026-06-22/missions/move 200 in 55ms
+ ✓ Compiled in 392ms (1427 modules)
+ ✓ Compiled /api/quests/[id] in 150ms (737 modules)
+ PUT /api/quests/doc 200 in 658ms
+ PUT /api/quests/free7 200 in 21ms
+ PUT /api/quests/free3 200 in 21ms
+ PUT /api/quests/free1 200 in 14ms
+ PUT /api/quests/swim50 200 in 21ms
+ PUT /api/quests/swim100 200 in 15ms
+ PUT /api/quests/swim200 200 in 21ms
+ ✓ Compiled in 392ms (1443 modules)
+ GET / 200 in 163ms
+ GET /api/xp 200 in 11ms
+ GET /api/xp 200 in 24ms
+ GET /api/xp 200 in 44ms
+ GET /api/xp 200 in 44ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ✓ Compiled in 584ms (1395 modules)
+ GET / 200 in 466ms
+ ✓ Compiled /api/xp in 134ms (733 modules)
+ GET /api/xp 200 in 188ms
+ GET /api/xp 200 in 187ms
+ GET /api/xp 200 in 187ms
+ GET /api/xp 200 in 204ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ✓ Compiled in 545ms (1425 modules)
+ GET / 200 in 599ms
+ GET /api/xp 200 in 13ms
+ GET /api/xp 200 in 13ms
+ GET /api/xp 200 in 19ms
+ GET /api/xp 200 in 19ms
+ ✓ Compiled in 232ms (1425 modules)
+ ✓ Compiled in 328ms (1425 modules)
+ ✓ Compiled in 459ms (1439 modules)
+ GET / 200 in 238ms
+ GET /api/xp 200 in 19ms
+ GET /api/xp 200 in 14ms
+ GET /api/xp 200 in 21ms
+ GET /api/xp 200 in 21ms
+ ✓ Compiled /api/days/[date]/missions/[id] in 199ms (735 modules)
+ PUT /api/days/2026-06-22/missions/read 200 in 244ms
+ PUT /api/days/2026-06-22/missions/read 200 in 22ms
+ PUT /api/days/2026-06-22/missions/read 200 in 26ms
+ PUT /api/days/2026-06-22/missions/read 200 in 19ms
+ PUT /api/days/2026-06-22/missions/read 200 in 22ms
+ ✓ Compiled /api/quests/[id] in 199ms (733 modules)
+ PUT /api/quests/jourj 200 in 252ms
+ PUT /api/quests/bike40 200 in 20ms
+ PUT /api/quests/run20 200 in 13ms
+ PUT /api/quests/renfo 200 in 24ms
+ PUT /api/quests/renfo 200 in 20ms
+ PUT /api/quests/renfo 200 in 18ms
+ PUT /api/quests/supersprint 200 in 11ms
+ PUT /api/quests/olympic 200 in 22ms
+ PUT /api/quests/sprint 200 in 10ms
+ ✓ Compiled in 303ms (1425 modules)

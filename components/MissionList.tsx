@@ -103,11 +103,6 @@ export default function MissionList({ missions, onToggle }: Props) {
         );
       })()}
 
-      {!DAILY.every(t => !!missions[t.id]) && (
-        <p style={{ fontSize: 12.5, marginTop: 9, color: '#3C3C43', fontStyle: 'italic', padding: '0 4px 2px' }}>
-          Le repos fait partie de l&apos;entraînement. Un jour off, c&apos;est une mission réussie, pas une mission ratée.
-        </p>
-      )}
     </section>
   );
 }
