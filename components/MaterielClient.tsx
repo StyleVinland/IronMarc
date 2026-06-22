@@ -55,6 +55,14 @@ const GEAR: GearItem[] = [
     color: '#CF8E42',
   },
   {
+    name: 'Écouteurs sport (conduction osseuse)',
+    price: '30-80 €',
+    why: '⚠️ INTERDITS en compétition Ironman — nage, vélo et course (WTC rules, pénalité/DQ). UNIQUEMENT pour l\'entraînement. Indispensables pour les longues sorties vélo et course à pied. Les conduction osseuse (Shokz) laissent les oreilles libres : tu entends les voitures, plus safe.',
+    brands: 'Shokz OpenRun · Shokz OpenRun Pro · JBL Endurance Race · Bose Sport Earbuds',
+    when: 'Mois 1-2 — entraînement uniquement, jamais en compétition',
+    color: '#7A7870',
+  },
+  {
     name: 'Pull buoy',
     price: '10-15 €',
     why: 'Flotteur entre les jambes pour travailler les bras en piscine. Permet de progresser en nage même quand les jambes sont fatiguées.',
