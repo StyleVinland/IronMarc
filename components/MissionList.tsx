@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { DAILY } from '@/lib/constants';
+import { DAILY, DAILY_BONUS } from '@/lib/constants';
 
 interface Props {
   missions: Record<string, boolean>;
@@ -79,9 +79,35 @@ export default function MissionList({ missions, onToggle }: Props) {
           );
         })}
       </div>
-      <p style={{ fontSize: 12.5, marginTop: 9, color: '#3C3C43', fontStyle: 'italic', padding: '0 4px 2px' }}>
-        Le repos fait partie de l&apos;entraînement. Un jour off, c&apos;est une mission réussie, pas une mission ratée.
-      </p>
+
+      {/* Bonus journée parfaite */}
+      {(() => {
+        const allDone = DAILY.every(t => !!missions[t.id]);
+        const remaining = DAILY.filter(t => !missions[t.id]).length;
+        return (
+          <div className={`daily-bonus${allDone ? ' done' : ''}`}>
+            {allDone ? (
+              <>
+                <span className="daily-bonus-icon">⚡</span>
+                <span className="daily-bonus-txt">Journée parfaite — Bonus <strong>+{DAILY_BONUS} XP</strong> gagné !</span>
+              </>
+            ) : (
+              <>
+                <span className="daily-bonus-icon">🎯</span>
+                <span className="daily-bonus-txt">
+                  {remaining === 1 ? 'Plus qu\'une mission' : `${remaining} missions restantes`} → Bonus <strong>+{DAILY_BONUS} XP</strong>
+                </span>
+              </>
+            )}
+          </div>
+        );
+      })()}
+
+      {!DAILY.every(t => !!missions[t.id]) && (
+        <p style={{ fontSize: 12.5, marginTop: 9, color: '#3C3C43', fontStyle: 'italic', padding: '0 4px 2px' }}>
+          Le repos fait partie de l&apos;entraînement. Un jour off, c&apos;est une mission réussie, pas une mission ratée.
+        </p>
+      )}
     </section>
   );
 }

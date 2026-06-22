@@ -59,6 +59,14 @@ export default function DashboardClient() {
     return () => window.removeEventListener('session-validated', load);
   }, []);
 
+  const [clock, setClock] = useState('');
+  useEffect(() => {
+    const tick = () => setClock(new Date().toLocaleTimeString('fr-FR', { timeZone: 'Europe/Paris', hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
   const habitXp    = computeXP(state);
   const xp         = habitXp + sessionXp;
   const level      = computeLevel(xp);
@@ -87,7 +95,10 @@ export default function DashboardClient() {
       {/* En-tête journalier */}
       <div className="bento-header">
         <div className="bento-title">Aujourd&apos;hui</div>
-        <div className="bento-date">{todayLabel}</div>
+        <div className="bento-date">
+          {todayLabel}
+          {clock && <span className="bento-clock">{clock}</span>}
+        </div>
       </div>
 
       {/* 4 widgets — stagger cascade Apple */}
@@ -122,6 +133,9 @@ export default function DashboardClient() {
           <div className="widget-unit">vers l&apos;Ironman</div>
           <div className="widget-bar">
             <div className="widget-bar-fill" style={{ width: `${planWidth}%`, background: 'var(--dawn)' }} />
+          </div>
+          <div className="widget-sub" style={{ fontVariantNumeric: 'tabular-nums' }}>
+            {(xp / XP_PLAN_TARGET * 100).toFixed(2)} %
           </div>
         </div>
       </div>

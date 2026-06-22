@@ -1,10 +1,11 @@
 import type { AppState } from '@/types';
-import { DAILY, QUESTS, LEVELS, XP_PER_LEVEL } from './constants';
+import { DAILY, DAILY_BONUS, QUESTS, LEVELS, XP_PER_LEVEL } from './constants';
 
 export function computeXP(state: AppState): number {
   let xp = 0;
   for (const d of Object.values(state.days)) {
     DAILY.forEach(t => { if (d.missions[t.id]) xp += t.xp; });
+    if (DAILY.every(t => d.missions[t.id])) xp += DAILY_BONUS;
   }
   QUESTS.forEach(q => { if (state.quests[q.id]) xp += q.xp; });
   return xp;

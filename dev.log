@@ -219,3 +219,110 @@
  GET /api/xp 200 in 20ms
  ✓ Compiled in 705ms (1399 modules)
  ✓ Compiled in 271ms (1399 modules)
+ ✓ Compiled in 428ms (1399 modules)
+ ✓ Compiled in 359ms (1399 modules)
+ ✓ Compiled in 242ms (1399 modules)
+ ✓ Compiled in 319ms (1399 modules)
+ ✓ Compiled in 291ms (1399 modules)
+ ✓ Compiled in 366ms (1399 modules)
+ ✓ Compiled in 328ms (1399 modules)
+ ✓ Compiled in 252ms (1399 modules)
+ ✓ Compiled in 277ms (1399 modules)
+ ✓ Compiled in 270ms (1399 modules)
+ ✓ Compiled in 268ms (1399 modules)
+ ✓ Compiled in 328ms (1399 modules)
+ ✓ Compiled in 297ms (1399 modules)
+ ✓ Compiled in 353ms (1399 modules)
+ ✓ Compiled in 300ms (1399 modules)
+ ✓ Compiled in 266ms (1399 modules)
+ ✓ Compiled in 396ms (1399 modules)
+ ✓ Compiled in 308ms (1399 modules)
+ ✓ Compiled in 538ms (1385 modules)
+ ✓ Compiled in 302ms (1385 modules)
+ ✓ Compiled in 359ms (1385 modules)
+ ✓ Compiled in 281ms (1385 modules)
+ GET / 200 in 216ms
+ ✓ Compiled /api/xp in 276ms (723 modules)
+ GET /api/xp 200 in 251ms
+ GET /api/xp 200 in 250ms
+ GET /api/xp 200 in 249ms
+ GET /api/xp 200 in 334ms
+ ✓ Compiled in 520ms (1399 modules)
+ ✓ Compiled in 292ms (1399 modules)
+ ✓ Compiled in 335ms (1399 modules)
+ ✓ Compiled in 260ms (1399 modules)
+ ✓ Compiled in 267ms (1399 modules)
+ ✓ Compiled in 348ms (1399 modules)
+ ✓ Compiled in 272ms (1399 modules)
+ ✓ Compiled in 264ms (1399 modules)
+ ✓ Compiled in 262ms (1399 modules)
+ ✓ Compiled in 254ms (1399 modules)
+ ✓ Compiled in 343ms (1399 modules)
+ ✓ Compiled in 266ms (1399 modules)
+ ✓ Compiled in 314ms (1399 modules)
+ ✓ Compiled in 278ms (1399 modules)
+ ✓ Compiled in 308ms (1399 modules)
+ ✓ Compiled in 305ms (1399 modules)
+ ✓ Compiled in 307ms (1399 modules)
+ ✓ Compiled in 333ms (1399 modules)
+ ✓ Compiled in 619ms (1385 modules)
+ ✓ Compiled in 339ms (1385 modules)
+ ✓ Compiled in 269ms (1385 modules)
+ ✓ Compiled in 252ms (1385 modules)
+ ✓ Compiled in 208ms (1385 modules)
+ ✓ Compiled in 250ms (1385 modules)
+ ✓ Compiled in 220ms (1385 modules)
+ ✓ Compiled in 200ms (1385 modules)
+ GET /materiel 200 in 165ms
+ ✓ Compiled /api/xp in 264ms (723 modules)
+ GET /api/xp 200 in 321ms
+ GET /api/xp 200 in 322ms
+ GET /api/xp 200 in 17ms
+ GET /api/xp 200 in 29ms
+ ✓ Compiled /entrainement in 250ms (740 modules)
+ ✓ Compiled /api/debriefs/[date] in 214ms (742 modules)
+ ✓ Compiled (746 modules)
+ GET /api/xp 200 in 406ms
+ GET /api/xp 200 in 406ms
+ GET /api/xp 200 in 406ms
+ GET /api/debriefs/2026-06-22 200 in 421ms
+ GET /api/strava/activities?page=1 401 in 426ms
+ GET /api/debriefs/last?session_id=renfo_a&before=2026-06-22 200 in 431ms
+ ✓ Compiled /api/sessions/complete in 171ms (748 modules)
+ GET /api/debriefs/last?session_id=renfo_a&before=2026-06-22 200 in 373ms
+ GET /api/sessions/complete?date=2026-06-22 200 in 378ms
+ GET /api/strava/activities?page=1 401 in 381ms
+ GET /api/xp 200 in 387ms
+ GET /api/debriefs/2026-06-22 200 in 387ms
+ GET /api/sessions/complete?date=2026-06-22 200 in 13ms
+ ✓ Compiled /nutrition in 196ms (747 modules)
+ ✓ Compiled /tabac in 136ms (754 modules)
+ GET /api/xp 200 in 35ms
+ GET /api/xp 200 in 97ms
+ GET /api/xp 200 in 25ms
+ GET /api/xp 200 in 18ms
+ ✓ Compiled in 430ms (1395 modules)
+ ✓ Compiled in 513ms (1395 modules)
+ GET / 200 in 175ms
+ ✓ Compiled /api/xp in 105ms (733 modules)
+ GET /api/xp 200 in 157ms
+ GET /api/xp 200 in 70ms
+ GET /api/xp 200 in 74ms
+ GET /api/xp 200 in 74ms
+ GET /api/xp 200 in 23ms
+ ✓ Compiled /api/strava/activities in 127ms (735 modules)
+ ✓ Compiled (739 modules)
+ GET /api/xp 200 in 340ms
+ GET /api/xp 200 in 340ms
+ GET /api/xp 200 in 340ms
+ GET /api/debriefs/2026-06-22 200 in 353ms
+ GET /api/debriefs/last?session_id=renfo_a&before=2026-06-22 200 in 362ms
+ GET /api/strava/activities?page=1 401 in 341ms
+ ✓ Compiled /api/sessions/complete in 130ms (741 modules)
+ GET /api/debriefs/2026-06-22 200 in 271ms
+ GET /api/sessions/complete?date=2026-06-22 200 in 307ms
+ GET /api/strava/activities?page=1 401 in 283ms
+ GET /api/debriefs/last?session_id=renfo_a&before=2026-06-22 200 in 288ms
+ GET /api/sessions/complete?date=2026-06-22 200 in 9ms
+ GET /api/xp 200 in 22ms
+ GET /api/xp 200 in 26ms

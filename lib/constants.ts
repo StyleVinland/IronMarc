@@ -5,7 +5,10 @@ export const DAILY = [
   { id: 'sleep',  txt: 'Au lit à une heure raisonnable (viser 7 h)',       xp: 15 },
   { id: 'mob',    txt: '10 min de mobilité / étirements',                  xp: 10 },
   { id: 'breath', txt: "3 respirations lentes quand l'envie de clope monte", xp: 10 },
+  { id: 'read',   txt: 'Lire 15 pages d\'un livre',                        xp: 15 },
 ] as const;
+
+export const DAILY_BONUS = 30;
 
 export const QUESTS = [
   { id: 'doc',          txt: 'Prendre RDV médecin — feu vert effort',                           xp: 40,  cp: false },

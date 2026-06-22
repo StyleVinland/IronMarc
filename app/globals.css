@@ -414,7 +414,8 @@ body { overflow-x: hidden; }
 .bento         { display: flex; flex-direction: column; gap: clamp(12px, 2vw, 20px); }
 .bento-header  { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
 .bento-title   { font-size: clamp(28px, 4vw, 44px); font-weight: 800; letter-spacing: -.03em; color: var(--label); }
-.bento-date    { font-size: 14px; color: var(--muted); font-weight: 400; }
+.bento-date    { font-size: 14px; color: var(--muted); font-weight: 400; display: flex; align-items: center; gap: 10px; }
+.bento-clock   { font-size: 13px; font-weight: 600; color: var(--dawn); font-variant-numeric: tabular-nums; letter-spacing: .01em; }
 
 /* Bento-row gardés pour rétro-compat */
 .bento-row     { display: grid; gap: 14px; }
@@ -1799,6 +1800,21 @@ body { padding: 0; }
   border: 1px solid rgba(52,199,89,0.2); border-radius: 999px; padding: 2px 8px; font-weight: 600;
 }
 .mob-routine-note { font-size: 12px; color: var(--muted); text-align: center; padding-top: 4px; line-height: 1.5; }
+
+/* ── Bonus journée parfaite ──────────────────────────────────────── */
+.daily-bonus {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 12px; padding: 10px 14px; border-radius: 12px;
+  background: rgba(0,122,255,0.06); border: 1px solid rgba(0,122,255,0.15);
+  transition: background .3s, border-color .3s;
+}
+.daily-bonus.done {
+  background: rgba(52,199,89,0.08); border-color: rgba(52,199,89,0.25);
+}
+.daily-bonus-icon { font-size: 16px; flex: none; }
+.daily-bonus-txt  { font-size: 13px; color: var(--label2); line-height: 1.4; }
+.daily-bonus-txt strong { color: var(--dawn); }
+.daily-bonus.done .daily-bonus-txt strong { color: var(--tide); }
 
 /* ================================================================
    MATÉRIEL
