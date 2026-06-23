@@ -3,7 +3,8 @@ export const DAILY = [
   { id: 'eat',    txt: 'Manger 3 vrais repas — nourrir, pas priver',       xp: 15 },
   { id: 'water',  txt: "Boire de l'eau régulièrement",                     xp: 10 },
   { id: 'sleep',  txt: 'Au lit à une heure raisonnable (viser 7 h)',       xp: 15 },
-  { id: 'mob',    txt: '10 min de mobilité / étirements',                  xp: 10 },
+  { id: 'mob_matin', txt: 'Réveil mobilité — 8 min au lever',               xp: 10 },
+  { id: 'mob_soir',  txt: 'Étirements soir — adaptés à la séance',         xp: 15 },
   { id: 'breath', txt: "3 respirations lentes quand l'envie de clope monte", xp: 10 },
   { id: 'read',   txt: 'Lire 15 pages d\'un livre',                        xp: 15 },
 ] as const;

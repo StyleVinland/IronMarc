@@ -14,7 +14,7 @@ const DAY_SHORT = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
 const WEEK_DAYS_IDX = ['lun','mar','mer','jeu','ven','sam','dim'] as const;
 
 function dateStr(d: Date) {
-  return d.toISOString().slice(0, 10);
+  return d.toLocaleDateString('fr-CA');
 }
 function fmtDay(ds: string) {
   const d = new Date(ds + 'T12:00:00');
