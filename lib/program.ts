@@ -495,7 +495,7 @@ export const SESSIONS: Record<string, TrainingSession> = {
 // S65  → 10 sep 2027  · Sprint       13 sep 2027
 // S104 →  9 jun 2028  · Olympique    15 jun 2028
 // S117 →  8 sep 2028  · Half-IM      21 sep 2028
-// S157 → 15 jun 2029  · IRONMAN      22 jun 2029
+// S157 → 15 jun 2029  · IRONMAN      30 jun 2029
 
 export const PHASES: ProgramPhase[] = [
   // ── PHASE 1 : RÉÉDUCATION ─────────────────────────────────────────────────
@@ -686,7 +686,7 @@ export const PHASES: ProgramPhase[] = [
       jeu: 'swim_ironman', ven: 'course_avance', sam: 'brick_ironman', dim: 'course_long_avance',
     },
     notes: [
-      '→ IRONMAN 22 juin 2029 (S157) : 3800 m nage · 180 km vélo · 42,2 km course.',
+      '→ IRONMAN 30 juin 2029 (S157) : 3800 m nage · 180 km vélo · 42,2 km course.',
       'S155-156 : taper (−40% volume, garder l\'intensité). Arriver frais et confiant.',
       'Ne jamais tester nutrition, matériel ou allure pour la première fois le jour J.',
       'Le secret de l\'Ironman : être patient sur la nage, conservateur sur le vélo, et courir à l\'écoute du corps.',
@@ -777,7 +777,7 @@ export const RACES: Race[] = [
     optional: true,
   },
   {
-    date: '2029-06-22',
+    date: '2029-06-30',
     label: 'IRONMAN',
     type: 'ironman',
     distances: '3 800 m nage · 180 km vélo · 42,2 km course',

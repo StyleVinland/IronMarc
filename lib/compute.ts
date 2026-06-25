@@ -37,8 +37,8 @@ export function computeLevelTitle(level: number): string {
 }
 
 // Progression temporelle vers l'Ironman (0-100, 2 décimales)
-const IRONMAN_START = new Date('2026-06-19').getTime();
-const IRONMAN_DATE  = new Date('2029-06-22').getTime();
+const IRONMAN_START = new Date('2026-06-21').getTime(); // jour réel de départ (XP = 0)
+const IRONMAN_DATE  = new Date('2029-06-30').getTime();
 export function computeIronmanPct(): number {
   const elapsed = Date.now() - IRONMAN_START;
   const total   = IRONMAN_DATE - IRONMAN_START;
