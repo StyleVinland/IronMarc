@@ -62,7 +62,11 @@ export default function CigCounter({ todayCigs, freeStreak, onAddCig, onRemoveCi
 
       {/* Streak sans tabac */}
       <div className="cig-streak">
-        <span className="cig-streak-fire">🔥</span>
+        <span className="cig-streak-fire">
+          <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="#30d158" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M10 2c0 0-5.5 4.5-5.5 9a5.5 5.5 0 0 0 11 0c0-2.5-1.5-5-3-6.5-.8 2-2.5 2.5-2.5 2.5S10 5 10 2z" />
+          </svg>
+        </span>
         <div className="cig-streak-content">
           <span className="cig-streak-n">{freeStreak}</span>
           <span className="cig-streak-k">jours sans tabac</span>
@@ -78,7 +82,11 @@ export default function CigCounter({ todayCigs, freeStreak, onAddCig, onRemoveCi
       {/* Message coach */}
       {showCoach && (
         <div className="cig-coach">
-          <span className="cig-coach-icon">💬</span>
+          <span className="cig-coach-icon">
+            <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="rgba(255,255,255,.7)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 13a2 2 0 0 1-2 2H6l-4 3V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z" />
+            </svg>
+          </span>
           <span>{coach}</span>
         </div>
       )}

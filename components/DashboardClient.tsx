@@ -11,6 +11,39 @@ import ProgressCharts from './ProgressCharts';
 import MissionList from './MissionList';
 import QuestList from './QuestList';
 
+const IcFlame = () => (
+  <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M10 2c0 0-5.5 4.5-5.5 9a5.5 5.5 0 0 0 11 0c0-2.5-1.5-5-3-6.5-.8 2-2.5 2.5-2.5 2.5S10 5 10 2z" />
+  </svg>
+);
+const IcZap = () => (
+  <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="13 2 7 11 11 11 7 18" />
+  </svg>
+);
+const IcCheck = () => (
+  <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="3" width="14" height="14" rx="2.5" />
+    <polyline points="7 10 9 12 13 8" />
+  </svg>
+);
+const IcTarget = () => (
+  <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="10" cy="10" r="7" /><circle cx="10" cy="10" r="3" /><circle cx="10" cy="10" r="0.5" fill="currentColor" />
+  </svg>
+);
+const IcList = () => (
+  <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="3" y1="6" x2="17" y2="6" /><line x1="3" y1="10" x2="17" y2="10" /><line x1="3" y1="14" x2="12" y2="14" />
+  </svg>
+);
+const IcTrophy = () => (
+  <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M7 3h6v5a3 3 0 0 1-6 0V3z" /><path d="M4 3h3v3a1.5 1.5 0 0 1-3 0V3z" /><path d="M13 3h3v3a1.5 1.5 0 0 1-3 0V3z" />
+    <line x1="10" y1="11" x2="10" y2="15" /><line x1="7" y1="17" x2="13" y2="17" />
+  </svg>
+);
+
 function ChevronIcon({ open }: { open: boolean }) {
   return (
     <svg width="16" height="16" viewBox="0 0 20 20" fill="none"
@@ -22,7 +55,7 @@ function ChevronIcon({ open }: { open: boolean }) {
 }
 
 interface AccordProps {
-  icon: string; title: string; badge: string;
+  icon: React.ReactNode; title: string; badge: string;
   open: boolean; onToggle: () => void; children: React.ReactNode;
 }
 
@@ -35,7 +68,6 @@ function Accord({ icon, title, badge, open, onToggle, children }: AccordProps) {
         <span className="accord-badge">{badge}</span>
         <span className="accord-chevron"><ChevronIcon open={open} /></span>
       </button>
-      {/* Smooth height via CSS grid trick — toujours rendu, jamais conditionnel */}
       <div className="accord-anim">
         <div className="accord-body">{children}</div>
       </div>
@@ -104,12 +136,12 @@ export default function DashboardClient() {
       {/* 4 widgets — stagger cascade Apple */}
       <div className="metrics-grid">
         <div className="widget reveal">
-          <div className="widget-cat" style={{ color: 'var(--tide)' }}>🔥 Sans clope</div>
+          <div className="widget-cat" style={{ color: 'var(--tide)' }}><IcFlame /> Sans clope</div>
           <div className="widget-val">{streak}</div>
           <div className="widget-unit">jours consécutifs</div>
         </div>
         <div className="widget reveal reveal-d1">
-          <div className="widget-cat" style={{ color: 'var(--dawn)' }}>⚡ Niveau</div>
+          <div className="widget-cat" style={{ color: 'var(--dawn)' }}><IcZap /> Niveau</div>
           <div className="widget-val">{level}</div>
           <div className="widget-unit">{levelTitle}</div>
           <div className="widget-sub">{xp} XP · Niv.{level + 1} dans {XP_PER_LEVEL - xpInLevel} XP</div>
@@ -118,7 +150,7 @@ export default function DashboardClient() {
           </div>
         </div>
         <div className="widget reveal reveal-d2">
-          <div className="widget-cat" style={{ color: 'var(--dawn)' }}>📋 Missions</div>
+          <div className="widget-cat" style={{ color: 'var(--dawn)' }}><IcCheck /> Missions</div>
           <div className="widget-val">
             {mDone}<span className="widget-val-of">/{mTotal}</span>
           </div>
@@ -128,7 +160,7 @@ export default function DashboardClient() {
           </div>
         </div>
         <div className="widget reveal reveal-d3">
-          <div className="widget-cat" style={{ color: 'var(--dawn)' }}>🏁 Plan 3 ans</div>
+          <div className="widget-cat" style={{ color: 'var(--dawn)' }}><IcTarget /> Plan 3 ans</div>
           <div className="widget-val">{planPct}</div>
           <div className="widget-unit">vers l&apos;Ironman</div>
           <div className="widget-bar">
@@ -146,7 +178,7 @@ export default function DashboardClient() {
 
       <div className="reveal">
         <Accord
-          icon="📋"
+          icon={<IcList />}
           title="Missions du jour"
           badge={`${mDone}/${mTotal}`}
           open={missionsOpen}
@@ -158,7 +190,7 @@ export default function DashboardClient() {
 
       <div className="reveal reveal-d1">
         <Accord
-          icon="🏅"
+          icon={<IcTrophy />}
           title="Quêtes secondaires"
           badge={`${qDone}/${qTotal}`}
           open={questsOpen}

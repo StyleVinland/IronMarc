@@ -344,12 +344,20 @@ export default function MissionList({ missions, onToggle, date }: Props) {
           <div className={`daily-bonus${allDone ? ' done' : ''}`}>
             {allDone ? (
               <>
-                <span className="daily-bonus-icon">⚡</span>
+                <span className="daily-bonus-icon">
+                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{color:'var(--tide)'}}>
+                    <polyline points="13 2 7 11 11 11 7 18" />
+                  </svg>
+                </span>
                 <span className="daily-bonus-txt">Journée parfaite — Bonus <strong>+{DAILY_BONUS} XP</strong> gagné !</span>
               </>
             ) : (
               <>
-                <span className="daily-bonus-icon">🎯</span>
+                <span className="daily-bonus-icon">
+                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{color:'var(--dawn)'}}>
+                    <circle cx="10" cy="10" r="7" /><circle cx="10" cy="10" r="3" />
+                  </svg>
+                </span>
                 <span className="daily-bonus-txt">
                   {remaining === 1 ? 'Plus qu\'une mission' : `${remaining} missions restantes`} → Bonus <strong>+{DAILY_BONUS} XP</strong>
                 </span>

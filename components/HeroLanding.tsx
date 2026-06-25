@@ -47,12 +47,12 @@ const IcGallery = () => (
 );
 
 const FEATURES = [
-  { href: '/entrainement', label: 'Entraînement', desc: 'Séances · Cardio · Nage · Vélo', cta: 'Voir le plan',       color: '#007AFF', bg: 'rgba(0,122,255,0.08)',  Icon: IcTrain   },
-  { href: '/nutrition',    label: 'Nutrition',    desc: '2 200 kcal · 120g protéines',   cta: 'Voir les repas',     color: '#FF9500', bg: 'rgba(255,149,0,0.08)',  Icon: IcFood    },
-  { href: '/tabac',        label: 'Tabac',        desc: 'Sevrage · Streak · XP gagnés',  cta: 'Suivre le sevrage',  color: '#FF3B30', bg: 'rgba(255,59,48,0.08)',  Icon: IcSmoke   },
-  { href: '/mental',       label: 'Mental',       desc: 'Journal · Humeur · Gratitude',  cta: 'Mindset du jour',    color: '#007AFF', bg: 'rgba(0,122,255,0.08)',  Icon: IcMind    },
-  { href: '/materiel',     label: 'Matériel',     desc: 'Équipement Ironman · Budget',   cta: 'Liste de matos',     color: '#007AFF', bg: 'rgba(0,122,255,0.08)',  Icon: IcGear    },
-  { href: '/galerie',      label: 'Galerie',      desc: 'Photos · Milestones · Progrès', cta: 'Ouvrir la galerie',  color: '#34C759', bg: 'rgba(52,199,89,0.08)',  Icon: IcGallery },
+  { href: '/entrainement', label: 'Entraînement', desc: 'Séances · Cardio · Nage · Vélo', cta: 'Voir le plan',       color: '#6366F1', bg: 'rgba(99,102,241,0.08)', Icon: IcTrain   },
+  { href: '/nutrition',    label: 'Nutrition',    desc: '2 200 kcal · 120g protéines',   cta: 'Voir les repas',     color: '#F97316', bg: 'rgba(249,115,22,0.08)', Icon: IcFood    },
+  { href: '/tabac',        label: 'Tabac',        desc: 'Sevrage · Streak · XP gagnés',  cta: 'Suivre le sevrage',  color: '#EF4444', bg: 'rgba(239,68,68,0.08)',  Icon: IcSmoke   },
+  { href: '/mental',       label: 'Mental',       desc: 'Journal · Humeur · Gratitude',  cta: 'Mindset du jour',    color: '#6366F1', bg: 'rgba(99,102,241,0.08)', Icon: IcMind    },
+  { href: '/materiel',     label: 'Matériel',     desc: 'Équipement Ironman · Budget',   cta: 'Liste de matos',     color: '#6366F1', bg: 'rgba(99,102,241,0.08)', Icon: IcGear    },
+  { href: '/galerie',      label: 'Galerie',      desc: 'Photos · Milestones · Progrès', cta: 'Ouvrir la galerie',  color: '#10B981', bg: 'rgba(16,185,129,0.08)', Icon: IcGallery },
 ];
 
 const ease = [0.33, 1, 0.68, 1] as const;
