@@ -99,5 +99,5 @@ export const MOODS = [
 // Courbe quadratique : level N coûte BASE_XP_LEVEL × N XP
 // Cumul pour atteindre level N = BASE_XP_LEVEL × (N-1) × N / 2
 // → Level 150 ≈ 100 575 XP cumulés (cible fin du plan ~3 ans)
-export const BASE_XP_LEVEL = 9;
+export const BASE_XP_LEVEL = 12;
 export const XP_PER_LEVEL  = BASE_XP_LEVEL; // compatibilité — ne plus utiliser directement

@@ -171,7 +171,7 @@ export default function DashboardClient() {
             <div className="widget-bar-fill" style={{ width: `${planWidth}%`, background: 'var(--dawn)' }} />
           </div>
           <div className="widget-sub" style={{ fontVariantNumeric: 'tabular-nums' }}>
-            J+{Math.floor((Date.now() - new Date('2026-06-19').getTime()) / 86400000)} / 1099 jours
+            {ironmanPct.toFixed(2)} %
           </div>
         </div>
       </div>
