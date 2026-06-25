@@ -2,17 +2,16 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { computeXP, computeLevel, computeLevelTitle, computeStreak } from '@/lib/compute';
+import { computeXP, computeLevel, computeLevelTitle, computeStreak, computeIronmanPct } from '@/lib/compute';
 import { useAppState } from './AppStateProvider';
 
-// XP total atteignable sur 3 ans : ~300 séances × 55 XP + missions quotidiennes + quêtes
-export const XP_PLAN_TARGET = 50000;
+export const XP_PLAN_TARGET = 50000; // conservé pour compatibilité
 
-export function fmtPct(xp: number): string {
-  const raw = xp / XP_PLAN_TARGET * 100;
-  if (raw <= 0) return '0%';
-  if (raw < 1) return '<1%';
-  return `${Math.min(100, Math.round(raw))}%`;
+// Affiche la progression temporelle vers l'Ironman
+export function fmtPct(_xp: number): string {
+  const pct = computeIronmanPct();
+  if (pct < 0.1) return '<0.1%';
+  return `${pct.toFixed(1)}%`;
 }
 
 // ── Icons pour la bottom nav mobile ─────────────────────────────────

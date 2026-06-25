@@ -2,9 +2,9 @@
 import { useState, useEffect } from 'react';
 import { useAppState } from './AppStateProvider';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
-import { computeXP, computeLevel, computeLevelTitle, computeStreak, computeCheckpointPct } from '@/lib/compute';
-import { DAILY, QUESTS, XP_PER_LEVEL } from '@/lib/constants';
-import { XP_PLAN_TARGET, fmtPct } from './Nav';
+import { computeXP, computeLevel, computeLevelTitle, computeStreak, computeCheckpointPct, computeXpInLevel, computeXpForLevel, computeIronmanPct } from '@/lib/compute';
+import { DAILY, QUESTS } from '@/lib/constants';
+import { fmtPct } from './Nav';
 import HeroLanding from './HeroLanding';
 import Affirmation from './Affirmation';
 import ProgressCharts from './ProgressCharts';
@@ -105,10 +105,14 @@ export default function DashboardClient() {
   const levelTitle = computeLevelTitle(level);
   const streak     = computeStreak(state);
   const phasePct   = computeCheckpointPct(state);
-  const planPct    = fmtPct(xp);
-  const planWidth  = Math.min(100, xp / XP_PLAN_TARGET * 100);
-  const xpInLevel  = xp % XP_PER_LEVEL;
-  const xpPct      = Math.round((xpInLevel / XP_PER_LEVEL) * 100);
+  // Progression temporelle : (aujourd'hui - 19/06/2026) / (22/06/2029 - 19/06/2026)
+  const ironmanPct  = computeIronmanPct();
+  const planWidth   = ironmanPct;
+  const planPct     = ironmanPct < 1 ? '<1%' : `${ironmanPct.toFixed(2)}%`;
+  // Niveau quadratique
+  const xpInLevel   = computeXpInLevel(xp);
+  const xpForLevel  = computeXpForLevel(level);
+  const xpPct       = Math.round((xpInLevel / xpForLevel) * 100);
   const mDone      = DAILY.filter(t => !!todayData.missions[t.id]).length;
   const mTotal     = DAILY.length;
   const qDone      = QUESTS.filter(q => !!state.quests[q.id]).length;
@@ -144,7 +148,7 @@ export default function DashboardClient() {
           <div className="widget-cat" style={{ color: 'var(--dawn)' }}><IcZap /> Niveau</div>
           <div className="widget-val">{level}</div>
           <div className="widget-unit">{levelTitle}</div>
-          <div className="widget-sub">{xp} XP · Niv.{level + 1} dans {XP_PER_LEVEL - xpInLevel} XP</div>
+          <div className="widget-sub">{xp} XP · Niv.{level + 1} dans {xpForLevel - xpInLevel} XP</div>
           <div className="widget-bar">
             <div className="widget-bar-fill" style={{ width: `${xpPct}%`, background: 'var(--dawn)' }} />
           </div>
@@ -167,7 +171,7 @@ export default function DashboardClient() {
             <div className="widget-bar-fill" style={{ width: `${planWidth}%`, background: 'var(--dawn)' }} />
           </div>
           <div className="widget-sub" style={{ fontVariantNumeric: 'tabular-nums' }}>
-            {(xp / XP_PLAN_TARGET * 100).toFixed(2)} %
+            J+{Math.floor((Date.now() - new Date('2026-06-19').getTime()) / 86400000)} / 1099 jours
           </div>
         </div>
       </div>

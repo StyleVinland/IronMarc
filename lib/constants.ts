@@ -54,10 +54,38 @@ export const COACH = [
   "Celle-là, tu la subissais peut-être. La prochaine, tu peux la choisir — ou la laisser.",
 ];
 
+// 30 titres × 5 niveaux = 150 niveaux couverts (un titre tous les 5 niveaux)
 export const LEVELS = [
-  'Le plongeon', 'Tête hors de l\'eau', 'Cardio en chantier', 'Nageur régulier',
-  'Le corps répond', 'Endurance qui monte', 'Machine en rodage',
-  'Triathlète en devenir', 'Sur la rampe', 'Inarrêtable',
+  'Le Plongeon',          // 1-5
+  'Premier Souffle',      // 6-10
+  'Corps en Éveil',       // 11-15
+  'Sur la Rampe',         // 16-20
+  'En Construction',      // 21-25
+  'Rythme Trouvé',        // 26-30
+  'Cardio Solide',        // 31-35
+  'Inarrêtable',          // 36-40
+  'Moteur en Marche',     // 41-45
+  'Fondations Béton',     // 46-50
+  'Triathlète Confirmé',  // 51-55
+  "Mental d'Acier",       // 56-60
+  'Longue Distance',      // 61-65
+  'Volume Maîtrisé',      // 66-70
+  "Bête d'Endurance",     // 71-75
+  'Guerrier du Bitume',   // 76-80
+  'Distance Apprivoisée', // 81-85
+  'Seuil Dépassé',        // 86-90
+  'Puissance Brute',      // 91-95
+  'Cent Pour Cent',       // 96-100
+  'Athlète Accompli',     // 101-105
+  'Élite Régional',       // 106-110
+  'Machine Humaine',      // 111-115
+  'Ironman en Vue',       // 116-120
+  'Race Ready',           // 121-125
+  'Ironwarrior',          // 126-130
+  'Quasi-Ironman',        // 131-135
+  'Ligne de Mire',        // 136-140
+  'Compte à Rebours',     // 141-145
+  'Iron-Prêt',            // 146-150
 ];
 
 export const MOODS = [
@@ -68,4 +96,8 @@ export const MOODS = [
   { v: 5, color: '#CF8E42', l: 'Au top' },
 ];
 
-export const XP_PER_LEVEL = 150;
+// Courbe quadratique : level N coûte BASE_XP_LEVEL × N XP
+// Cumul pour atteindre level N = BASE_XP_LEVEL × (N-1) × N / 2
+// → Level 150 ≈ 100 575 XP cumulés (cible fin du plan ~3 ans)
+export const BASE_XP_LEVEL = 9;
+export const XP_PER_LEVEL  = BASE_XP_LEVEL; // compatibilité — ne plus utiliser directement

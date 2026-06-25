@@ -1,5 +1,5 @@
 import type { AppState } from '@/types';
-import { DAILY, DAILY_BONUS, QUESTS, LEVELS, XP_PER_LEVEL } from './constants';
+import { DAILY, DAILY_BONUS, QUESTS, LEVELS, BASE_XP_LEVEL } from './constants';
 
 export function computeXP(state: AppState): number {
   let xp = 0;
@@ -11,12 +11,38 @@ export function computeXP(state: AppState): number {
   return xp;
 }
 
+// XP cumulés pour atteindre le DÉBUT du level N (level 1 = 0 XP)
+export function xpToReachLevel(n: number): number {
+  return BASE_XP_LEVEL * (n - 1) * n / 2;
+}
+
+// Level courant depuis XP total (formule quadratique)
 export function computeLevel(xp: number): number {
-  return Math.floor(xp / XP_PER_LEVEL) + 1;
+  return Math.max(1, Math.floor((1 + Math.sqrt(1 + 8 * xp / BASE_XP_LEVEL)) / 2));
+}
+
+// XP gagnés DANS le level courant (0 … xpForLevel-1)
+export function computeXpInLevel(xp: number): number {
+  return xp - xpToReachLevel(computeLevel(xp));
+}
+
+// Coût total du level courant (XP pour passer du level N au level N+1)
+export function computeXpForLevel(level: number): number {
+  return BASE_XP_LEVEL * level;
 }
 
 export function computeLevelTitle(level: number): string {
-  return LEVELS[Math.min(level - 1, LEVELS.length - 1)];
+  const idx = Math.min(Math.floor((level - 1) / 5), LEVELS.length - 1);
+  return LEVELS[idx];
+}
+
+// Progression temporelle vers l'Ironman (0-100, 2 décimales)
+const IRONMAN_START = new Date('2026-06-19').getTime();
+const IRONMAN_DATE  = new Date('2029-06-22').getTime();
+export function computeIronmanPct(): number {
+  const elapsed = Date.now() - IRONMAN_START;
+  const total   = IRONMAN_DATE - IRONMAN_START;
+  return Math.min(100, Math.max(0, elapsed / total * 100));
 }
 
 export function computeStreak(state: AppState): number {
