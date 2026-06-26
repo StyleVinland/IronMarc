@@ -90,8 +90,8 @@ export const SESSIONS: Record<string, TrainingSession> = {
     painCheck: true,
     exercises: [
       { name: 'Échauffement machine', detail: 'Vélo ou rameur salle, résistance légère, 5 min. Activation des hanches avant le travail adducteurs.', required: true },
-      { name: 'Machine adducteurs (PRIORITÉ PUBALGIE)', detail: 'Amplitude contrôlée, charge légère. Jamais de douleur dans l\'aine. Commencer à 50% de la résistance minimale — la tendinopathie guérit par des charges progressives, pas par le repos total.', sets: '3 × 12 · récup 60 s · augmenter la charge de 2,5 kg/semaine si indolore', warning: true },
-      { name: 'Machine abducteurs', detail: 'Fessier moyen — stabilise le bassin côté opposé, protège l\'aine indirectement.', sets: '3 × 12' },
+      { name: 'Machine adducteurs — RAPPROCHER (PRIORITÉ PUBALGIE)', detail: 'Amplitude contrôlée, charge légère. Jamais de douleur dans l\'aine. Commencer à 50% de la résistance minimale — la tendinopathie guérit par des charges progressives, pas par le repos total.', sets: '3 × 12 · récup 60 s · augmenter la charge de 2,5 kg/semaine si indolore', warning: true },
+      { name: 'Machine abducteurs — ÉCARTER', detail: 'Fessier moyen — stabilise le bassin côté opposé, protège l\'aine indirectement.', sets: '3 × 12' },
       { name: 'Leg press pieds écartés', detail: 'Pieds à largeur d\'épaules ou légèrement plus, pointes légèrement ouvertes. Descendre jusqu\'à 90°. Force quadriceps sans compression directe de l\'aine.', sets: '3 × 10 · charge modérée (contrôle de la descente)' },
       { name: 'Copenhagen genou → pied (progressif)', detail: 'Planche latérale, jambe du dessus pliée (genou) ou tendue (pied) sur un banc. Soulever le bassin. Niveau semaine 1-4 : genou. S5+ : pied si indolore.', sets: '3 × 8 / côté · récup 90 s', warning: false },
       { name: 'Dead bug', detail: 'Dos au sol, étendre bras droit + jambe gauche en alternance, dos collé au sol.', sets: '3 × 8 / côté' },
