@@ -83,6 +83,26 @@ export const SESSIONS: Record<string, TrainingSession> = {
     ],
   },
 
+  renfo_salle_a: {
+    id: 'renfo_salle_a', label: 'Renfo Salle — Pubalgie & Force', short: 'Salle A',
+    type: 'renfo', color: '#FF9500', duration: '55-65 min',
+    desc: 'S1-16 (lun) · Machines salle + protocole Copenhagen. Priorité : adducteurs sur machine, chaîne postérieure, haut du corps pour la nage.',
+    painCheck: true,
+    exercises: [
+      { name: 'Échauffement machine', detail: 'Vélo ou rameur salle, résistance légère, 5 min. Activation des hanches avant le travail adducteurs.', required: true },
+      { name: 'Machine adducteurs (PRIORITÉ PUBALGIE)', detail: 'Amplitude contrôlée, charge légère. Jamais de douleur dans l\'aine. Commencer à 50% de la résistance minimale — la tendinopathie guérit par des charges progressives, pas par le repos total.', sets: '3 × 12 · récup 60 s · augmenter la charge de 2,5 kg/semaine si indolore', warning: true },
+      { name: 'Machine abducteurs', detail: 'Fessier moyen — stabilise le bassin côté opposé, protège l\'aine indirectement.', sets: '3 × 12' },
+      { name: 'Leg press pieds écartés', detail: 'Pieds à largeur d\'épaules ou légèrement plus, pointes légèrement ouvertes. Descendre jusqu\'à 90°. Force quadriceps sans compression directe de l\'aine.', sets: '3 × 10 · charge modérée (contrôle de la descente)' },
+      { name: 'Copenhagen genou → pied (progressif)', detail: 'Planche latérale, jambe du dessus pliée (genou) ou tendue (pied) sur un banc. Soulever le bassin. Niveau semaine 1-4 : genou. S5+ : pied si indolore.', sets: '3 × 8 / côté · récup 90 s', warning: false },
+      { name: 'Dead bug', detail: 'Dos au sol, étendre bras droit + jambe gauche en alternance, dos collé au sol.', sets: '3 × 8 / côté' },
+      { name: 'Tirage vertical (lat pulldown)', detail: 'Prise légèrement plus large que les épaules, tirer vers le menton, coudes vers le bas. Développe les dorsaux pour la nage crawl.', sets: '3 × 12 · charge légère — technique avant tout' },
+      { name: 'Rowing câble horizontal', detail: 'Assis face à la poulie basse, tirer les coudes vers l\'arrière, omoplates se rapprochent. Posture vélo + force nage.', sets: '3 × 12' },
+      { name: 'Pompes', detail: 'Corps gainé, coudes à ~45°. Progresser : 3 × 10 → 3 × 20 au fil des semaines.', sets: '50 au total', required: true },
+      { name: 'Planche ventrale', detail: 'Sur les coudes, corps droit. Concentration sur la respiration — ne pas retenir le souffle.', sets: '3 × 30 s → 3 × 45 s' },
+      { name: 'Mobilité', detail: 'Fente basse 30 s / côté · Pigeon couché 30 s / côté · Étirement pso-iliaque.', required: true },
+    ],
+  },
+
   renfo_core: {
     id: 'renfo_core', label: 'Renfo Core — Maintien tri', short: 'Renfo C',
     type: 'renfo', color: '#FF9500', duration: '20 min',
@@ -211,6 +231,42 @@ export const SESSIONS: Record<string, TrainingSession> = {
       { name: 'Corps de séance', detail: 'Résistance légère, 80-90 rpm. S1-4 : 20 min · S5-8 : 30 min · S9-12 : 35 min · S13-16 : 40 min', sets: '' },
       { name: 'Règle conversation', detail: 'Tu dois pouvoir parler en phrases entières. Si tu t\'essouffle → résistance trop haute. Baisser.', warning: true },
       { name: 'Retour au calme', detail: 'Résistance nulle, 5 min', required: true },
+    ],
+  },
+
+  bike_salle: {
+    id: 'bike_salle', label: 'Salle + Vélo stationnaire', short: 'Salle+Vélo',
+    type: 'bike', color: '#34C759', duration: '60-70 min',
+    desc: 'S1-16 (jeu) · Circuit muscu salle 30 min en premier (muscles frais) + vélo stationnaire 25-35 min. Force + cardio sans impact.',
+    painCheck: true,
+    exercises: [
+      { name: '⚠ Ordre : muscu AVANT le vélo', detail: 'Les exercices de force se font en premier pendant que les muscles sont frais. Le vélo est la finition cardio.', required: true, warning: true },
+      { name: 'Squat gobelet léger', detail: 'Tenir un haltère ou kettlebell devant la poitrine, pieds à largeur d\'épaules, descendre à 90°. Charge légère — technique parfaite. Si douleur à l\'aine → passer aux step-ups uniquement.', sets: '3 × 10 · progression +2,5 kg/semaine si indolore' },
+      { name: 'Romanian deadlift (RDL)', detail: 'Barre ou haltères, dos droit, hanches en arrière, descendre jusqu\'à la tension dans les ischio. Chaîne postérieure = moteur du vélo et de la nage.', sets: '3 × 10 · charge modérée' },
+      { name: 'Step-up unilateral', detail: 'Monter sur un banc/step en poussant sur le talon. 1 jambe à la fois. Force fonctionnelle vélo + prévention déséquilibre G/D.', sets: '3 × 8 / jambe' },
+      { name: 'Tirage vertical (lat pulldown)', detail: 'Prise large ou moyenne, tirer vers le menton. Essentiel pour les épaules en crawl.', sets: '3 × 12' },
+      { name: 'Développé épaules haltères (assis)', detail: 'Assis, haltères au niveau des épaules, pousser vers le haut. Posture et force pour le vélo (bras avant) et la nage.', sets: '3 × 10 · charge légère' },
+      { name: 'Gainage planche', detail: 'Sur les coudes, 30 s. Transition sans pause vers le vélo.', sets: '2 × 30 s · récup 30 s' },
+      { name: 'Vélo stationnaire — cardio Zone 2', detail: 'Résistance légère, 80-90 rpm. Récupération active après la muscu. S1-4 : 20 min · S5-8 : 25 min · S9-16 : 30-35 min.', required: true },
+      { name: 'Retour calme vélo', detail: 'Résistance nulle, 5 min. Si les jambes brûlent encore de la muscu → c\'est bon signe.', required: true },
+    ],
+  },
+
+  bike_court_salle: {
+    id: 'bike_court_salle', label: 'Salle + Vélo court', short: 'Salle+Vélo',
+    type: 'bike', color: '#34C759', duration: '75-95 min',
+    desc: 'S17-48 (jeu) · Circuit muscu complet 25-30 min + vélo route 45-60 min. Phase 2 : la pubalgie est contrôlée, on monte en charge.',
+    exercises: [
+      { name: 'Circuit muscu salle (25-30 min)', detail: 'Ordre : Squat → RDL → Fentes → Tirage vertical → Rowing → Gainage. Peu de repos entre les exercices (circuit).', required: true },
+      { name: 'Squat', detail: 'S17-24 : gobelet · S25-48 : barre légère à la nuque ou en avant (front squat). Progresser en charge de manière contrôlée.', sets: '3 × 10' },
+      { name: 'Romanian Deadlift', detail: 'Barre ou haltères, dose progressive. Les ischio-jambiers sont le moteur n°1 du coup de pédale.', sets: '3 × 10' },
+      { name: 'Fentes (unilatérales)', detail: 'Marche ou statiques. Simule la foulée de course et renforce les stabilisateurs de hanche.', sets: '3 × 8 / jambe' },
+      { name: 'Leg press', detail: 'Complément si les squats étaient légers. Pieds hauts sur la plaque = focus fessiers/ischio.', sets: '3 × 12' },
+      { name: 'Tirage vertical', detail: 'S17-30 : 3 × 12 · S31-48 : progresser vers des tractions assistées.', sets: '3 × 12' },
+      { name: 'Rowing horizontal câble ou barre', detail: 'Force dorsale = posture en position aéro sur le vélo.', sets: '3 × 12' },
+      { name: 'Gainage', detail: 'Planche 30-45 s + 1 exercice rotatoire (Russian twist léger ou planche avec rotation).', sets: '2 × séries' },
+      { name: 'Vélo court — Zone 2', detail: 'Sortie route ou home trainer. S17-22 : 35-40 min · S23-30 : 50-55 min · S31-48 : 55-65 min. Allure conversation.', required: true },
+      { name: 'Retour calme', detail: '10 min allure facile + étirements debout (quadriceps, ischio).', required: true },
     ],
   },
 
@@ -504,16 +560,16 @@ export const PHASES: ProgramPhase[] = [
     label: 'Phase 1A — Fondations',
     weeks: [1, 4],
     tagline: 'Bâtir les bases sans solliciter les blessures',
-    focus: ['Renfo A+B', 'Apprivoiser l\'eau — rester au bord', 'Vélo 20-30 min appart.', 'Zéro course'],
+    focus: ['Salle lun (machine adducteurs + force)', 'Apprivoiser l\'eau — rester au bord', 'Salle+Vélo jeu', 'Zéro course'],
     template: {
-      lun: 'renfo_a', mar: 'swim_apprivoiser', mer: 'renfo_b',
-      jeu: 'bike_stationnaire', ven: 'renfo_a', sam: 'swim_apprivoiser', dim: 'rest',
+      lun: 'renfo_salle_a', mar: 'swim_apprivoiser', mer: 'renfo_b',
+      jeu: 'bike_salle', ven: 'renfo_a', sam: 'swim_apprivoiser', dim: 'rest',
     },
     notes: [
       'Zéro course à pied — le tibia et l\'aine doivent se reconditionner en premier.',
+      'Lundi salle : machine adducteurs en priorité — c\'est la séance qui traite la pubalgie. Jamais douloureux.',
+      'Jeudi salle+vélo : muscu d\'abord (muscles frais), puis cardio vélo.',
       'Nage : objectif = entrer dans l\'eau et souffler dedans. La distance ne compte pas encore.',
-      'Panique = pose les mains sur le bord, expire, attends. C\'est toujours la bonne décision.',
-      'Vélo appartement : jamais douloureux à l\'aine. Baisser résistance si besoin.',
     ],
   },
   {
@@ -521,10 +577,10 @@ export const PHASES: ProgramPhase[] = [
     label: 'Phase 1B — Marche',
     weeks: [5, 8],
     tagline: 'Marche si les tibias sont silencieux',
-    focus: ['Marche 20-30 min', 'Nage : 25 m planche régulier', 'Vélo 30 min', 'Renfo A+B'],
+    focus: ['Salle lun (charge +2,5 kg/sem)', 'Nage : 25 m planche régulier', 'Salle+Vélo jeu', 'Renfo B mer'],
     template: {
-      lun: 'renfo_a', mar: 'swim_apprivoiser', mer: 'renfo_b',
-      jeu: 'bike_stationnaire', ven: 'marche', sam: 'swim_apprivoiser', dim: 'rest',
+      lun: 'renfo_salle_a', mar: 'swim_apprivoiser', mer: 'renfo_b',
+      jeu: 'bike_salle', ven: 'marche', sam: 'swim_apprivoiser', dim: 'rest',
     },
     notes: [
       'Critère marche : marcher 20 min au quotidien sans douleur tibiale depuis 1 semaine.',
@@ -537,10 +593,10 @@ export const PHASES: ProgramPhase[] = [
     label: 'Phase 1C — Run/Walk',
     weeks: [9, 16],
     tagline: '1 min course / 2 min marche — ultra-progressif',
-    focus: ['Run/walk 1:2 → 2:1', 'Premiers crawl 10-25 m', 'Vélo 40 min', 'Renfo maintien'],
+    focus: ['Run/walk 1:2 → 2:1', 'Premiers crawl 10-25 m', 'Salle+Vélo jeu (vélo 35-40 min)', 'Salle lun'],
     template: {
-      lun: 'renfo_a', mar: 'swim_debutant', mer: 'marche_course',
-      jeu: 'bike_stationnaire', ven: 'renfo_b', sam: 'swim_debutant', dim: 'rest',
+      lun: 'renfo_salle_a', mar: 'swim_debutant', mer: 'marche_course',
+      jeu: 'bike_salle', ven: 'renfo_b', sam: 'swim_debutant', dim: 'rest',
     },
     notes: [
       'Critère course : marcher 30 min sans douleur → alors seulement démarrer les intervalles.',
@@ -555,10 +611,10 @@ export const PHASES: ProgramPhase[] = [
     label: 'Phase 2A — Course progressive',
     weeks: [17, 30],
     tagline: 'Construire jusqu\'à 10 min de course continue — 3,5 mois',
-    focus: ['Run/walk → 10 min continus', 'Nage 50-200 m crawl enchaîné', 'Vélo route 45-60 min', '2 courses/sem'],
+    focus: ['Run/walk → 10 min continus', 'Nage 50-200 m crawl enchaîné', 'Salle+Vélo jeu (45-55 min vélo)', '2 courses/sem'],
     template: {
       lun: 'renfo_core', mar: 'swim_initiation', mer: 'marche_course',
-      jeu: 'bike_court', ven: 'marche_course', sam: 'swim_initiation', dim: 'rest',
+      jeu: 'bike_court_salle', ven: 'marche_course', sam: 'swim_initiation', dim: 'rest',
     },
     notes: [
       'Basculer sur vélo de route dès que disponible (mois 4-5).',
@@ -571,10 +627,10 @@ export const PHASES: ProgramPhase[] = [
     label: 'Phase 2B — Prépa Super Sprint',
     weeks: [31, 48],
     tagline: '20 min course, 400 m nage, 45 min vélo → Super Sprint',
-    focus: ['Course 15-25 min continu', 'Nage 400-600 m', 'Vélo 45-75 min route', '🏊 Super Sprint 16 mai 2027'],
+    focus: ['Course 15-25 min continu', 'Nage 400-600 m', 'Salle+Vélo jeu · Vélo long dim', '🏊 Super Sprint 16 mai 2027'],
     template: {
       lun: 'renfo_core', mar: 'swim_base', mer: 'course_debutant',
-      jeu: 'bike_court', ven: 'course_debutant', sam: 'swim_base', dim: 'bike_court',
+      jeu: 'bike_court_salle', ven: 'course_debutant', sam: 'swim_base', dim: 'bike_court',
     },
     notes: [
       '→ Super Sprint 16 mai 2027 (S48) : 400 m nage · 10 km vélo · 2,5 km course.',
