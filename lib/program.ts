@@ -895,6 +895,7 @@ export const DATE_OVERRIDES: Record<string, string> = {
   '2026-06-25': 'renfo_a',           // Jeudi — vélo déplacé au 26 (swap jeu↔ven)
   '2026-06-26': 'bike_stationnaire', // Vendredi — vélo récupéré du 25
   '2026-06-27': 'swim_apprivoiser',  // Nage samedi S1
+  '2026-06-29': 'renfo_a',           // Lundi — salle indispo, renfo maison (pubalgie)
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
