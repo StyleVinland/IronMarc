@@ -64,8 +64,11 @@ export function computeCheckpointPct(state: AppState): number {
   return Math.round((done / cps.length) * 100);
 }
 
+// Avant 5h du matin → on est encore "hier" pour les missions
 export function todayStr(): string {
-  return new Date().toLocaleDateString('fr-CA');
+  const now = new Date();
+  if (now.getHours() < 5) now.setDate(now.getDate() - 1);
+  return now.toLocaleDateString('fr-CA');
 }
 
 export function ensureDay(state: AppState, date: string): AppState {
