@@ -219,35 +219,47 @@ const EVENING: Record<string, Exo[]> = {
 const WEEK_DAYS_IDX = ['lun', 'mar', 'mer', 'jeu', 'ven', 'sam', 'dim'] as const;
 const ALL_OVERRIDES: Record<string, string> = { ...computeRaceOverrides(), ...DATE_OVERRIDES };
 
+function sessionIdForDate(ds: string): string {
+  if (ALL_OVERRIDES[ds]) return ALL_OVERRIDES[ds];
+  const start = new Date(PROGRAM_START + 'T00:00:00');
+  const d = new Date(ds + 'T00:00:00');
+  const weekNum = Math.max(1, Math.floor((d.getTime() - start.getTime()) / 86400000 / 7) + 1);
+  const dow = d.getDay();
+  const dayKey = WEEK_DAYS_IDX[dow === 0 ? 6 : dow - 1];
+  const phase = PHASES.find(p => weekNum >= p.weeks[0] && weekNum <= p.weeks[1]);
+  if (!phase) return 'rest';
+  return phase.template[dayKey] ?? 'rest';
+}
+
 function sessionTypeForDate(ds: string): string {
-  const sid = (() => {
-    if (ALL_OVERRIDES[ds]) return ALL_OVERRIDES[ds];
-    const start = new Date(PROGRAM_START + 'T00:00:00');
-    const d = new Date(ds + 'T00:00:00');
-    const weekNum = Math.max(1, Math.floor((d.getTime() - start.getTime()) / 86400000 / 7) + 1);
-    const dow = d.getDay();
-    const dayKey = WEEK_DAYS_IDX[dow === 0 ? 6 : dow - 1];
-    const phase = PHASES.find(p => weekNum >= p.weeks[0] && weekNum <= p.weeks[1]);
-    if (!phase) return 'rest';
-    return phase.template[dayKey] ?? 'rest';
-  })();
-  return SESSIONS[sid]?.type ?? 'rest';
+  return SESSIONS[sessionIdForDate(ds)]?.type ?? 'rest';
 }
 
 function sessionShortForDate(ds: string): string {
-  const sid = (() => {
-    if (ALL_OVERRIDES[ds]) return ALL_OVERRIDES[ds];
-    const start = new Date(PROGRAM_START + 'T00:00:00');
-    const d = new Date(ds + 'T00:00:00');
-    const weekNum = Math.max(1, Math.floor((d.getTime() - start.getTime()) / 86400000 / 7) + 1);
-    const dow = d.getDay();
-    const dayKey = WEEK_DAYS_IDX[dow === 0 ? 6 : dow - 1];
-    const phase = PHASES.find(p => weekNum >= p.weeks[0] && weekNum <= p.weeks[1]);
-    if (!phase) return 'rest';
-    return phase.template[dayKey] ?? 'rest';
-  })();
-  return SESSIONS[sid]?.short ?? 'Repos';
+  return SESSIONS[sessionIdForDate(ds)]?.short ?? 'Repos';
 }
+
+// Étirements soir par session ID (priorité sur le type)
+const EVENING_BY_SESSION: Record<string, Exo[]> = {
+  renfo_salle_a: [
+    ...EVENING.renfo,
+    {
+      name: 'Crunch classique',
+      detail: 'Dos au sol, genoux fléchis. Décoller les épaules en expirant — le bas du dos reste au sol. Abdos faits ici plutôt qu\'en salle.',
+      dur: '3 × 15',
+    },
+    {
+      name: 'Crunch bicycle',
+      detail: 'Coude droit vers genou gauche en alternance. Rotation contrôlée, ne pas tirer sur la nuque.',
+      dur: '3 × 12 / côté',
+    },
+    {
+      name: 'Crunch inversé (jambes)',
+      detail: 'Sur le dos, jambes à 90°. Soulever le bassin en amenant les genoux vers la poitrine, puis redescendre lentement. Cible le bas du ventre.',
+      dur: '3 × 12',
+    },
+  ],
+};
 
 function RoutinePanel({ title, exos, note }: { title: string; exos: Exo[]; note?: string }) {
   return (
@@ -272,9 +284,10 @@ export default function MissionList({ missions, onToggle, date }: Props) {
   const [openId, setOpenId] = useState<string | null>(null);
   const dl = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
 
-  const sessionType = sessionTypeForDate(date);
+  const sessionId    = sessionIdForDate(date);
+  const sessionType  = sessionTypeForDate(date);
   const sessionShort = sessionShortForDate(date);
-  const eveningExos = EVENING[sessionType] ?? EVENING.rest;
+  const eveningExos  = EVENING_BY_SESSION[sessionId] ?? EVENING[sessionType] ?? EVENING.rest;
 
   function toggleExpand(id: string, e: React.MouseEvent) {
     e.stopPropagation();
