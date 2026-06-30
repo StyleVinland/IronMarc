@@ -16,6 +16,7 @@ export interface Exercise {
   sets?: string;
   warning?: boolean;
   required?: boolean;
+  section?: boolean; // séparateur de section visuel (pas un vrai exercice)
 }
 
 export interface TrainingSession {
@@ -93,22 +94,24 @@ export const SESSIONS: Record<string, TrainingSession> = {
     desc: 'S1-16 (lun) · Machines salle + protocole Copenhagen. Priorité : adducteurs sur machine, chaîne postérieure, haut du corps pour la nage.',
     painCheck: true,
     exercises: [
+      { name: 'Avec matériel — machines, câbles, haltères', detail: '', sets: '', section: true },
       { name: 'Échauffement machine', detail: 'Vélo ou rameur salle, résistance légère, 5 min. Activation des hanches avant le travail adducteurs.', required: true },
-      { name: 'Machine adducteurs — RAPPROCHER (PRIORITÉ PUBALGIE)', detail: 'Amplitude contrôlée, charge légère. Jamais de douleur dans l\'aine. Commencer à 50% de la résistance minimale — la tendinopathie guérit par des charges progressives, pas par le repos total.', sets: '3 × 12 · récup 60 s · augmenter la charge de 2,5 kg/semaine si indolore', warning: true },
+      { name: 'Machine adducteurs — RAPPROCHER (PRIORITÉ PUBALGIE)', detail: 'Amplitude contrôlée, charge légère. Jamais de douleur dans l\'aine. Commencer à 50% de la résistance minimale — la tendinopathie guérit par des charges progressives, pas par le repos total.', sets: '3 × 12 · récup 60 s · +2,5 kg/semaine si indolore', warning: true },
       { name: 'Machine abducteurs — ÉCARTER', detail: 'Fessier moyen — stabilise le bassin côté opposé, protège l\'aine indirectement.', sets: '3 × 12' },
-      { name: 'Leg press pieds écartés', detail: 'Pieds à largeur d\'épaules ou légèrement plus, pointes légèrement ouvertes. Descendre jusqu\'à 90°. Force quadriceps sans compression directe de l\'aine.', sets: '3 × 10 · charge modérée (contrôle de la descente)' },
-      { name: 'Copenhagen genou → pied (progressif)', detail: 'Planche latérale, jambe du dessus pliée (genou) ou tendue (pied) sur un banc. Soulever le bassin. Niveau semaine 1-4 : genou. S5+ : pied si indolore.', sets: '3 × 8 / côté · récup 90 s', warning: false },
-      { name: 'Leg curl machine (ischio-jambiers)', detail: 'Allongé face vers le bas, résistance sur les chevilles. Ramener les talons vers les fesses lentement. Chaîne postérieure = moteur vélo + protection genou + soutien tibia.', sets: '3 × 12' },
-      { name: 'Hip thrust machine ou banc', detail: 'Dos appuyé sur un banc, barre ou plaque sur les hanches, pousser le bassin vers le haut. Fessiers à fond. Essentiel pour la puissance de pédalage et la stabilité du bassin (pubalgie).', sets: '3 × 10 · charge progressive' },
-      { name: 'Développé épaules haltères (assis)', detail: 'Assis, haltères à hauteur d\'épaule, pousser vers le haut. Deltoïdes — préparation pour la nage crawl et la position aéro sur le vélo.', sets: '3 × 10 · charge légère' },
-      { name: 'Curl biceps haltères ou câble', detail: 'Debout ou assis, coudes fixes contre le buste, lever les haltères en supination (paume vers le haut). Bras — complète la chaîne de traction pour la nage.', sets: '3 × 12' },
-      { name: 'Triceps câble pushdown', detail: 'Face à la poulie haute, corde ou barre, coudes fixés contre le buste, pousser vers le bas. Complète le travail des pompes pour une triceps équilibré.', sets: '3 × 12' },
-      { name: 'Dead bug', detail: 'Dos au sol, étendre bras droit + jambe gauche en alternance, dos collé au sol. Gainage profond.', sets: '3 × 8 / côté' },
-      { name: 'Tirage vertical (lat pulldown)', detail: 'Prise légèrement plus large que les épaules, tirer vers le menton, coudes vers le bas. Dorsaux pour la nage crawl.', sets: '3 × 12 · charge légère — technique avant tout' },
+      { name: 'Leg press pieds écartés', detail: 'Pieds à largeur d\'épaules ou légèrement plus, pointes légèrement ouvertes. Descendre jusqu\'à 90°. Force quadriceps sans compression directe de l\'aine.', sets: '3 × 10 · charge modérée' },
+      { name: 'Leg curl machine (ischio-jambiers)', detail: 'Allongé face vers le bas, résistance sur les chevilles. Ramener les talons vers les fesses lentement. Chaîne postérieure = moteur vélo + protection genou.', sets: '3 × 12' },
+      { name: 'Hip thrust machine ou banc', detail: 'Dos appuyé sur un banc, barre ou plaque sur les hanches, pousser le bassin vers le haut. Fessiers à fond. Puissance de pédalage + stabilité bassin (pubalgie).', sets: '3 × 10 · charge progressive' },
+      { name: 'Tirage vertical (lat pulldown)', detail: 'Prise légèrement plus large que les épaules, tirer vers le menton, coudes vers le bas. Dorsaux pour la nage crawl.', sets: '3 × 12 · technique avant tout' },
       { name: 'Rowing câble horizontal', detail: 'Assis face à la poulie basse, tirer les coudes vers l\'arrière, omoplates se rapprochent. Posture vélo + force nage.', sets: '3 × 12' },
-      { name: 'Pompes déclinées — haut pecs + épaules', detail: 'Pieds posés sur un banc (ou chaise), mains au sol à largeur d\'épaules. Cible le haut des pectoraux et les deltoïdes antérieurs. Débuter par 3 × 6 et progresser.', sets: '50 au total', required: true },
+      { name: 'Développé épaules haltères (assis)', detail: 'Assis, haltères à hauteur d\'épaule, pousser vers le haut. Deltoïdes — nage crawl + position aéro vélo.', sets: '3 × 10 · charge légère' },
+      { name: 'Curl biceps haltères ou câble', detail: 'Debout ou assis, coudes fixes contre le buste, lever en supination (paume vers le haut). Complète la chaîne de traction pour la nage.', sets: '3 × 12' },
+      { name: 'Triceps câble pushdown', detail: 'Face à la poulie haute, corde ou barre, coudes fixés contre le buste, pousser vers le bas.', sets: '3 × 12' },
+      { name: 'Pompes déclinées — haut pecs + épaules', detail: 'Pieds posés sur un banc, mains au sol à largeur d\'épaules. Débuter par 3 × 6 et progresser.', sets: '50 au total', required: true },
+      { name: 'Sans matériel — au sol', detail: '', sets: '', section: true },
+      { name: 'Copenhagen genou → pied (progressif)', detail: 'Planche latérale, jambe du dessus pliée (genou) ou tendue (pied) sur le sol ou un appui bas. S1-4 : genou. S5+ : pied si indolore.', sets: '3 × 8 / côté · récup 90 s', warning: false },
+      { name: 'Dead bug', detail: 'Dos au sol, étendre bras droit + jambe gauche en alternance, dos collé au sol. Gainage profond.', sets: '3 × 8 / côté' },
       { name: 'Planche ventrale', detail: 'Sur les coudes, corps droit. Ne pas retenir le souffle.', sets: '3 × 30 s → 3 × 45 s' },
-      { name: '📋 Abdos ce soir', detail: 'Les abdominaux sont dans les étirements du soir (mission mob_soir) — crunch classique + bicycle + crunch inversé. Les faire avant de dormir.', sets: '', required: false },
+      { name: 'Abdos ce soir ↓', detail: 'Les abdominaux sont dans les étirements du soir (mission mob_soir) — crunch classique + bicycle + crunch inversé. Les faire avant de dormir.', sets: '' },
       { name: 'Mobilité', detail: 'Fente basse 30 s / côté · Pigeon couché 30 s / côté · Étirement pso-iliaque.', required: true },
     ],
   },

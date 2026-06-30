@@ -361,11 +361,13 @@ export default function EntrainementClient() {
               {selSession.exercises.length > 0 && (
                 <div className="prog-exercise-grid">
                   {selSession.exercises.map((ex, i) => (
-                    <div key={i} className={`prog-ex-card${ex.required ? ' required' : ''}${ex.warning ? ' warning' : ''}`}>
-                      <div className="prog-ex-name">{ex.name}</div>
-                      {ex.sets && <div className="prog-ex-sets">{ex.sets}</div>}
-                      <div className="prog-ex-detail">{ex.detail}</div>
-                    </div>
+                    ex.section
+                      ? <div key={i} className="prog-ex-section">{ex.name}</div>
+                      : <div key={i} className={`prog-ex-card${ex.required ? ' required' : ''}${ex.warning ? ' warning' : ''}`}>
+                          <div className="prog-ex-name">{ex.name}</div>
+                          {ex.sets && <div className="prog-ex-sets">{ex.sets}</div>}
+                          <div className="prog-ex-detail">{ex.detail}</div>
+                        </div>
                   ))}
                 </div>
               )}
