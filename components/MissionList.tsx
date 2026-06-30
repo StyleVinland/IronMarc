@@ -15,7 +15,7 @@ const CHECK_SVG = (
   </svg>
 );
 
-interface Exo { name: string; detail: string; dur: string; tag?: string }
+interface Exo { name: string; detail: string; dur: string; tag?: string; section?: boolean }
 
 // ── ROUTINE MATIN FIXE ────────────────────────────────────────────────────────
 // Même séquence chaque jour — activation au réveil. ~8 min.
@@ -258,6 +258,45 @@ const EVENING_BY_SESSION: Record<string, Exo[]> = {
       detail: 'Sur le dos, jambes à 90°. Soulever le bassin en amenant les genoux vers la poitrine, puis redescendre lentement. Cible le bas du ventre.',
       dur: '3 × 12',
     },
+    { name: 'Épaule droite — avant nage demain', detail: '', dur: '', section: true },
+    {
+      name: 'Étirement épaule croisée',
+      detail: 'Bras droit tendu passé devant la poitrine. Le bras gauche ramène doucement vers le buste. Tu dois sentir l\'arrière de l\'épaule (deltoïde postérieur) s\'étirer — pas de douleur. Insiste côté droit.',
+      dur: '45 s × 2 / côté',
+    },
+    {
+      name: 'Sleeper stretch (capsule postérieure)',
+      detail: 'Allongé sur le côté droit, bras droit à 90° devant toi. La main gauche appuie doucement le poignet droit vers le sol (rotation interne). Étirement profond de l\'arrière de l\'épaule. Arrêter si douleur — ce n\'est qu\'une gêne légère à dissoudre.',
+      dur: '30 s × 2 côté droit',
+      tag: 'Épaule',
+    },
+    {
+      name: 'Rotation de l\'épaule en cercle',
+      detail: 'Bras pendant, grands cercles lents vers l\'avant puis vers l\'arrière. Mobilise la tête humérale dans la glène — lubrifie l\'articulation avant la nage crawl de demain.',
+      dur: '10 × avant · 10 × arrière',
+    },
+    { name: 'Récupération — anti-courbatures', detail: '', dur: '', section: true },
+    {
+      name: 'Boire 500 ml d\'eau maintenant',
+      detail: 'Le muscle qui manque d\'eau cramp et courbature plus fort. Boire dans l\'heure qui suit la séance est la chose la plus simple et la plus efficace.',
+      dur: 'Dans l\'heure',
+    },
+    {
+      name: 'Protéines avant de dormir',
+      detail: 'Œufs, blanc de poulet, yaourt végétal, ou jambon — pas besoin de peser. La synthèse musculaire a lieu la nuit : sans protéines, tu récupères à vide. Vise 20-30 g.',
+      dur: 'Ce soir',
+    },
+    {
+      name: 'Froid sur l\'épaule si encore sensible',
+      detail: 'Glaçons dans un torchon, 10-15 min max. Ne pas appliquer à même la peau. Réduit l\'inflammation locale avant de dormir — surtout si la gêne persiste après les étirements.',
+      dur: '10-15 min si besoin',
+      tag: 'Épaule',
+    },
+    {
+      name: 'Étirer avant de dormir, pas juste avant de bouger',
+      detail: 'Les étirements sont plus efficaces à chaud (après la séance) qu\'à froid. Si tu les fais maintenant, tu optimises la récupération nocturne. Lumière tamisée, respiration lente.',
+      dur: 'Ce soir',
+    },
   ],
 };
 
@@ -266,14 +305,16 @@ function RoutinePanel({ title, exos, note }: { title: string; exos: Exo[]; note?
     <div className="mob-routine">
       <div className="mob-routine-title">{title}</div>
       {exos.map((ex, i) => (
-        <div key={i} className="mob-ex">
-          <div className="mob-ex-top">
-            <span className="mob-ex-name">{ex.name}</span>
-            <span className="mob-ex-dur">{ex.dur}</span>
-          </div>
-          <div className="mob-ex-detail">{ex.detail}</div>
-          {ex.tag && <span className="mob-ex-tag">{ex.tag}</span>}
-        </div>
+        ex.section
+          ? <div key={i} className="mob-ex-section">{ex.name}</div>
+          : <div key={i} className="mob-ex">
+              <div className="mob-ex-top">
+                <span className="mob-ex-name">{ex.name}</span>
+                {ex.dur && <span className="mob-ex-dur">{ex.dur}</span>}
+              </div>
+              <div className="mob-ex-detail">{ex.detail}</div>
+              {ex.tag && <span className="mob-ex-tag">{ex.tag}</span>}
+            </div>
       ))}
       {note && <div className="mob-routine-note">{note}</div>}
     </div>

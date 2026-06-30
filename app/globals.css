@@ -1807,6 +1807,12 @@ body { padding: 0; }
   text-transform: uppercase; color: var(--tide); background: rgba(52,199,89,0.08);
   border: 1px solid rgba(52,199,89,0.2); border-radius: 999px; padding: 2px 8px; font-weight: 600;
 }
+.mob-ex-section {
+  font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--dawn); padding: 10px 0 4px;
+  border-bottom: 1px solid color-mix(in srgb, var(--dawn) 20%, transparent);
+  margin-bottom: 4px;
+}
 .mob-routine-note { font-size: 12px; color: var(--muted); text-align: center; padding-top: 4px; line-height: 1.5; }
 
 /* ── Bonus journée parfaite ──────────────────────────────────────── */
