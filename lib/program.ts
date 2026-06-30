@@ -896,6 +896,9 @@ export const DATE_OVERRIDES: Record<string, string> = {
   '2026-06-26': 'bike_stationnaire', // Vendredi — vélo récupéré du 25
   '2026-06-27': 'swim_apprivoiser',  // Nage samedi S1
   '2026-06-29': 'renfo_a',           // Lundi — salle indispo, renfo maison (pubalgie)
+  '2026-06-30': 'renfo_salle_a',     // Mardi — piscine indispo, salle à la place (adducteurs machine)
+  '2026-07-01': 'swim_apprivoiser',  // Mercredi — nage récupérée du 30/06
+  '2026-07-03': 'renfo_b',           // Vendredi — renfo B maison (tibias/mollets) à la place de renfo_a
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
