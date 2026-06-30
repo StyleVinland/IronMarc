@@ -109,7 +109,11 @@ export const SESSIONS: Record<string, TrainingSession> = {
       { name: 'Pont fessier unijambiste — Hölmich gainage', detail: 'Sur le dos, 1 pied au sol genou fléchi. Pousser le bassin vers le haut. S1-4 : pont bilatéral (2 pieds) si l\'unilatéral est trop instable — puis passer à 1 jambe dès que maîtrisé.', sets: '3 × 12 sec / côté' },
       { name: 'Dead bug — gainage profond', detail: 'Sur le dos, bras vers le plafond, hanches + genoux à 90°. Étendre bras D + jambe G sans creuser le dos. Progression : +1 rep/semaine.', sets: '3 × 8 / côté' },
       { name: 'Planche RKC', detail: 'Sur les coudes, serrer les poings, contracter fessiers + abdos. Progression : +5 sec/semaine. Remplace les crunchs classiques (contre-indiqués en pubalgie).', sets: '3 × 20 s → 3 × 30 s' },
-      { name: 'Mobilité', detail: 'Fente basse genou à terre 45 s / côté (psoas) · Pigeon couché 45 s / côté · Adducteur allongé 30 s / côté.', required: true },
+      { name: 'MTSS — tibias + hanches', detail: '', sets: '', section: true },
+      { name: 'Tibial raises contre mur', detail: 'Dos au mur, talons à 10 cm. Soulever les pointes des pieds le plus haut possible. Renforce le tibial antérieur qui tire sur le périoste — le renforcer réduit cette traction à la course. Progression : +2 reps/semaine.', sets: '3 × 20 · récup 30 s' },
+      { name: 'Calf raises excentrique genou tendu', detail: 'Sur un step ou au sol, montée 2 pieds, descente 1 pied en 3-4 sec. Gastrocnémien = muscle le plus directement lié aux périostites tibiales. Excentrique lent = traitement de fond.', sets: '3 × 12 / jambe · excentrique 3-4 sec', warning: true },
+      { name: 'Hip hitches debout sur step', detail: 'Pied porteur sur le bord d\'une marche. Laisser le bassin tomber du côté libre, puis le soulever en contractant le fessier de la jambe portante. Corrige le pelvic drop à la course = cause principale de la surcharge tibiale. Progression : +2 reps/semaine.', sets: '3 × 12 / côté · récup 60 s', warning: true },
+      { name: 'Mobilité', detail: 'Fente basse genou à terre 45 s / côté (psoas) · Pigeon couché 45 s / côté · Adducteur allongé 30 s / côté · Mollet genou tendu 30 s / côté.', required: true },
     ],
   },
 
