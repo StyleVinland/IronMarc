@@ -962,16 +962,21 @@ export function computeRaceOverrides(): Record<string, string> {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const DATE_OVERRIDES: Record<string, string> = {
-  '2026-06-20': 'rest',              // Samedi — nage déplacée au 23/06
-  '2026-06-21': 'renfo_a',           // Dimanche de rattrapage — renfo pubalgie
-  '2026-06-23': 'swim_apprivoiser',  // Mardi — PREMIÈRE SÉANCE PISCINE S1
-  '2026-06-25': 'renfo_a',           // Jeudi — vélo déplacé au 26 (swap jeu↔ven)
-  '2026-06-26': 'bike_stationnaire', // Vendredi — vélo récupéré du 25
-  '2026-06-27': 'swim_apprivoiser',  // Nage samedi S1
-  '2026-06-29': 'renfo_a',           // Lundi — salle indispo, renfo maison (pubalgie)
-  '2026-06-30': 'renfo_salle_a',     // Mardi — piscine indispo, salle à la place (adducteurs machine)
-  '2026-07-01': 'swim_apprivoiser',  // Mercredi — nage récupérée du 30/06
-  '2026-07-03': 'renfo_b',           // Vendredi — renfo B maison (tibias/mollets) à la place de renfo_a
+  // ── S1 (21-27 juin) — ajustements semaine d'ouverture ─────────────────────
+  '2026-06-20': 'rest',              // Sam — nage déplacée au 23/06
+  '2026-06-21': 'renfo_salle_a',     // Dim — rattrapage renfo pubalgie en salle
+  '2026-06-23': 'swim_apprivoiser',  // Mar — 1re séance piscine S1
+  '2026-06-25': 'renfo_salle_a',     // Jeu — vélo déplacé au 26 (swap jeu↔ven)
+  '2026-06-26': 'bike_salle',        // Ven — vélo récupéré du 25
+  '2026-06-27': 'swim_apprivoiser',  // Sam — nage S1
+  // ── S2 (28 juin – 4 juillet) — 2 renfo déjà faits lun+mar ─────────────────
+  '2026-06-29': 'renfo_salle_a',     // Lun — Salle A (pubalgie lourd + MTSS) ✓ fait
+  '2026-06-30': 'renfo_salle_a',     // Mar — Salle A (2e passage, piscine indispo) ✓ fait
+  // Mer 01/07 → renfo_salle_b  (template Phase 1A)
+  // Jeu 02/07 → bike_salle     (template Phase 1A)
+  // Ven 03/07 → renfo_salle_c  (template Phase 1A)
+  // Sam 04/07 → swim_apprivoiser (template Phase 1A)
+  // Dim 05/07 → rest           (template Phase 1A)
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
