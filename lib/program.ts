@@ -969,14 +969,14 @@ export const DATE_OVERRIDES: Record<string, string> = {
   '2026-06-25': 'renfo_salle_a',     // Jeu — vélo déplacé au 26 (swap jeu↔ven)
   '2026-06-26': 'bike_salle',        // Ven — vélo récupéré du 25
   '2026-06-27': 'swim_apprivoiser',  // Sam — nage S1
-  // ── S2 (28 juin – 4 juillet) — 2 renfo déjà faits lun+mar ─────────────────
-  '2026-06-29': 'renfo_salle_a',     // Lun — Salle A (pubalgie lourd + MTSS) ✓ fait
-  '2026-06-30': 'renfo_salle_a',     // Mar — Salle A (2e passage, piscine indispo) ✓ fait
-  // Mer 01/07 → renfo_salle_b  (template Phase 1A)
-  // Jeu 02/07 → bike_salle     (template Phase 1A)
-  // Ven 03/07 → renfo_salle_c  (template Phase 1A)
+  // ── S2 (28 juin – 4 juillet) ──────────────────────────────────────────────
+  '2026-06-29': 'renfo_salle_a',     // Lun — Salle A ✓ fait
+  '2026-06-30': 'renfo_salle_b',     // Mar — Salle B ✓ fait (swap mar↔mer cette semaine)
+  '2026-07-01': 'swim_apprivoiser',  // Mer — Nage (swap exceptionnel cette semaine)
+  // Jeu 02/07 → bike_salle      (template Phase 1A)
+  // Ven 03/07 → renfo_salle_c   (template Phase 1A)
   // Sam 04/07 → swim_apprivoiser (template Phase 1A)
-  // Dim 05/07 → rest           (template Phase 1A)
+  // Dim 05/07 → rest             (template Phase 1A)
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
