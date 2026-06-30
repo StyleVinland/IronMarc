@@ -17,39 +17,53 @@ const CHECK_SVG = (
 
 interface Exo { name: string; detail: string; dur: string; tag?: string; section?: boolean }
 
-// ── ROUTINE MATIN FIXE ────────────────────────────────────────────────────────
-// Même séquence chaque jour — activation au réveil. ~8 min.
-// Protocoles : anti-pubalgie (aine) + anti-MTSS (tibias).
+// ── ROUTINE MATIN PAR SESSION ─────────────────────────────────────────────────
+// Chaque session a sa préparation matinale ciblée (~8 min).
 const MORNING_ROUTINE: Exo[] = [
-  {
-    name: 'Cat-Cow',
-    detail: '4 pattes, ondulation dos creux → dos rond. Lent, synchronisé avec la respiration. Réveille la colonne et mobilise les hanches.',
-    dur: '10 reps',
-  },
-  {
-    name: 'Cercles de hanches debout',
-    detail: 'Mains sur les crêtes iliaques, grands cercles de bassin dans chaque sens. Active l\'aine sans forcer — essentiel pubalgie.',
-    dur: '10 × / sens',
-    tag: 'Pubalgie',
-  },
-  {
-    name: 'Pompages de cheville',
-    detail: 'Assis au bord du lit ou allongé — flex / extension lente des deux chevilles. Réveille la chaîne tibias-mollets avant tout impact.',
-    dur: '20 × / pied',
-    tag: 'Périostites',
-  },
-  {
-    name: 'Fente basse genou à terre',
-    detail: 'Genou arrière au sol, pied arrière relâché. Bascule doucement le bassin vers l\'avant jusqu\'à sentir l\'avant de la hanche s\'étirer. Ne force pas.',
-    dur: '30 s / côté',
-    tag: 'Pubalgie',
-  },
-  {
-    name: 'Rotation thoracique en fente',
-    detail: 'Depuis la fente : main derrière la nuque, rotation du buste vers le ciel × 5, puis garde. Déverrouille la colonne pour la journée.',
-    dur: '5 × puis 20 s / côté',
-  },
+  { name: 'Cat-Cow', detail: '4 pattes, ondulation dos creux → dos rond. Réveille la colonne et mobilise les hanches.', dur: '10 reps' },
+  { name: 'Cercles de hanches debout', detail: 'Mains sur les crêtes iliaques, grands cercles de bassin dans chaque sens. Active l\'aine.', dur: '10× / sens', tag: 'Pubalgie' },
+  { name: 'Pompages de cheville', detail: 'Assis ou allongé — flex / extension lente des deux chevilles. Réveille la chaîne tibias-mollets.', dur: '20× / pied', tag: 'Périostites' },
+  { name: 'Fente basse genou à terre', detail: 'Genou arrière au sol. Bascule doucement le bassin vers l\'avant. Psoas + avant de la hanche.', dur: '30 s / côté', tag: 'Pubalgie' },
+  { name: 'Rotation thoracique en fente', detail: 'Depuis la fente : main derrière la nuque, rotation vers le ciel × 5, puis tenu. Déverrouille la colonne.', dur: '5× puis 20 s / côté' },
 ];
+
+const MORNING_BY_SESSION: Record<string, Exo[]> = {
+  renfo_salle_a: [
+    { name: 'Pompages de cheville', detail: 'Assis ou allongé, flex/extension lente des deux chevilles. Réveille la chaîne tibias-mollets avant les calf raises + tibial raises du jour.', dur: '20× / pied', tag: 'Périostites' },
+    { name: 'Cercles de hanches debout', detail: 'Grands cercles de bassin dans chaque sens. Mobilise l\'aine avant la machine adducteurs — indispensable pubalgie.', dur: '10× / sens', tag: 'Pubalgie' },
+    { name: 'Clam shells au sol', detail: 'Allongé sur le côté, genoux fléchis à 90°. Ouvrir le genou du dessus comme une palourde sans bouger le bassin. Active le fessier moyen avant les abducteurs et hip hitches.', dur: '10× / côté' },
+    { name: 'Fente basse genou à terre', detail: 'Psoas + avant de la hanche. Basculer le bassin vers l\'avant doucement. Prépare leg press et hip thrust.', dur: '30 s / côté', tag: 'Pubalgie' },
+    { name: 'Cat-Cow', detail: '4 pattes, ondulation dos creux → dos rond. Libère les lombaires avant le leg press et le hip thrust.', dur: '10 reps' },
+  ],
+  renfo_salle_b: [
+    { name: 'Pompages de cheville', detail: 'Maintien MTSS quotidien. Réveille la chaîne tibias avant les step-ups et calf raises du jour.', dur: '20× / pied', tag: 'Périostites' },
+    { name: 'Rotation d\'épaule en cercle', detail: 'Bras pendant, grands cercles lents avant puis arrière. Lubrifie la coiffe des rotateurs avant lat pulldown et rowing.', dur: '10× avant · 10× arrière' },
+    { name: 'Pendule d\'épaule', detail: 'Penché en avant, bras suspendu, petits cercles passifs (gravité seulement). Décomprime l\'articulation avant la traction.', dur: '30 s / bras' },
+    { name: 'Cercles de hanches debout', detail: 'Maintien mobilité aine — 2e séance de la semaine. L\'aine reste mobile entre lundi et mercredi.', dur: '10× / sens', tag: 'Pubalgie' },
+    { name: 'Rotation thoracique en fente', detail: 'Depuis la fente, main derrière la nuque, 5 rotations vers le ciel. Ouvre la cage thoracique pour le rowing et le tirage.', dur: '5× puis 20 s / côté' },
+  ],
+  renfo_salle_c: [
+    { name: 'Pompages de cheville', detail: 'Maintien MTSS. Réveille les mollets et tibias avant les calf raises unijambistes.', dur: '20× / pied', tag: 'Périostites' },
+    { name: 'Fente basse genou à terre', detail: 'PRIORITÉ avant le Bulgarian split squat — ouvre le psoas et l\'avant de la hanche pour descendre correctement sans compenser.', dur: '45 s / côté', tag: 'Pubalgie' },
+    { name: 'Leg swing latéral', detail: 'Debout, une main au mur. Balancer la jambe libre de gauche à droite en croisant le corps. Active adducteurs + abducteurs avant la séance.', dur: '15× / jambe' },
+    { name: 'Cercles de hanches debout', detail: 'Maintien mobilité aine — 3e et dernier passage de la semaine.', dur: '10× / sens', tag: 'Pubalgie' },
+    { name: 'Rotation thoracique en fente', detail: 'Prépare la colonne pour le RDL (dos droit = technique). 5 rotations lentes.', dur: '5× puis 20 s / côté' },
+  ],
+  bike_salle: [
+    { name: 'Rotation lombaire allongée', detail: 'Sur le dos, genoux pliés, les faire tomber doucement d\'un côté puis l\'autre. Le vélo comprime les lombaires — décompresser avant de monter en selle.', dur: '8× / côté' },
+    { name: 'Fente basse genou à terre', detail: 'Psoas = fléchisseur de hanche = muscle n°1 comprimé en position vélo. Ouvrir avant la selle.', dur: '45 s / côté' },
+    { name: 'Cercles de hanches debout', detail: 'Mobilisation de la hanche dans tous les plans avant le pédalage.', dur: '10× / sens', tag: 'Pubalgie' },
+    { name: 'Pompages de cheville', detail: 'Mollets travaillent en continu au vélo. Activation avant = moins de tensions pendant.', dur: '20× / pied', tag: 'Périostites' },
+    { name: 'Rotation thoracique en fente', detail: 'La position aéro verrouille la colonne — la déverrouiller avant.', dur: '5× puis 20 s / côté' },
+  ],
+  swim_apprivoiser: [
+    { name: 'Rotation d\'épaule en cercle', detail: 'Grands cercles avant puis arrière. Le crawl sollicite la coiffe des rotateurs à chaque bras — la préparer avant l\'eau.', dur: '10× avant · 10× arrière' },
+    { name: 'Pectoraux contre encadrement de porte', detail: 'Main à hauteur d\'épaule contre le mur, rotation du buste vers l\'extérieur. Ouvre la poitrine pour l\'entrée de bras en crawl.', dur: '20 s / côté' },
+    { name: 'Rotation thoracique en fente', detail: 'Crawl = rotation de tronc à chaque coup de bras. Préparer cette rotation le matin améliore la technique directement.', dur: '5× puis 20 s / côté' },
+    { name: 'Pompages de cheville', detail: 'Protocole MTSS quotidien — même les jours nage (zéro impact = pas de relâche sur la prévention).', dur: '20× / pied', tag: 'Périostites' },
+    { name: 'Cercles de hanches debout', detail: 'Maintien mobilité. Le crawl sollicite peu les hanches — les entretenir le matin.', dur: '10× / sens', tag: 'Pubalgie' },
+  ],
+};
 
 // ── ÉTIREMENTS SOIR ADAPTÉS ───────────────────────────────────────────────────
 // Clés = type de session (renfo | swim | bike | run | brick | rest)
@@ -242,61 +256,53 @@ function sessionShortForDate(ds: string): string {
 // Étirements soir par session ID (priorité sur le type)
 const EVENING_BY_SESSION: Record<string, Exo[]> = {
   renfo_salle_a: [
-    ...EVENING.renfo,
-    {
-      name: 'Crunch classique',
-      detail: 'Dos au sol, genoux fléchis. Décoller les épaules en expirant — le bas du dos reste au sol. Abdos faits ici plutôt qu\'en salle.',
-      dur: '3 × 15',
-    },
-    {
-      name: 'Crunch bicycle',
-      detail: 'Coude droit vers genou gauche en alternance. Rotation contrôlée, ne pas tirer sur la nuque.',
-      dur: '3 × 12 / côté',
-    },
-    {
-      name: 'Crunch inversé (jambes)',
-      detail: 'Sur le dos, jambes à 90°. Soulever le bassin en amenant les genoux vers la poitrine, puis redescendre lentement. Cible le bas du ventre.',
-      dur: '3 × 12',
-    },
+    { name: 'Pubalgie — hanches + aine', detail: '', dur: '', section: true },
+    { name: 'Pigeon au sol', detail: 'Jambe avant pliée à 90°, jambe arrière tendue. Pesanteur qui fait le travail — ne pas forcer.', dur: '60 s / côté', tag: 'Pubalgie' },
+    { name: 'Adducteur allongé', detail: 'Sur le dos, jambe tendue qui s\'ouvre lentement sur le côté, talon glissant au sol. Intérieur de la cuisse — pas l\'aine.', dur: '45 s / côté', tag: 'Pubalgie' },
+    { name: 'Psoas — fente genou à terre', detail: 'Genou arrière au sol, bassin vers l\'avant. Respire et laisse la hanche descendre à chaque expire.', dur: '45 s / côté' },
+    { name: 'MTSS — tibias + mollets', detail: '', dur: '', section: true },
+    { name: 'Mollet genou tendu', detail: 'Talon contre une marche ou mur, jambe tendue. Gastrocnémien — directement impliqué dans les périostites.', dur: '45 s / côté', tag: 'Périostites' },
+    { name: 'Mollet genou fléchi (soléaire)', detail: 'Même position, genou légèrement plié. Soléaire = muscle n°1 des périostites. Ne jamais sauter.', dur: '45 s / côté', tag: 'Périostites' },
+    { name: 'Massage plantaire', detail: 'Balle de tennis sous le pied, rouler lentement de la voûte vers le talon. Fascia plantaire → tibias.', dur: '1-2 min / pied' },
+    { name: 'Core — abdos', detail: '', dur: '', section: true },
+    { name: 'Crunch classique', detail: 'Dos au sol, genoux fléchis. Décoller les épaules en expirant — bas du dos reste au sol.', dur: '3 × 15' },
+    { name: 'Crunch bicycle', detail: 'Coude droit vers genou gauche en alternance. Rotation contrôlée, ne pas tirer sur la nuque.', dur: '3 × 12 / côté' },
+    { name: 'Crunch inversé (jambes)', detail: 'Sur le dos, jambes à 90°. Soulever le bassin en amenant les genoux vers la poitrine, redescendre lentement.', dur: '3 × 12' },
     { name: 'Épaule droite — avant nage demain', detail: '', dur: '', section: true },
-    {
-      name: 'Étirement épaule croisée',
-      detail: 'Bras droit tendu passé devant la poitrine. Le bras gauche ramène doucement vers le buste. Tu dois sentir l\'arrière de l\'épaule (deltoïde postérieur) s\'étirer — pas de douleur. Insiste côté droit.',
-      dur: '45 s × 2 / côté',
-    },
-    {
-      name: 'Sleeper stretch (capsule postérieure)',
-      detail: 'Allongé sur le côté droit, bras droit à 90° devant toi. La main gauche appuie doucement le poignet droit vers le sol (rotation interne). Étirement profond de l\'arrière de l\'épaule. Arrêter si douleur — ce n\'est qu\'une gêne légère à dissoudre.',
-      dur: '30 s × 2 côté droit',
-      tag: 'Épaule',
-    },
-    {
-      name: 'Rotation de l\'épaule en cercle',
-      detail: 'Bras pendant, grands cercles lents vers l\'avant puis vers l\'arrière. Mobilise la tête humérale dans la glène — lubrifie l\'articulation avant la nage crawl de demain.',
-      dur: '10 × avant · 10 × arrière',
-    },
+    { name: 'Étirement épaule croisée', detail: 'Bras droit passé devant la poitrine, bras gauche retient. Arrière de l\'épaule (deltoïde postérieur). Insiste côté droit.', dur: '45 s × 2 / côté' },
+    { name: 'Sleeper stretch', detail: 'Allongé sur le côté droit, bras à 90°. Main gauche appuie doucement le poignet vers le sol. Gêne légère OK, douleur = stop.', dur: '30 s × 2 côté droit', tag: 'Épaule' },
+    { name: 'Rotation d\'épaule en cercle', detail: 'Bras pendant, grands cercles lents avant puis arrière. Lubrifie l\'articulation avant la nage crawl de demain.', dur: '10× avant · 10× arrière' },
     { name: 'Récupération — anti-courbatures', detail: '', dur: '', section: true },
-    {
-      name: 'Boire 500 ml d\'eau maintenant',
-      detail: 'Le muscle qui manque d\'eau cramp et courbature plus fort. Boire dans l\'heure qui suit la séance est la chose la plus simple et la plus efficace.',
-      dur: 'Dans l\'heure',
-    },
-    {
-      name: 'Protéines avant de dormir',
-      detail: 'Œufs, blanc de poulet, yaourt végétal, ou jambon — pas besoin de peser. La synthèse musculaire a lieu la nuit : sans protéines, tu récupères à vide. Vise 20-30 g.',
-      dur: 'Ce soir',
-    },
-    {
-      name: 'Froid sur l\'épaule si encore sensible',
-      detail: 'Glaçons dans un torchon, 10-15 min max. Ne pas appliquer à même la peau. Réduit l\'inflammation locale avant de dormir — surtout si la gêne persiste après les étirements.',
-      dur: '10-15 min si besoin',
-      tag: 'Épaule',
-    },
-    {
-      name: 'Étirer avant de dormir, pas juste avant de bouger',
-      detail: 'Les étirements sont plus efficaces à chaud (après la séance) qu\'à froid. Si tu les fais maintenant, tu optimises la récupération nocturne. Lumière tamisée, respiration lente.',
-      dur: 'Ce soir',
-    },
+    { name: 'Boire 500 ml d\'eau', detail: 'Dans l\'heure qui suit la séance. Muscle déshydraté = courbatures amplifiées.', dur: 'Dans l\'heure' },
+    { name: 'Protéines avant de dormir', detail: 'Œufs, blanc de poulet, yaourt végétal — vise 20-30 g. Synthèse musculaire a lieu la nuit.', dur: 'Ce soir' },
+    { name: 'Froid sur l\'épaule si sensible', detail: 'Glaçons dans un torchon, 10-15 min max. Pas à même la peau.', dur: '10-15 min si besoin', tag: 'Épaule' },
+  ],
+  renfo_salle_b: [
+    { name: 'Dos + épaules — après lat pulldown + rowing', detail: '', dur: '', section: true },
+    { name: 'Grand dorsal', detail: 'Bras tendu au-dessus, main accrochée à un bord ou encadrement. Inclinaison latérale douce — sentir le flanc et le dos s\'ouvrir.', dur: '30 s / côté' },
+    { name: 'Épaule croisée', detail: 'Bras passé devant la poitrine, l\'autre bras retient. Deltoïde postérieur + face pull = arrière épaule à relâcher.', dur: '30 s / côté' },
+    { name: 'Rotation lombaire allongée', detail: 'Sur le dos, genoux pliés à 90°, les faire tomber d\'un côté. Step-up et SL-RDL sollicitent le dos — décompression.', dur: '8× / côté' },
+    { name: 'MTSS — tibias (séance principale)', detail: '', dur: '', section: true },
+    { name: 'Mollet genou tendu', detail: 'Talon contre une marche, jambe tendue. Gastrocnémien. Séance B = plus de volume MTSS — bien étirer après.', dur: '60 s / côté', tag: 'Périostites' },
+    { name: 'Mollet genou fléchi (soléaire)', detail: 'Même position, genou légèrement plié. Soléaire = priorité absolue après les calf raises assis. Ne jamais sauter.', dur: '60 s / côté', tag: 'Périostites' },
+    { name: 'Massage plantaire', detail: 'Balle de tennis, rouler lentement de la voûte vers le talon. Soulage les tibias via le fascia plantaire.', dur: '2 min / pied' },
+    { name: 'Hanches + Pubalgie', detail: '', dur: '', section: true },
+    { name: 'Fessier moyen — étirement latéral', detail: 'Sur le dos, genou droit vers la poitrine et croiser vers la gauche (la main gauche tient le genou). Étire le fessier moyen et TFL — muscles qui travaillent dans les hip hitches.', dur: '45 s / côté' },
+    { name: 'Pigeon au sol', detail: 'Jambe avant à 90°, jambe arrière tendue. Récupération après hip hitches et step-ups.', dur: '60 s / côté', tag: 'Pubalgie' },
+    { name: 'Adducteur allongé', detail: 'Sur le dos, jambe tendue qui s\'ouvre doucement. Maintien pubalgie — ne jamais sauter.', dur: '45 s / côté', tag: 'Pubalgie' },
+  ],
+  renfo_salle_c: [
+    { name: 'Chaîne postérieure — après RDL + Bulgarian', detail: '', dur: '', section: true },
+    { name: 'Ischio-jambiers debout', detail: 'Talon sur une chaise ou marche, dos droit, buste incliné vers l\'avant. RDL et BSS contractent fort les ischio — les étirer est obligatoire.', dur: '45 s / côté' },
+    { name: 'Quadriceps debout', detail: 'Talon vers les fesses, genou pointé vers le bas. Bulgarian split squat = gros travail quad — les relâcher après.', dur: '45 s / côté' },
+    { name: 'Fléchisseur de hanche', detail: 'Fente genou à terre, bassin vers l\'avant. BSS contracte l\'avant de la hanche — décompresser.', dur: '45 s / côté' },
+    { name: 'MTSS — tibias', detail: '', dur: '', section: true },
+    { name: 'Mollet genou tendu', detail: 'Après calf raises unijambiste excentrique — gastrocnémien obligatoire.', dur: '60 s / côté', tag: 'Périostites' },
+    { name: 'Mollet genou fléchi (soléaire)', detail: 'Soléaire = priorité absolue. Fin de semaine — les mollets ont travaillé 3× cette semaine.', dur: '60 s / côté', tag: 'Périostites' },
+    { name: 'Pubalgie — fin de semaine', detail: '', dur: '', section: true },
+    { name: 'Adducteur allongé', detail: 'Sur le dos, jambe tendue qui s\'ouvre doucement. 3e et dernier passage de la semaine — bien s\'y attarder.', dur: '45 s / côté', tag: 'Pubalgie' },
+    { name: 'Pigeon au sol', detail: 'Fin de semaine = le meilleur moment pour un pigeon long. Laisser la pesanteur travailler 60 s.', dur: '60 s / côté', tag: 'Pubalgie' },
+    { name: 'Massage plantaire', detail: 'Balle de tennis, 1-2 min par pied. Fin de semaine — les fascias sont chargés après 3 séances.', dur: '1-2 min / pied' },
   ],
 };
 
@@ -329,6 +335,7 @@ export default function MissionList({ missions, onToggle, date }: Props) {
   const sessionType  = sessionTypeForDate(date);
   const sessionShort = sessionShortForDate(date);
   const eveningExos  = EVENING_BY_SESSION[sessionId] ?? EVENING[sessionType] ?? EVENING.rest;
+  const morningExos  = MORNING_BY_SESSION[sessionId] ?? MORNING_ROUTINE;
 
   function toggleExpand(id: string, e: React.MouseEvent) {
     e.stopPropagation();
@@ -373,8 +380,8 @@ export default function MissionList({ missions, onToggle, date }: Props) {
 
               {isMatin && isOpen && (
                 <RoutinePanel
-                  title="Réveil mobilité — 8 min, avant de sortir du lit ou juste après"
-                  exos={MORNING_ROUTINE}
+                  title={`Réveil mobilité — ${sessionShort === 'Repos' ? 'Repos' : sessionShort} · 8 min au lever`}
+                  exos={morningExos}
                   note="Respire lentement. Si une zone résiste, reste — ne force pas au-delà du confort."
                 />
               )}

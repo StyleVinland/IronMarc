@@ -49,6 +49,14 @@ const GEAR: GearItem[] = [
     color: '#FF9500',
   },
   {
+    name: 'Élastique de résistance (bande loop)',
+    price: '8-15 €',
+    why: 'Indispensable pour le protocole Hölmich Phase 2 (adduction debout élastique à partir de S5-6). Aussi utilisé pour les hip abductions. Prendre une tension medium ou medium/heavy — la résistance augmente semaine après semaine.',
+    brands: 'Theraband Loop · Decathlon Domyos · Rogue Monster Band',
+    when: 'Mois 1 — avant la semaine 5',
+    color: '#FF9500',
+  },
+  {
     name: 'Manchons de compression mollets',
     price: '25-45 €',
     why: 'Direct contre les périostites. À porter pendant la marche/course et 1-2 h après. Les périostites peuvent te sortir du programme — c\'est une priorité.',
