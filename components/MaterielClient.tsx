@@ -16,11 +16,27 @@ const OWNED = ['Maillot de bain', 'Chaussures de course'];
 const GEAR: GearItem[] = [
   /* ── NATATION ─────────────────────────── bleu #007AFF */
   {
-    name: 'Lunettes de natation — triathlon open water',
-    price: '35-80 €',
-    why: 'Pour l\'Ironman (3,8 km eau libre, 1h15-1h30) il faut : grands verres anti-fuite, lentilles teintées/polarisées pour l\'extérieur, champ de vision large pour sighter les bouées. Éviter les modèles racing piscine (Vanquisher, Cobra) : joints petits et rigides. Autant prendre la bonne paire maintenant plutôt que de changer dans 6 mois. Aqua Sphere Kayenne = meilleur rapport qualité/prix triathlon. Roka R1 = référence des Ironman élites, anti-fuite parfait.',
-    brands: 'Aqua Sphere Kayenne (35-45 € · joint large, versatile piscine + open water) · Aqua Sphere Vista Pro (50-60 € · vue panoramique, idéal sighting bouées) · Roka R1 (60-80 € · référence Ironman, meilleur anti-fuite du marché)',
-    when: 'Cette semaine — investir direct dans la bonne paire',
+    name: '⭐ Roka R1 — lunettes triathlon (recommandé)',
+    price: '60-80 €',
+    why: 'La référence des Ironman élites. Anti-fuite parfait grâce au joint silicone double épaisseur — conçu pour l\'eau agitée avec des centaines de nageurs autour. Verres grand champ pour sighter les bouées. Lentilles smoke/miroir pour l\'extérieur. Investir direct dans la meilleure paire évite de tout racheter dans 6 mois.',
+    brands: 'Roka R1 Titanium · Roka R1 — disponible sur roka.com ou Amazon',
+    when: 'Cette semaine',
+    color: '#007AFF',
+  },
+  {
+    name: 'Aqua Sphere Vista Pro — open water panoramique',
+    price: '50-60 €',
+    why: 'Vue panoramique 180° — la meilleure visibilité pour sighter les bouées en open water. Joint large et souple, très anti-fuite. Bon compromis entre confort piscine et performance open water.',
+    brands: 'Aqua Sphere Vista Pro — Decathlon, Intersport, Amazon',
+    when: 'Cette semaine',
+    color: '#007AFF',
+  },
+  {
+    name: 'Aqua Sphere Kayenne — entrée triathlon',
+    price: '35-45 €',
+    why: 'Meilleur rapport qualité/prix pour débuter en triathlon. Grand verre, joint silicone large, polyvalent piscine + open water. Idéal si le budget Roka R1 est trop élevé pour l\'instant.',
+    brands: 'Aqua Sphere Kayenne — Decathlon, Intersport, Amazon',
+    when: 'Cette semaine',
     color: '#007AFF',
   },
   {
