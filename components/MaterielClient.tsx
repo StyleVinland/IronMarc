@@ -241,7 +241,7 @@ export default function MaterielClient() {
       <section className="reveal">
         <div className="shead">
           <h2>À acheter dans l'ordre</h2>
-          <span className="hint">{boughtItems.length}/{GEAR.length} achetés</span>
+          <span className="hint">{OWNED.length + boughtItems.length}/{OWNED.length + GEAR.length} achetés</span>
         </div>
         <div className="gear-list">
           {remaining.map((item) => {
