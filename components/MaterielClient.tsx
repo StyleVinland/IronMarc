@@ -16,10 +16,10 @@ const OWNED = ['Maillot de bain', 'Chaussures de course'];
 const GEAR: GearItem[] = [
   /* ── NATATION ─────────────────────────── bleu #007AFF */
   {
-    name: 'Lunettes de natation',
-    price: '20-30 €',
-    why: 'Sans lunettes tu ne peux pas t\'entraîner en piscine. Premier achat, aucune négociation.',
-    brands: 'Speedo Vanquisher 2.0 · Aqua Sphere Kayenne · Arena Cobra',
+    name: 'Lunettes de natation — grands verres, joints larges',
+    price: '20-40 €',
+    why: 'Éviter absolument les modèles racing (Vanquisher, Arena Cobra) : contours petits et rigides = eau qui rentre. Il te faut des grands verres avec joints silicone larges et souples qui épousent le visage. Aqua Sphere est la marque de référence pour ça — leurs joints sont nettement plus larges que la moyenne.',
+    brands: 'Aqua Sphere Kayenne (référence anti-fuite) · Aqua Sphere Seal XP2 (joint extra-large) · Speedo Biofuse 2.0 (cadre flexible) · Zoggs Predator Flex',
     when: 'Cette semaine',
     color: '#007AFF',
   },
