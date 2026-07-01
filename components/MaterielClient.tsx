@@ -19,7 +19,7 @@ const GEAR: GearItem[] = [
     name: '⭐ Roka R1 — lunettes triathlon (recommandé)',
     price: '60-80 €',
     why: 'La référence des Ironman élites. Anti-fuite parfait grâce au joint silicone double épaisseur — conçu pour l\'eau agitée avec des centaines de nageurs autour. Verres grand champ pour sighter les bouées. Lentilles smoke/miroir pour l\'extérieur. Investir direct dans la meilleure paire évite de tout racheter dans 6 mois.',
-    brands: 'Roka R1 Titanium · Roka R1 — disponible sur roka.com ou Amazon',
+    brands: 'Roka R1 — rokamultisport.com (attention : roka.com = lunettes optiques, pas natation)',
     when: 'Cette semaine',
     color: '#007AFF',
   },
