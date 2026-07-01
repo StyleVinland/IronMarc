@@ -16,11 +16,11 @@ const OWNED = ['Maillot de bain', 'Chaussures de course'];
 const GEAR: GearItem[] = [
   /* ── NATATION ─────────────────────────── bleu #007AFF */
   {
-    name: 'Lunettes de natation — grands verres, joints larges',
-    price: '20-40 €',
-    why: 'Éviter absolument les modèles racing (Vanquisher, Arena Cobra) : contours petits et rigides = eau qui rentre. Il te faut des grands verres avec joints silicone larges et souples qui épousent le visage. Aqua Sphere est la marque de référence pour ça — leurs joints sont nettement plus larges que la moyenne.',
-    brands: 'Aqua Sphere Kayenne (référence anti-fuite) · Aqua Sphere Seal XP2 (joint extra-large) · Speedo Biofuse 2.0 (cadre flexible) · Zoggs Predator Flex',
-    when: 'Cette semaine',
+    name: 'Lunettes de natation — triathlon open water',
+    price: '35-80 €',
+    why: 'Pour l\'Ironman (3,8 km eau libre, 1h15-1h30) il faut : grands verres anti-fuite, lentilles teintées/polarisées pour l\'extérieur, champ de vision large pour sighter les bouées. Éviter les modèles racing piscine (Vanquisher, Cobra) : joints petits et rigides. Autant prendre la bonne paire maintenant plutôt que de changer dans 6 mois. Aqua Sphere Kayenne = meilleur rapport qualité/prix triathlon. Roka R1 = référence des Ironman élites, anti-fuite parfait.',
+    brands: 'Aqua Sphere Kayenne (35-45 € · joint large, versatile piscine + open water) · Aqua Sphere Vista Pro (50-60 € · vue panoramique, idéal sighting bouées) · Roka R1 (60-80 € · référence Ironman, meilleur anti-fuite du marché)',
+    when: 'Cette semaine — investir direct dans la bonne paire',
     color: '#007AFF',
   },
   {
