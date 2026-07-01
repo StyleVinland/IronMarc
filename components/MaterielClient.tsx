@@ -11,34 +11,10 @@ interface GearItem {
   color: string;
 }
 
-const OWNED = ['Maillot de bain', 'Chaussures de course'];
+const OWNED = ['Maillot de bain', 'Chaussures de course', 'Lunettes bFit Decathlon — noir fumé'];
 
 const GEAR: GearItem[] = [
   /* ── NATATION ─────────────────────────── bleu #007AFF */
-  {
-    name: '⭐ Roka R1 — lunettes triathlon (recommandé)',
-    price: '60-80 €',
-    why: 'La référence des Ironman élites. Anti-fuite parfait grâce au joint silicone double épaisseur — conçu pour l\'eau agitée avec des centaines de nageurs autour. Verres grand champ pour sighter les bouées. Lentilles smoke/miroir pour l\'extérieur. Investir direct dans la meilleure paire évite de tout racheter dans 6 mois.',
-    brands: 'Roka R1 — rokamultisport.com (attention : roka.com = lunettes optiques, pas natation)',
-    when: 'Cette semaine',
-    color: '#007AFF',
-  },
-  {
-    name: 'Aqua Sphere Vista Pro — open water panoramique',
-    price: '50-60 €',
-    why: 'Vue panoramique 180° — la meilleure visibilité pour sighter les bouées en open water. Joint large et souple, très anti-fuite. Bon compromis entre confort piscine et performance open water.',
-    brands: 'Aqua Sphere Vista Pro — Decathlon, Intersport, Amazon',
-    when: 'Cette semaine',
-    color: '#007AFF',
-  },
-  {
-    name: 'Aqua Sphere Kayenne — entrée triathlon',
-    price: '35-45 €',
-    why: 'Meilleur rapport qualité/prix pour débuter en triathlon. Grand verre, joint silicone large, polyvalent piscine + open water. Idéal si le budget Roka R1 est trop élevé pour l\'instant.',
-    brands: 'Aqua Sphere Kayenne — Decathlon, Intersport, Amazon',
-    when: 'Cette semaine',
-    color: '#007AFF',
-  },
   {
     name: 'Bonnet de silicone',
     price: '5-10 €',
